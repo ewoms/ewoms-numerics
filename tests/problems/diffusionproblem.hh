@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,21 +23,21 @@
 /*!
  * \file
  *
- * \copydoc Opm::DiffusionProblem
+ * \copydoc Ewoms::DiffusionProblem
  */
 #ifndef EWOMS_POWER_INJECTION_PROBLEM_HH
 #define EWOMS_POWER_INJECTION_PROBLEM_HH
 
-#include <opm/models/ncp/ncpproperties.hh>
+#include <ewoms/numerics/models/ncp/ncpproperties.hh>
 
-#include <opm/models/io/cubegridvanguard.hh>
+#include <ewoms/numerics/io/cubegridvanguard.hh>
 
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/fluidsystems/H2ON2FluidSystem.hpp>
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/constraintsolvers/ComputeFromReferencePhase.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/fluidsystems/h2on2fluidsystem.hh>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/constraintsolvers/computefromreferencephase.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/common/version.hh>
@@ -47,7 +47,7 @@
 #include <sstream>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class DiffusionProblem;
 }
@@ -60,10 +60,10 @@ NEW_TYPE_TAG(DiffusionBaseProblem);
 SET_TYPE_PROP(DiffusionBaseProblem, Grid, Dune::YaspGrid</*dim=*/1>);
 
 // set the Vanguard property
-SET_TYPE_PROP(DiffusionBaseProblem, Vanguard, Opm::CubeGridVanguard<TypeTag>);
+SET_TYPE_PROP(DiffusionBaseProblem, Vanguard, Ewoms::CubeGridVanguard<TypeTag>);
 
 // Set the problem property
-SET_TYPE_PROP(DiffusionBaseProblem, Problem, Opm::DiffusionProblem<TypeTag>);
+SET_TYPE_PROP(DiffusionBaseProblem, Problem, Ewoms::DiffusionProblem<TypeTag>);
 
 // Set the fluid system
 SET_PROP(DiffusionBaseProblem, FluidSystem)
@@ -72,7 +72,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::H2ON2FluidSystem<Scalar> type;
+    typedef Ewoms::H2ON2FluidSystem<Scalar> type;
 };
 
 // Set the material Law
@@ -86,12 +86,12 @@ private:
                   "A fluid system with two phases is required "
                   "for this problem!");
 
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Opm::LinearMaterial<Traits> type;
+    typedef Ewoms::LinearMaterial<Traits> type;
 };
 
 // Enable molecular diffusion for this problem
@@ -117,7 +117,7 @@ SET_SCALAR_PROP(DiffusionBaseProblem, InitialTimeStepSize, 1000);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  * \brief 1D problem which is driven by molecular diffusion.
@@ -236,18 +236,18 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::intrinsicPermeability
      */
     template <class Context>
-    const DimMatrix& intrinsicPermeability(const Context& context OPM_UNUSED,
-                                           unsigned spaceIdx OPM_UNUSED,
-                                           unsigned timeIdx OPM_UNUSED) const
+    const DimMatrix& intrinsicPermeability(const Context& context EWOMS_UNUSED,
+                                           unsigned spaceIdx EWOMS_UNUSED,
+                                           unsigned timeIdx EWOMS_UNUSED) const
     { return K_; }
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return 0.35; }
 
     /*!
@@ -255,18 +255,18 @@ public:
      */
     template <class Context>
     const MaterialLawParams&
-    materialLawParams(const Context& context OPM_UNUSED,
-                      unsigned spaceIdx OPM_UNUSED,
-                      unsigned timeIdx OPM_UNUSED) const
+    materialLawParams(const Context& context EWOMS_UNUSED,
+                      unsigned spaceIdx EWOMS_UNUSED,
+                      unsigned timeIdx EWOMS_UNUSED) const
     { return materialParams_; }
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     //! \}
@@ -283,9 +283,9 @@ public:
      */
     template <class Context>
     void boundary(BoundaryRateVector& values,
-                  const Context& context OPM_UNUSED,
-                  unsigned spaceIdx OPM_UNUSED,
-                  unsigned timeIdx OPM_UNUSED) const
+                  const Context& context EWOMS_UNUSED,
+                  unsigned spaceIdx EWOMS_UNUSED,
+                  unsigned timeIdx EWOMS_UNUSED) const
     { values.setNoFlow(); }
 
     //! \}
@@ -319,9 +319,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -347,7 +347,7 @@ private:
         leftInitialFluidState_.setMoleFraction(gasPhaseIdx, H2OIdx, xH2O);
         leftInitialFluidState_.setMoleFraction(gasPhaseIdx, N2Idx, 1 - xH2O);
 
-        typedef Opm::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         CFRP::solve(leftInitialFluidState_, paramCache, gasPhaseIdx,
                     /*setViscosity=*/false, /*setEnthalpy=*/false);
@@ -364,11 +364,11 @@ private:
     DimMatrix K_;
     MaterialLawParams materialParams_;
 
-    Opm::CompositionalFluidState<Scalar, FluidSystem> leftInitialFluidState_;
-    Opm::CompositionalFluidState<Scalar, FluidSystem> rightInitialFluidState_;
+    Ewoms::CompositionalFluidState<Scalar, FluidSystem> leftInitialFluidState_;
+    Ewoms::CompositionalFluidState<Scalar, FluidSystem> rightInitialFluidState_;
     Scalar temperature_;
 };
 
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

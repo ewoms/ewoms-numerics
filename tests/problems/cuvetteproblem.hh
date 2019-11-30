@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,24 +23,24 @@
 /*!
  * \file
  *
- * \copydoc Opm::CuvetteProblem
+ * \copydoc Ewoms::CuvetteProblem
  */
 #ifndef EWOMS_CUVETTE_PROBLEM_HH
 #define EWOMS_CUVETTE_PROBLEM_HH
 
-#include <opm/models/pvs/pvsproperties.hh>
+#include <ewoms/numerics/models/pvs/pvsproperties.hh>
 
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/fluidsystems/H2OAirMesityleneFluidSystem.hpp>
-#include <opm/material/fluidmatrixinteractions/ThreePhaseParkerVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/thermal/ConstantSolidHeatCapLaw.hpp>
-#include <opm/material/thermal/SomertonThermalConductionLaw.hpp>
-#include <opm/material/constraintsolvers/MiscibleMultiPhaseComposition.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/common/Valgrind.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/fluidsystems/h2oairmesitylenefluidsystem.hh>
+#include <ewoms/material/fluidmatrixinteractions/threephaseparkervangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/thermal/constantsolidheatcaplaw.hh>
+#include <ewoms/material/thermal/somertonthermalconductionlaw.hh>
+#include <ewoms/material/constraintsolvers/misciblemultiphasecomposition.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/common/valgrind.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -51,13 +51,12 @@
 
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class CuvetteProblem;
 }
 
 BEGIN_PROPERTIES
-
 
 // create a new type tag for the cuvette steam injection problem
 NEW_TYPE_TAG(CuvetteBaseProblem);
@@ -66,12 +65,12 @@ NEW_TYPE_TAG(CuvetteBaseProblem);
 SET_TYPE_PROP(CuvetteBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
-SET_TYPE_PROP(CuvetteBaseProblem, Problem, Opm::CuvetteProblem<TypeTag>);
+SET_TYPE_PROP(CuvetteBaseProblem, Problem, Ewoms::CuvetteProblem<TypeTag>);
 
 // Set the fluid system
 SET_TYPE_PROP(
     CuvetteBaseProblem, FluidSystem,
-    Opm::H2OAirMesityleneFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+    Ewoms::H2OAirMesityleneFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Enable gravity
 SET_BOOL_PROP(CuvetteBaseProblem, EnableGravity, true);
@@ -86,19 +85,19 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
-    typedef Opm::ThreePhaseMaterialTraits<
+    typedef Ewoms::ThreePhaseMaterialTraits<
         Scalar,
         /*wettingPhaseIdx=*/FluidSystem::waterPhaseIdx,
         /*nonWettingPhaseIdx=*/FluidSystem::naplPhaseIdx,
         /*gasPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Opm::ThreePhaseParkerVanGenuchten<Traits> type;
+    typedef Ewoms::ThreePhaseParkerVanGenuchten<Traits> type;
 };
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(CuvetteBaseProblem, SolidEnergyLaw,
-              Opm::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Set the thermal conduction law
 SET_PROP(CuvetteBaseProblem, ThermalConductionLaw)
@@ -109,7 +108,7 @@ private:
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
 };
 
 // The default for the end time of the simulation
@@ -123,7 +122,7 @@ SET_STRING_PROP(CuvetteBaseProblem, GridFile, "./data/cuvette_11x4.dgf");
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  *
@@ -205,7 +204,7 @@ public:
     {
         ParentType::finishInit();
 
-        if (Opm::Valgrind::IsRunning())
+        if (Ewoms::Valgrind::IsRunning())
             FluidSystem::init(/*minT=*/283.15, /*maxT=*/500.0, /*nT=*/20,
                               /*minp=*/0.8e5, /*maxp=*/2e5, /*np=*/10);
         else
@@ -329,9 +328,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return 293.15; /* [K] */ }
 
     /*!
@@ -379,9 +378,9 @@ public:
      */
     template <class Context>
     const ThermalConductionLawParams &
-    thermalConductionParams(const Context& context OPM_UNUSED,
-                         unsigned spaceIdx OPM_UNUSED,
-                         unsigned timeIdx OPM_UNUSED) const
+    thermalConductionParams(const Context& context EWOMS_UNUSED,
+                         unsigned spaceIdx EWOMS_UNUSED,
+                         unsigned timeIdx EWOMS_UNUSED) const
     { return thermalCondParams_; }
 
     //! \}
@@ -401,7 +400,7 @@ public:
         const auto& pos = context.pos(spaceIdx, timeIdx);
 
         if (onRightBoundary_(pos)) {
-            Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+            Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
 
             initialFluidState_(fs, context, spaceIdx, timeIdx);
 
@@ -447,7 +446,7 @@ public:
     void initial(PrimaryVariables& values, const Context& context, unsigned spaceIdx,
                  unsigned timeIdx) const
     {
-        Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+        Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
 
         initialFluidState_(fs, context, spaceIdx, timeIdx);
 
@@ -463,9 +462,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -522,7 +521,7 @@ private:
                 fs.setPressure(phaseIdx, pw + (pc[phaseIdx] - pc[waterPhaseIdx]));
 
             // compute the phase compositions
-            typedef Opm::MiscibleMultiPhaseComposition<Scalar, FluidSystem> MMPC;
+            typedef Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem> MMPC;
             typename FluidSystem::template ParameterCache<Scalar> paramCache;
             MMPC::solve(fs, paramCache, /*setViscosity=*/true, /*setEnthalpy=*/true);
         }
@@ -539,7 +538,7 @@ private:
                 fs.setPressure(phaseIdx, pw + (pc[phaseIdx] - pc[waterPhaseIdx]));
 
             // compute the phase compositions
-            typedef Opm::MiscibleMultiPhaseComposition<Scalar, FluidSystem> MMPC;
+            typedef Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem> MMPC;
             typename FluidSystem::template ParameterCache<Scalar> paramCache;
             MMPC::solve(fs, paramCache, /*setViscosity=*/true, /*setEnthalpy=*/true);
 
@@ -566,7 +565,7 @@ private:
         Scalar lambdaGranite = 2.8; // [W / (K m)]
 
         // create a Fluid state which has all phases present
-        Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+        Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
         fs.setTemperature(293.15);
         for (unsigned phaseIdx = 0; phaseIdx < numPhases; ++phaseIdx) {
             fs.setPressure(phaseIdx, 1.0135e5);
@@ -628,10 +627,10 @@ private:
     ThermalConductionLawParams thermalCondParams_;
     SolidEnergyLawParams solidEnergyLawParams_;
 
-    Opm::CompositionalFluidState<Scalar, FluidSystem> injectFluidState_;
+    Ewoms::CompositionalFluidState<Scalar, FluidSystem> injectFluidState_;
 
     const Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

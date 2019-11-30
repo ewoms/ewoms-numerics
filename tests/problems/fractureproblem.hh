@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,7 +23,7 @@
 /*!
  * \file
  *
- * \copydoc Opm::FractureProblem
+ * \copydoc Ewoms::FractureProblem
  */
 #ifndef EWOMS_FRACTURE_PROBLEM_HH
 #define EWOMS_FRACTURE_PROBLEM_HH
@@ -37,20 +37,20 @@
 #error "dune-alugrid not found!"
 #endif
 
-#include <opm/models/discretefracture/discretefracturemodel.hh>
-#include <opm/models/io/dgfvanguard.hh>
+#include <ewoms/numerics/models/discretefracture/discretefracturemodel.hh>
+#include <ewoms/numerics/io/dgfvanguard.hh>
 
-#include <opm/material/fluidmatrixinteractions/RegularizedBrooksCorey.hpp>
-#include <opm/material/fluidmatrixinteractions/RegularizedVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/thermal/SomertonThermalConductionLaw.hpp>
-#include <opm/material/thermal/ConstantSolidHeatCapLaw.hpp>
-#include <opm/material/fluidsystems/TwoPhaseImmiscibleFluidSystem.hpp>
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/components/Dnapl.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidmatrixinteractions/regularizedbrookscorey.hh>
+#include <ewoms/material/fluidmatrixinteractions/regularizedvangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/thermal/somertonthermalconductionlaw.hh>
+#include <ewoms/material/thermal/constantsolidheatcaplaw.hh>
+#include <ewoms/material/fluidsystems/twophaseimmisciblefluidsystem.hh>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/components/dnapl.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/common/version.hh>
 #include <dune/common/fmatrix.hh>
@@ -60,7 +60,7 @@
 #include <sstream>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class FractureProblem;
 }
@@ -76,10 +76,10 @@ SET_TYPE_PROP(
     Dune::ALUGrid</*dim=*/2, /*dimWorld=*/2, Dune::simplex, Dune::nonconforming>);
 
 // Set the Vanguard property
-SET_TYPE_PROP(FractureProblem, Vanguard, Opm::DgfVanguard<TypeTag>);
+SET_TYPE_PROP(FractureProblem, Vanguard, Ewoms::DgfVanguard<TypeTag>);
 
 // Set the problem property
-SET_TYPE_PROP(FractureProblem, Problem, Opm::FractureProblem<TypeTag>);
+SET_TYPE_PROP(FractureProblem, Problem, Ewoms::FractureProblem<TypeTag>);
 
 // Set the wetting phase
 SET_PROP(FractureProblem, WettingPhase)
@@ -88,7 +88,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::SimpleH2O<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
 };
 
 // Set the non-wetting phase
@@ -98,7 +98,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::DNAPL<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> > type;
 };
 
 // Set the material Law
@@ -110,18 +110,18 @@ private:
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
     Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedBrooksCorey<Traits> EffectiveLaw;
+    typedef Ewoms::RegularizedBrooksCorey<Traits> EffectiveLaw;
     // typedef RegularizedVanGenuchten<Traits> EffectiveLaw;
     // typedef LinearMaterial<Traits> EffectiveLaw;
 public:
-    typedef Opm::EffToAbsLaw<EffectiveLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
 };
 
 // Enable the energy equation
@@ -136,12 +136,12 @@ private:
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
 };
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(FractureProblem, SolidEnergyLaw,
-              Opm::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Disable gravity
 SET_BOOL_PROP(FractureProblem, EnableGravity, false);
@@ -160,7 +160,7 @@ SET_SCALAR_PROP(FractureProblem, InitialTimeStepSize, 100);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  *
@@ -207,7 +207,7 @@ class FractureProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef Opm::ImmiscibleFluidState<Scalar, FluidSystem> FluidState;
+    typedef Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> FluidState;
 
     typedef Dune::FieldVector<Scalar, dimWorld> GlobalPosition;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
@@ -220,7 +220,7 @@ class FractureProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     };
     typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView, FaceLayout> FaceMapper;
 
-    typedef Opm::FractureMapper<TypeTag> FractureMapper;
+    typedef Ewoms::FractureMapper<TypeTag> FractureMapper;
 
 public:
     /*!
@@ -322,9 +322,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     // \}
@@ -338,9 +338,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::intrinsicPermeability
      */
     template <class Context>
-    const DimMatrix& intrinsicPermeability(const Context& context OPM_UNUSED,
-                                           unsigned spaceIdx OPM_UNUSED,
-                                           unsigned timeIdx OPM_UNUSED) const
+    const DimMatrix& intrinsicPermeability(const Context& context EWOMS_UNUSED,
+                                           unsigned spaceIdx EWOMS_UNUSED,
+                                           unsigned timeIdx EWOMS_UNUSED) const
     { return matrixK_; }
 
     /*!
@@ -349,18 +349,18 @@ public:
      * \copydoc Doxygen::contextParams
      */
     template <class Context>
-    const DimMatrix& fractureIntrinsicPermeability(const Context& context OPM_UNUSED,
-                                                   unsigned spaceIdx OPM_UNUSED,
-                                                   unsigned timeIdx OPM_UNUSED) const
+    const DimMatrix& fractureIntrinsicPermeability(const Context& context EWOMS_UNUSED,
+                                                   unsigned spaceIdx EWOMS_UNUSED,
+                                                   unsigned timeIdx EWOMS_UNUSED) const
     { return fractureK_; }
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return matrixPorosity_; }
 
     /*!
@@ -369,18 +369,18 @@ public:
      * \copydoc Doxygen::contextParams
      */
     template <class Context>
-    Scalar fracturePorosity(const Context& context OPM_UNUSED,
-                            unsigned spaceIdx OPM_UNUSED,
-                            unsigned timeIdx OPM_UNUSED) const
+    Scalar fracturePorosity(const Context& context EWOMS_UNUSED,
+                            unsigned spaceIdx EWOMS_UNUSED,
+                            unsigned timeIdx EWOMS_UNUSED) const
     { return fracturePorosity_; }
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::materialLawParams
      */
     template <class Context>
-    const MaterialLawParams& materialLawParams(const Context& context OPM_UNUSED,
-                                               unsigned spaceIdx OPM_UNUSED,
-                                               unsigned timeIdx OPM_UNUSED) const
+    const MaterialLawParams& materialLawParams(const Context& context EWOMS_UNUSED,
+                                               unsigned spaceIdx EWOMS_UNUSED,
+                                               unsigned timeIdx EWOMS_UNUSED) const
     { return matrixMaterialParams_; }
 
     /*!
@@ -389,9 +389,9 @@ public:
      * \copydoc Doxygen::contextParams
      */
     template <class Context>
-    const MaterialLawParams& fractureMaterialLawParams(const Context& context OPM_UNUSED,
-                                                       unsigned spaceIdx OPM_UNUSED,
-                                                       unsigned timeIdx OPM_UNUSED) const
+    const MaterialLawParams& fractureMaterialLawParams(const Context& context EWOMS_UNUSED,
+                                                       unsigned spaceIdx EWOMS_UNUSED,
+                                                       unsigned timeIdx EWOMS_UNUSED) const
     { return fractureMaterialParams_; }
 
     /*!
@@ -413,10 +413,10 @@ public:
      * \param timeIdx The index used by the time discretization.
      */
     template <class Context>
-    Scalar fractureWidth(const Context& context OPM_UNUSED,
-                         unsigned spaceIdx1 OPM_UNUSED,
-                         unsigned spaceIdx2 OPM_UNUSED,
-                         unsigned timeIdx OPM_UNUSED) const
+    Scalar fractureWidth(const Context& context EWOMS_UNUSED,
+                         unsigned spaceIdx1 EWOMS_UNUSED,
+                         unsigned spaceIdx2 EWOMS_UNUSED,
+                         unsigned timeIdx EWOMS_UNUSED) const
     { return fractureWidth_; }
 
     /*!
@@ -424,9 +424,9 @@ public:
      */
     template <class Context>
     const ThermalConductionLawParams&
-    thermalConductionLawParams(const Context& context OPM_UNUSED,
-                               unsigned spaceIdx OPM_UNUSED,
-                               unsigned timeIdx OPM_UNUSED) const
+    thermalConductionLawParams(const Context& context EWOMS_UNUSED,
+                               unsigned spaceIdx EWOMS_UNUSED,
+                               unsigned timeIdx EWOMS_UNUSED) const
     { return thermalConductionParams_; }
 
     /*!
@@ -436,9 +436,9 @@ public:
      */
     template <class Context>
     const SolidEnergyLawParams&
-    solidEnergyLawParams(const Context& context OPM_UNUSED,
-                         unsigned spaceIdx OPM_UNUSED,
-                         unsigned timeIdx OPM_UNUSED) const
+    solidEnergyLawParams(const Context& context EWOMS_UNUSED,
+                         unsigned spaceIdx EWOMS_UNUSED,
+                         unsigned timeIdx EWOMS_UNUSED) const
     { return solidEnergyParams_; }
 
     // \}
@@ -546,9 +546,9 @@ public:
      */
     template <class Context>
     void initial(PrimaryVariables& values,
-                 const Context& context OPM_UNUSED,
-                 unsigned spaceIdx OPM_UNUSED,
-                 unsigned timeIdx OPM_UNUSED) const
+                 const Context& context EWOMS_UNUSED,
+                 unsigned spaceIdx EWOMS_UNUSED,
+                 unsigned timeIdx EWOMS_UNUSED) const
     {
         FluidState fluidState;
         fluidState.setTemperature(temperature_);
@@ -570,9 +570,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     // \}
@@ -600,7 +600,7 @@ private:
         Scalar lambdaGranite = 2.8; // [W / (K m)]
 
         // create a Fluid state which has all phases present
-        Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+        Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
         fs.setTemperature(293.15);
         for (unsigned phaseIdx = 0; phaseIdx < numPhases; ++phaseIdx) {
             fs.setPressure(phaseIdx, 1.0135e5);
@@ -648,6 +648,6 @@ private:
     Scalar temperature_;
     Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif // EWOMS_FRACTURE_PROBLEM_HH

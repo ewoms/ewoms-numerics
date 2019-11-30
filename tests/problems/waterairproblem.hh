@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,25 +23,25 @@
 /*!
  * \file
  *
- * \copydoc Opm::WaterAirProblem
+ * \copydoc Ewoms::WaterAirProblem
  */
 #ifndef EWOMS_WATER_AIR_PROBLEM_HH
 #define EWOMS_WATER_AIR_PROBLEM_HH
 
-#include <opm/models/pvs/pvsproperties.hh>
-#include <opm/simulators/linalg/parallelistlbackend.hh>
+#include <ewoms/numerics/models/pvs/pvsproperties.hh>
+#include <ewoms/numerics/linear/parallelistlbackend.hh>
 
-#include <opm/material/fluidsystems/H2OAirFluidSystem.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/RegularizedBrooksCorey.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/thermal/ConstantSolidHeatCapLaw.hpp>
-#include <opm/material/thermal/SomertonThermalConductionLaw.hpp>
-#include <opm/material/constraintsolvers/ComputeFromReferencePhase.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidsystems/h2oairfluidsystem.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/regularizedbrookscorey.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/thermal/constantsolidheatcaplaw.hh>
+#include <ewoms/material/thermal/somertonthermalconductionlaw.hh>
+#include <ewoms/material/constraintsolvers/computefromreferencephase.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -53,7 +53,7 @@
 #include <sstream>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class WaterAirProblem;
 }
@@ -66,7 +66,7 @@ NEW_TYPE_TAG(WaterAirBaseProblem);
 SET_TYPE_PROP(WaterAirBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
-SET_TYPE_PROP(WaterAirBaseProblem, Problem, Opm::WaterAirProblem<TypeTag>);
+SET_TYPE_PROP(WaterAirBaseProblem, Problem, Ewoms::WaterAirProblem<TypeTag>);
 
 // Set the material Law
 SET_PROP(WaterAirBaseProblem, MaterialLaw)
@@ -74,18 +74,18 @@ SET_PROP(WaterAirBaseProblem, MaterialLaw)
 private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedBrooksCorey<Traits> EffMaterialLaw;
+    typedef Ewoms::RegularizedBrooksCorey<Traits> EffMaterialLaw;
 
 public:
     // define the material law parameterized by absolute saturations
     // which uses the two-phase API
-    typedef Opm::EffToAbsLaw<EffMaterialLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffMaterialLaw> type;
 };
 
 // Set the thermal conduction law
@@ -97,17 +97,17 @@ private:
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
 };
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(WaterAirBaseProblem, SolidEnergyLaw,
-              Opm::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Set the fluid system. in this case, we use the one which describes
 // air and water
 SET_TYPE_PROP(WaterAirBaseProblem, FluidSystem,
-              Opm::H2OAirFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::H2OAirFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Enable gravity
 SET_BOOL_PROP(WaterAirBaseProblem, EnableGravity, true);
@@ -130,19 +130,19 @@ SET_STRING_PROP(WaterAirBaseProblem, GridFile, "./data/waterair.dgf");
 // Use the restarted GMRES linear solver with the ILU-2 preconditioner from dune-istl
 SET_TAG_PROP(WaterAirBaseProblem, LinearSolverSplice, ParallelIstlLinearSolver);
 SET_TYPE_PROP(WaterAirBaseProblem, LinearSolverWrapper,
-              Opm::Linear::SolverWrapperRestartedGMRes<TypeTag>);
+              Ewoms::Linear::SolverWrapperRestartedGMRes<TypeTag>);
 #if DUNE_VERSION_NEWER(DUNE_ISTL, 2,7)
 SET_TYPE_PROP(WaterAirBaseProblem, PreconditionerWrapper,
-              Opm::Linear::PreconditionerWrapperILU<TypeTag>);
+              Ewoms::Linear::PreconditionerWrapperILU<TypeTag>);
 #else
 SET_TYPE_PROP(WaterAirBaseProblem, PreconditionerWrapper,
-              Opm::Linear::PreconditionerWrapperILUn<TypeTag>);
+              Ewoms::Linear::PreconditionerWrapperILUn<TypeTag>);
 #endif
 SET_INT_PROP(WaterAirBaseProblem, PreconditionerOrder, 2);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  * \brief Non-isothermal gas injection problem where a air
@@ -369,9 +369,9 @@ public:
      */
     template <class Context>
     const SolidEnergyLawParams&
-    solidEnergyLawParams(const Context& context OPM_UNUSED,
-                         unsigned spaceIdx OPM_UNUSED,
-                         unsigned timeIdx OPM_UNUSED) const
+    solidEnergyLawParams(const Context& context EWOMS_UNUSED,
+                         unsigned spaceIdx EWOMS_UNUSED,
+                         unsigned timeIdx EWOMS_UNUSED) const
     { return solidEnergyLawParams_; }
 
     /*!
@@ -423,7 +423,7 @@ public:
             values.setMassRate(massRate);
 
             if (enableEnergy) {
-                Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+                Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
                 initialFluidState_(fs, context, spaceIdx, timeIdx);
 
                 Scalar hl = fs.enthalpy(liquidPhaseIdx);
@@ -433,7 +433,7 @@ public:
             }
         }
         else if (onLeftBoundary_(pos) || onRightBoundary_(pos)) {
-            Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+            Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
             initialFluidState_(fs, context, spaceIdx, timeIdx);
 
             // impose an freeflow boundary condition
@@ -463,7 +463,7 @@ public:
                  unsigned spaceIdx,
                  unsigned timeIdx) const
     {
-        Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+        Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
         initialFluidState_(fs, context, spaceIdx, timeIdx);
 
         const auto& matParams = materialLawParams(context, spaceIdx, timeIdx);
@@ -478,9 +478,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = 0; }
 
     //! \}
@@ -531,7 +531,7 @@ private:
         fs.setPressure(gasPhaseIdx, fs.pressure(liquidPhaseIdx) + (pc[gasPhaseIdx] - pc[liquidPhaseIdx]));
 
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
-        typedef Opm::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
         CFRP::solve(fs, paramCache, liquidPhaseIdx, /*setViscosity=*/true,  /*setEnthalpy=*/true);
     }
 
@@ -540,7 +540,7 @@ private:
         Scalar lambdaGranite = 2.8; // [W / (K m)]
 
         // create a Fluid state which has all phases present
-        Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+        Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
         fs.setTemperature(293.15);
         for (unsigned phaseIdx = 0; phaseIdx < numPhases; ++phaseIdx) {
             fs.setPressure(phaseIdx, 1.0135e5);
@@ -589,6 +589,6 @@ private:
     Scalar maxDepth_;
     Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

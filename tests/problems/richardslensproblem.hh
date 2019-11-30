@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,20 +23,20 @@
 /*!
  * \file
  *
- * \copydoc Opm::RichardsLensProblem
+ * \copydoc Ewoms::RichardsLensProblem
  */
 #ifndef EWOMS_RICHARDS_LENS_PROBLEM_HH
 #define EWOMS_RICHARDS_LENS_PROBLEM_HH
 
-#include <opm/models/richards/richardsmodel.hh>
+#include <ewoms/numerics/models/richards/richardsmodel.hh>
 
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/fluidsystems/LiquidPhase.hpp>
-#include <opm/material/fluidmatrixinteractions/RegularizedVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/fluidsystems/liquidphase.hh>
+#include <ewoms/material/fluidmatrixinteractions/regularizedvangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -45,11 +45,11 @@
 #include <dune/common/fvector.hh>
 #include <dune/common/fmatrix.hh>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class RichardsLensProblem;
 
-} // namespace Opm
+} // namespace Ewoms
 
 BEGIN_PROPERTIES
 
@@ -59,7 +59,7 @@ NEW_TYPE_TAG(RichardsLensProblem, INHERITS_FROM(Richards));
 SET_TYPE_PROP(RichardsLensProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the physical problem to be solved
-SET_TYPE_PROP(RichardsLensProblem, Problem, Opm::RichardsLensProblem<TypeTag>);
+SET_TYPE_PROP(RichardsLensProblem, Problem, Ewoms::RichardsLensProblem<TypeTag>);
 
 // Set the wetting phase
 SET_PROP(RichardsLensProblem, WettingFluid)
@@ -68,7 +68,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::SimpleH2O<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
 };
 
 // Set the material Law
@@ -80,18 +80,18 @@ private:
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
         Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedVanGenuchten<Traits> EffectiveLaw;
+    typedef Ewoms::RegularizedVanGenuchten<Traits> EffectiveLaw;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::EffToAbsLaw<EffectiveLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
 };
 
 // Enable gravitational acceleration
@@ -120,7 +120,7 @@ SET_STRING_PROP(RichardsLensProblem, GridFile, "./data/richardslens_24x16.dgf");
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 
 /*!
  * \ingroup TestProblems
@@ -280,7 +280,7 @@ public:
     Scalar temperature(const Context& context, unsigned spaceIdx, unsigned timeIdx) const
     { return temperature(context.globalSpaceIndex(spaceIdx, timeIdx), timeIdx); }
 
-    Scalar temperature(unsigned globalSpaceIdx OPM_UNUSED, unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(unsigned globalSpaceIdx EWOMS_UNUSED, unsigned timeIdx EWOMS_UNUSED) const
     { return 273.15 + 10; } // -> 10°C
 
     /*!
@@ -301,9 +301,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return 0.4; }
 
     /*!
@@ -319,7 +319,7 @@ public:
     }
 
     const MaterialLawParams& materialLawParams(unsigned globalSpaceIdx,
-                                               unsigned timeIdx OPM_UNUSED) const
+                                               unsigned timeIdx EWOMS_UNUSED) const
     {
         if (dofIsInLens_[globalSpaceIdx])
             return lensMaterialParams_;
@@ -339,8 +339,8 @@ public:
 
     // the Richards model does not have an element context available at all places
     // where the reference pressure is required...
-    Scalar referencePressure(unsigned globalSpaceIdx OPM_UNUSED,
-                             unsigned timeIdx OPM_UNUSED) const
+    Scalar referencePressure(unsigned globalSpaceIdx EWOMS_UNUSED,
+                             unsigned timeIdx EWOMS_UNUSED) const
     { return pnRef_; }
 
     //! \}
@@ -365,7 +365,7 @@ public:
             const auto& materialParams = this->materialLawParams(context, spaceIdx, timeIdx);
 
             Scalar Sw = 0.0;
-            Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+            Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
             fs.setSaturation(wettingPhaseIdx, Sw);
             fs.setSaturation(nonWettingPhaseIdx, 1.0 - Sw);
 
@@ -415,7 +415,7 @@ public:
         const auto& materialParams = this->materialLawParams(context, spaceIdx, timeIdx);
 
         Scalar Sw = 0.0;
-        Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+        Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
         fs.setSaturation(wettingPhaseIdx, Sw);
         fs.setSaturation(nonWettingPhaseIdx, 1.0 - Sw);
 
@@ -432,9 +432,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -481,6 +481,6 @@ private:
     Scalar eps_;
     Scalar pnRef_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

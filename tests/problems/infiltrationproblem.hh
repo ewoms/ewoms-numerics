@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -22,20 +22,20 @@
 */
 /*!
  * \file
- * \copydoc Opm::InfiltrationProblem
+ * \copydoc Ewoms::InfiltrationProblem
  */
 #ifndef EWOMS_INFILTRATION_PROBLEM_HH
 #define EWOMS_INFILTRATION_PROBLEM_HH
 
-#include <opm/models/pvs/pvsproperties.hh>
+#include <ewoms/numerics/models/pvs/pvsproperties.hh>
 
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidsystems/H2OAirMesityleneFluidSystem.hpp>
-#include <opm/material/fluidmatrixinteractions/ThreePhaseParkerVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/constraintsolvers/ComputeFromReferencePhase.hpp>
-#include <opm/material/common/Valgrind.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidsystems/h2oairmesitylenefluidsystem.hh>
+#include <ewoms/material/fluidmatrixinteractions/threephaseparkervangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/constraintsolvers/computefromreferencephase.hh>
+#include <ewoms/common/valgrind.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -47,7 +47,7 @@
 #include <sstream>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class InfiltrationProblem;
 }
@@ -61,12 +61,12 @@ SET_TYPE_PROP(InfiltrationBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
 SET_TYPE_PROP(InfiltrationBaseProblem, Problem,
-              Opm::InfiltrationProblem<TypeTag>);
+              Ewoms::InfiltrationProblem<TypeTag>);
 
 // Set the fluid system
 SET_TYPE_PROP(
     InfiltrationBaseProblem, FluidSystem,
-    Opm::H2OAirMesityleneFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+    Ewoms::H2OAirMesityleneFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Enable gravity?
 SET_BOOL_PROP(InfiltrationBaseProblem, EnableGravity, true);
@@ -84,14 +84,14 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
-    typedef Opm::ThreePhaseMaterialTraits<
+    typedef Ewoms::ThreePhaseMaterialTraits<
         Scalar,
         /*wettingPhaseIdx=*/FluidSystem::waterPhaseIdx,
         /*nonWettingPhaseIdx=*/FluidSystem::naplPhaseIdx,
         /*gasPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Opm::ThreePhaseParkerVanGenuchten<Traits> type;
+    typedef Ewoms::ThreePhaseParkerVanGenuchten<Traits> type;
 };
 
 // The default for the end time of the simulation
@@ -106,7 +106,7 @@ SET_STRING_PROP(InfiltrationBaseProblem, GridFile,
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  * \brief Isothermal NAPL infiltration problem where LNAPL
@@ -266,9 +266,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     /*!
@@ -290,9 +290,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return porosity_; }
 
     /*!
@@ -300,9 +300,9 @@ public:
      */
     template <class Context>
     const MaterialLawParams&
-    materialLawParams(const Context& context OPM_UNUSED,
-                      unsigned spaceIdx OPM_UNUSED,
-                      unsigned timeIdx OPM_UNUSED) const
+    materialLawParams(const Context& context EWOMS_UNUSED,
+                      unsigned spaceIdx EWOMS_UNUSED,
+                      unsigned timeIdx EWOMS_UNUSED) const
     { return materialParams_; }
 
     //! \}
@@ -324,7 +324,7 @@ public:
         const auto& pos = context.pos(spaceIdx, timeIdx);
 
         if (onLeftBoundary_(pos) || onRightBoundary_(pos)) {
-            Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+            Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
 
             initialFluidState_(fs, context, spaceIdx, timeIdx);
 
@@ -335,7 +335,7 @@ public:
             molarRate[conti0EqIdx + NAPLIdx] = -0.001;
 
             values.setMolarRate(molarRate);
-            Opm::Valgrind::CheckDefined(values);
+            Ewoms::Valgrind::CheckDefined(values);
         }
         else
             values.setNoFlow();
@@ -357,13 +357,13 @@ public:
                  unsigned spaceIdx,
                  unsigned timeIdx) const
     {
-        Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+        Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
 
         initialFluidState_(fs, context, spaceIdx, timeIdx);
 
         const auto& matParams = materialLawParams(context, spaceIdx, timeIdx);
         values.assignMassConservative(fs, matParams, /*inEquilibrium=*/true);
-        Opm::Valgrind::CheckDefined(values);
+        Ewoms::Valgrind::CheckDefined(values);
     }
 
     /*!
@@ -374,9 +374,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -421,8 +421,8 @@ private:
             Sw = 1 - Sgr;
         Scalar Sg = 1 - Sw;
 
-        Opm::Valgrind::CheckDefined(Sw);
-        Opm::Valgrind::CheckDefined(Sg);
+        Ewoms::Valgrind::CheckDefined(Sw);
+        Ewoms::Valgrind::CheckDefined(Sg);
 
         fs.setSaturation(waterPhaseIdx, Sw);
         fs.setSaturation(gasPhaseIdx, Sg);
@@ -446,7 +446,7 @@ private:
                            1 - fs.moleFraction(gasPhaseIdx, H2OIdx));
         fs.setMoleFraction(gasPhaseIdx, NAPLIdx, 0);
 
-        typedef Opm::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         CFRP::solve(fs, paramCache, gasPhaseIdx,
                     /*setViscosity=*/true,
@@ -469,6 +469,6 @@ private:
     Scalar temperature_;
     Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,26 +23,26 @@
 /*!
  * \file
  *
- * \copydoc Opm::FingerProblem
+ * \copydoc Ewoms::FingerProblem
  */
 #ifndef EWOMS_FINGER_PROBLEM_HH
 #define EWOMS_FINGER_PROBLEM_HH
 
-#include <opm/models/io/structuredgridvanguard.hh>
+#include <ewoms/numerics/io/structuredgridvanguard.hh>
 
-#include <opm/material/fluidmatrixinteractions/RegularizedVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/ParkerLenhard.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
+#include <ewoms/material/fluidmatrixinteractions/regularizedvangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/parkerlenhard.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
 
-#include <opm/material/fluidsystems/TwoPhaseImmiscibleFluidSystem.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/components/Air.hpp>
+#include <ewoms/material/fluidsystems/twophaseimmisciblefluidsystem.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/components/air.hh>
 
-#include <opm/models/immiscible/immiscibleproperties.hh>
-#include <opm/models/discretization/common/restrictprolong.hh>
+#include <ewoms/numerics/models/immiscible/immiscibleproperties.hh>
+#include <ewoms/numerics/discretizations/common/restrictprolong.hh>
 
 #if HAVE_DUNE_ALUGRID
 #include <dune/alugrid/grid.hh>
@@ -56,11 +56,11 @@
 #include <vector>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class FingerProblem;
 
-} // namespace Opm
+} // namespace Ewoms
 
 BEGIN_PROPERTIES
 
@@ -80,7 +80,7 @@ SET_TYPE_PROP(FingerBaseProblem,
 NEW_PROP_TAG(InitialWaterSaturation);
 
 // Set the problem property
-SET_TYPE_PROP(FingerBaseProblem, Problem, Opm::FingerProblem<TypeTag>);
+SET_TYPE_PROP(FingerBaseProblem, Problem, Ewoms::FingerProblem<TypeTag>);
 
 // Set the wetting phase
 SET_PROP(FingerBaseProblem, WettingPhase)
@@ -89,7 +89,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::SimpleH2O<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
 };
 
 // Set the non-wetting phase
@@ -99,7 +99,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::GasPhase<Scalar, Opm::Air<Scalar> > type;
+    typedef Ewoms::GasPhase<Scalar, Ewoms::Air<Scalar> > type;
 };
 
 // Set the material Law
@@ -107,12 +107,12 @@ SET_PROP(FingerBaseProblem, MaterialLaw)
 {
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx> Traits;
 
     // use the parker-lenhard hysteresis law
-    typedef Opm::ParkerLenhard<Traits> ParkerLenhard;
+    typedef Ewoms::ParkerLenhard<Traits> ParkerLenhard;
     typedef ParkerLenhard type;
 };
 
@@ -147,7 +147,7 @@ SET_SCALAR_PROP(FingerBaseProblem, InitialTimeStepSize, 10);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 
 /*!
  * \ingroup TestProblems
@@ -544,12 +544,12 @@ private:
 
     MaterialLawParamsContainer materialParams_;
 
-    Opm::ImmiscibleFluidState<Scalar, FluidSystem> initialFluidState_;
+    Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> initialFluidState_;
 
     Scalar temperature_;
     Scalar eps_;
 };
 
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

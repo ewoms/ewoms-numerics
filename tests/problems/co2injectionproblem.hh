@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,28 +23,28 @@
 /*!
  * \file
  *
- * \copydoc Opm::Co2InjectionProblem
+ * \copydoc Ewoms::Co2InjectionProblem
  */
 #ifndef EWOMS_CO2_INJECTION_PROBLEM_HH
 #define EWOMS_CO2_INJECTION_PROBLEM_HH
 
-#include <opm/models/immiscible/immisciblemodel.hh>
-#include <opm/simulators/linalg/parallelamgbackend.hh>
+#include <ewoms/numerics/models/immiscible/immisciblemodel.hh>
+#include <ewoms/numerics/linear/parallelamgbackend.hh>
 
-#include <opm/material/fluidsystems/H2ON2FluidSystem.hpp>
-#include <opm/material/fluidsystems/BrineCO2FluidSystem.hpp>
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/constraintsolvers/ComputeFromReferencePhase.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/RegularizedBrooksCorey.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/thermal/SomertonThermalConductionLaw.hpp>
-#include <opm/material/thermal/ConstantSolidHeatCapLaw.hpp>
-#include <opm/material/binarycoefficients/Brine_CO2.hpp>
-#include <opm/material/common/UniformTabulated2DFunction.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidsystems/h2on2fluidsystem.hh>
+#include <ewoms/material/fluidsystems/brineco2fluidsystem.hh>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/constraintsolvers/computefromreferencephase.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/regularizedbrookscorey.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/thermal/somertonthermalconductionlaw.hh>
+#include <ewoms/material/thermal/constantsolidheatcaplaw.hh>
+#include <ewoms/material/binarycoefficients/brine_co2.hh>
+#include <ewoms/common/uniformtabulated2dfunction.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -57,13 +57,13 @@
 #include <iostream>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 //! \cond SKIP_THIS
 template <class TypeTag>
 class Co2InjectionProblem;
 
 namespace Co2Injection {
-#include <opm/material/components/co2tables.inc>
+#include <ewoms/material/components/co2tables.inc>
 }
 //! \endcond
 }
@@ -89,18 +89,18 @@ SET_TYPE_PROP(Co2InjectionBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
 SET_TYPE_PROP(Co2InjectionBaseProblem, Problem,
-              Opm::Co2InjectionProblem<TypeTag>);
+              Ewoms::Co2InjectionProblem<TypeTag>);
 
 // Set fluid configuration
 SET_PROP(Co2InjectionBaseProblem, FluidSystem)
 {
 private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Opm::Co2Injection::CO2Tables CO2Tables;
+    typedef Ewoms::Co2Injection::CO2Tables CO2Tables;
 
 public:
-    typedef Opm::BrineCO2FluidSystem<Scalar, CO2Tables> type;
-    //typedef Opm::H2ON2FluidSystem<Scalar, /*useComplexRelations=*/false> type;
+    typedef Ewoms::BrineCO2FluidSystem<Scalar, CO2Tables> type;
+    //typedef Ewoms::H2ON2FluidSystem<Scalar, /*useComplexRelations=*/false> type;
 };
 
 // Set the material Law
@@ -112,17 +112,17 @@ private:
     enum { gasPhaseIdx = FluidSystem::gasPhaseIdx };
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedBrooksCorey<Traits> EffMaterialLaw;
+    typedef Ewoms::RegularizedBrooksCorey<Traits> EffMaterialLaw;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::EffToAbsLaw<EffMaterialLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffMaterialLaw> type;
 };
 
 // Set the thermal conduction law
@@ -134,12 +134,12 @@ private:
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
 };
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(Co2InjectionBaseProblem, SolidEnergyLaw,
-              Opm::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Use the algebraic multi-grid linear solver for this problem
 SET_TAG_PROP(Co2InjectionBaseProblem, LinearSolverSplice, ParallelAmgLinearSolver);
@@ -173,7 +173,7 @@ SET_STRING_PROP(Co2InjectionBaseProblem, GridFile, "data/co2injection.dgf");
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  *
@@ -230,7 +230,7 @@ class Co2InjectionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     typedef typename GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
     typedef typename ThermalConductionLaw::Params ThermalConductionLawParams;
 
-    typedef Opm::MathToolbox<Evaluation> Toolbox;
+    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef typename GridView::ctype CoordScalar;
     typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
@@ -441,9 +441,9 @@ public:
      */
     template <class Context>
     const SolidEnergyLawParams&
-    solidEnergyLawParams(const Context& context OPM_UNUSED,
-                         unsigned spaceIdx OPM_UNUSED,
-                         unsigned timeIdx OPM_UNUSED) const
+    solidEnergyLawParams(const Context& context EWOMS_UNUSED,
+                         unsigned spaceIdx EWOMS_UNUSED,
+                         unsigned timeIdx EWOMS_UNUSED) const
     { return solidEnergyLawParams_; }
 
     /*!
@@ -477,7 +477,7 @@ public:
     {
         const auto& pos = context.pos(spaceIdx, timeIdx);
         if (onLeftBoundary_(pos)) {
-            Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+            Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
             initialFluidState_(fs, context, spaceIdx, timeIdx);
             fs.checkDefined();
 
@@ -488,7 +488,7 @@ public:
             RateVector massRate(0.0);
             massRate[contiCO2EqIdx] = -1e-3; // [kg/(m^3 s)]
 
-            typedef Opm::ImmiscibleFluidState<Scalar, FluidSystem> FluidState;
+            typedef Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> FluidState;
             FluidState fs;
             fs.setSaturation(gasPhaseIdx, 1.0);
             const auto& pg =
@@ -523,7 +523,7 @@ public:
     void initial(PrimaryVariables& values, const Context& context, unsigned spaceIdx,
                  unsigned timeIdx) const
     {
-        Opm::CompositionalFluidState<Scalar, FluidSystem> fs;
+        Ewoms::CompositionalFluidState<Scalar, FluidSystem> fs;
         initialFluidState_(fs, context, spaceIdx, timeIdx);
 
         // const auto& matParams = this->materialLawParams(context, spaceIdx,
@@ -540,9 +540,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -589,7 +589,7 @@ private:
                            1.0 - fs.moleFraction(liquidPhaseIdx, CO2Idx));
 
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
-        typedef Opm::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
         CFRP::solve(fs, paramCache,
                     /*refPhaseIdx=*/liquidPhaseIdx,
                     /*setViscosity=*/true,
@@ -649,6 +649,6 @@ private:
     Scalar pressureLow_, pressureHigh_;
     Scalar temperatureLow_, temperatureHigh_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

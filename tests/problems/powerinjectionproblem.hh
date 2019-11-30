@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,23 +23,23 @@
 /*!
  * \file
  *
- * \copydoc Opm::PowerInjectionProblem
+ * \copydoc Ewoms::PowerInjectionProblem
  */
 #ifndef EWOMS_POWER_INJECTION_PROBLEM_HH
 #define EWOMS_POWER_INJECTION_PROBLEM_HH
 
-#include <opm/models/immiscible/immisciblemodel.hh>
-#include <opm/models/io/cubegridvanguard.hh>
+#include <ewoms/numerics/models/immiscible/immisciblemodel.hh>
+#include <ewoms/numerics/io/cubegridvanguard.hh>
 
-#include <opm/material/fluidmatrixinteractions/RegularizedVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/fluidsystems/TwoPhaseImmiscibleFluidSystem.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/components/Air.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidmatrixinteractions/regularizedvangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/fluidsystems/twophaseimmisciblefluidsystem.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/components/air.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 
@@ -52,7 +52,7 @@
 #include <type_traits>
 #include <iostream>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class PowerInjectionProblem;
 }
@@ -66,11 +66,11 @@ SET_TYPE_PROP(PowerInjectionBaseProblem, Grid, Dune::YaspGrid</*dim=*/1>);
 
 // set the Vanguard property
 SET_TYPE_PROP(PowerInjectionBaseProblem, Vanguard,
-              Opm::CubeGridVanguard<TypeTag>);
+              Ewoms::CubeGridVanguard<TypeTag>);
 
 // Set the problem property
 SET_TYPE_PROP(PowerInjectionBaseProblem, Problem,
-              Opm::PowerInjectionProblem<TypeTag>);
+              Ewoms::PowerInjectionProblem<TypeTag>);
 
 // Set the wetting phase
 SET_PROP(PowerInjectionBaseProblem, WettingPhase)
@@ -79,7 +79,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::SimpleH2O<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
 };
 
 // Set the non-wetting phase
@@ -89,7 +89,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::GasPhase<Scalar, Opm::Air<Scalar> > type;
+    typedef Ewoms::GasPhase<Scalar, Ewoms::Air<Scalar> > type;
 };
 
 // Set the material Law
@@ -101,18 +101,18 @@ private:
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
         Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedVanGenuchten<Traits> EffectiveLaw;
+    typedef Ewoms::RegularizedVanGenuchten<Traits> EffectiveLaw;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::EffToAbsLaw<EffectiveLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
 };
 
 // Write out the filter velocities for this problem
@@ -138,7 +138,7 @@ SET_SCALAR_PROP(PowerInjectionBaseProblem, InitialTimeStepSize, 1e-3);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  * \brief 1D Problem with very fast injection of gas on the left.
@@ -236,7 +236,7 @@ public:
         std::ostringstream oss;
         oss << "powerinjection_";
         if (std::is_same<typename GET_PROP_TYPE(TypeTag, FluxModule),
-                         Opm::DarcyFluxModule<TypeTag> >::value)
+                         Ewoms::DarcyFluxModule<TypeTag> >::value)
             oss << "darcy";
         else
             oss << "forchheimer";
@@ -279,27 +279,27 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::intrinsicPermeability
      */
     template <class Context>
-    const DimMatrix& intrinsicPermeability(const Context& context OPM_UNUSED,
-                                           unsigned spaceIdx OPM_UNUSED,
-                                           unsigned timeIdx OPM_UNUSED) const
+    const DimMatrix& intrinsicPermeability(const Context& context EWOMS_UNUSED,
+                                           unsigned spaceIdx EWOMS_UNUSED,
+                                           unsigned timeIdx EWOMS_UNUSED) const
     { return K_; }
 
     /*!
      * \copydoc ForchheimerBaseProblem::ergunCoefficient
      */
     template <class Context>
-    Scalar ergunCoefficient(const Context& context OPM_UNUSED,
-                            unsigned spaceIdx OPM_UNUSED,
-                            unsigned timeIdx OPM_UNUSED) const
+    Scalar ergunCoefficient(const Context& context EWOMS_UNUSED,
+                            unsigned spaceIdx EWOMS_UNUSED,
+                            unsigned timeIdx EWOMS_UNUSED) const
     { return 0.3866; }
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return 0.558; }
 
     /*!
@@ -307,18 +307,18 @@ public:
      */
     template <class Context>
     const MaterialLawParams&
-    materialLawParams(const Context& context OPM_UNUSED,
-                      unsigned spaceIdx OPM_UNUSED,
-                      unsigned timeIdx OPM_UNUSED) const
+    materialLawParams(const Context& context EWOMS_UNUSED,
+                      unsigned spaceIdx EWOMS_UNUSED,
+                      unsigned timeIdx EWOMS_UNUSED) const
     { return materialParams_; }
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     //! \}
@@ -369,9 +369,9 @@ public:
      */
     template <class Context>
     void initial(PrimaryVariables& values,
-                 const Context& context OPM_UNUSED,
-                 unsigned spaceIdx OPM_UNUSED,
-                 unsigned timeIdx OPM_UNUSED) const
+                 const Context& context EWOMS_UNUSED,
+                 unsigned spaceIdx EWOMS_UNUSED,
+                 unsigned timeIdx EWOMS_UNUSED) const
     {
         // assign the primary variables
         values.assignNaive(initialFluidState_);
@@ -385,9 +385,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -424,11 +424,11 @@ private:
     DimMatrix K_;
     MaterialLawParams materialParams_;
 
-    Opm::ImmiscibleFluidState<Scalar, FluidSystem> initialFluidState_;
+    Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> initialFluidState_;
     Scalar temperature_;
     Scalar eps_;
 };
 
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

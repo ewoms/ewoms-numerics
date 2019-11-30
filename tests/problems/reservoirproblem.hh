@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,22 +23,22 @@
 /*!
  * \file
  *
- * \copydoc Opm::ReservoirProblem
+ * \copydoc Ewoms::ReservoirProblem
  */
 #ifndef EWOMS_RESERVOIR_PROBLEM_HH
 #define EWOMS_RESERVOIR_PROBLEM_HH
 
-#include <opm/models/blackoil/blackoilproperties.hh>
+#include <ewoms/numerics/models/blackoil/blackoilproperties.hh>
 
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidsystems/BlackOilFluidSystem.hpp>
-#include <opm/material/constraintsolvers/ComputeFromReferencePhase.hpp>
-#include <opm/material/fluidsystems/blackoilpvt/DryGasPvt.hpp>
-#include <opm/material/fluidsystems/blackoilpvt/LiveOilPvt.hpp>
-#include <opm/material/fluidsystems/blackoilpvt/ConstantCompressibilityWaterPvt.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidsystems/blackoilfluidsystem.hh>
+#include <ewoms/material/constraintsolvers/computefromreferencephase.hh>
+#include <ewoms/material/fluidsystems/blackoilpvt/drygaspvt.hh>
+#include <ewoms/material/fluidsystems/blackoilpvt/liveoilpvt.hh>
+#include <ewoms/material/fluidsystems/blackoilpvt/constantcompressibilitywaterpvt.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -50,14 +50,13 @@
 #include <vector>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class ReservoirProblem;
 
-} // namespace Opm
+} // namespace Ewoms
 
 BEGIN_PROPERTIES
-
 
 NEW_TYPE_TAG(ReservoirBaseProblem);
 
@@ -72,7 +71,7 @@ NEW_PROP_TAG(WellWidth);
 SET_TYPE_PROP(ReservoirBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
-SET_TYPE_PROP(ReservoirBaseProblem, Problem, Opm::ReservoirProblem<TypeTag>);
+SET_TYPE_PROP(ReservoirBaseProblem, Problem, Ewoms::ReservoirProblem<TypeTag>);
 
 // Set the material Law
 SET_PROP(ReservoirBaseProblem, MaterialLaw)
@@ -81,14 +80,14 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
-    typedef Opm::
+    typedef Ewoms::
         ThreePhaseMaterialTraits<Scalar,
                                  /*wettingPhaseIdx=*/FluidSystem::waterPhaseIdx,
                                  /*nonWettingPhaseIdx=*/FluidSystem::oilPhaseIdx,
                                  /*gasPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Opm::LinearMaterial<Traits> type;
+    typedef Ewoms::LinearMaterial<Traits> type;
 };
 
 // Write the Newton convergence behavior to disk?
@@ -130,7 +129,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::BlackOilFluidSystem<Scalar> type;
+    typedef Ewoms::BlackOilFluidSystem<Scalar> type;
 };
 
 // The default DGF file to load
@@ -141,7 +140,7 @@ SET_SCALAR_PROP(ReservoirBaseProblem, NewtonTolerance, 1e-6);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 
 /*!
  * \ingroup TestProblems
@@ -199,7 +198,7 @@ class ReservoirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
     typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
 
-    typedef Opm::CompositionalFluidState<Scalar,
+    typedef Ewoms::CompositionalFluidState<Scalar,
                                          FluidSystem,
                                          /*enableEnthalpy=*/true> InitialFluidState;
 
@@ -288,26 +287,26 @@ public:
         FluidSystem::setEnableVaporizedOil(false);
         FluidSystem::setReferenceDensities(rhoRefO, rhoRefW, rhoRefG, /*regionIdx=*/0);
 
-        Opm::GasPvtMultiplexer<Scalar> *gasPvt = new Opm::GasPvtMultiplexer<Scalar>;
-        gasPvt->setApproach(Opm::GasPvtMultiplexer<Scalar>::DryGasPvt);
-        auto& dryGasPvt = gasPvt->template getRealPvt<Opm::GasPvtMultiplexer<Scalar>::DryGasPvt>();
+        Ewoms::GasPvtMultiplexer<Scalar> *gasPvt = new Ewoms::GasPvtMultiplexer<Scalar>;
+        gasPvt->setApproach(Ewoms::GasPvtMultiplexer<Scalar>::DryGasPvt);
+        auto& dryGasPvt = gasPvt->template getRealPvt<Ewoms::GasPvtMultiplexer<Scalar>::DryGasPvt>();
         dryGasPvt.setNumRegions(/*numPvtRegion=*/1);
         dryGasPvt.setReferenceDensities(/*regionIdx=*/0, rhoRefO, rhoRefG, rhoRefW);
         dryGasPvt.setGasFormationVolumeFactor(/*regionIdx=*/0, Bg);
         dryGasPvt.setGasViscosity(/*regionIdx=*/0, mug);
 
-        Opm::OilPvtMultiplexer<Scalar> *oilPvt = new Opm::OilPvtMultiplexer<Scalar>;
-        oilPvt->setApproach(Opm::OilPvtMultiplexer<Scalar>::LiveOilPvt);
-        auto& liveOilPvt = oilPvt->template getRealPvt<Opm::OilPvtMultiplexer<Scalar>::LiveOilPvt>();
+        Ewoms::OilPvtMultiplexer<Scalar> *oilPvt = new Ewoms::OilPvtMultiplexer<Scalar>;
+        oilPvt->setApproach(Ewoms::OilPvtMultiplexer<Scalar>::LiveOilPvt);
+        auto& liveOilPvt = oilPvt->template getRealPvt<Ewoms::OilPvtMultiplexer<Scalar>::LiveOilPvt>();
         liveOilPvt.setNumRegions(/*numPvtRegion=*/1);
         liveOilPvt.setReferenceDensities(/*regionIdx=*/0, rhoRefO, rhoRefG, rhoRefW);
         liveOilPvt.setSaturatedOilGasDissolutionFactor(/*regionIdx=*/0, Rs);
         liveOilPvt.setSaturatedOilFormationVolumeFactor(/*regionIdx=*/0, Bo);
         liveOilPvt.setSaturatedOilViscosity(/*regionIdx=*/0, muo);
 
-        Opm::WaterPvtMultiplexer<Scalar> *waterPvt = new Opm::WaterPvtMultiplexer<Scalar>;
-        waterPvt->setApproach(Opm::WaterPvtMultiplexer<Scalar>::ConstantCompressibilityWaterPvt);
-        auto& ccWaterPvt = waterPvt->template getRealPvt<Opm::WaterPvtMultiplexer<Scalar>::ConstantCompressibilityWaterPvt>();
+        Ewoms::WaterPvtMultiplexer<Scalar> *waterPvt = new Ewoms::WaterPvtMultiplexer<Scalar>;
+        waterPvt->setApproach(Ewoms::WaterPvtMultiplexer<Scalar>::ConstantCompressibilityWaterPvt);
+        auto& ccWaterPvt = waterPvt->template getRealPvt<Ewoms::WaterPvtMultiplexer<Scalar>::ConstantCompressibilityWaterPvt>();
         ccWaterPvt.setNumRegions(/*numPvtRegions=*/1);
         ccWaterPvt.setReferenceDensities(/*regionIdx=*/0, rhoRefO, rhoRefG, rhoRefW);
         ccWaterPvt.setViscosity(/*regionIdx=*/0, 9.6e-4);
@@ -317,13 +316,13 @@ public:
         oilPvt->initEnd();
         waterPvt->initEnd();
 
-        typedef std::shared_ptr<Opm::GasPvtMultiplexer<Scalar> > GasPvtSharedPtr;
+        typedef std::shared_ptr<Ewoms::GasPvtMultiplexer<Scalar> > GasPvtSharedPtr;
         FluidSystem::setGasPvt(GasPvtSharedPtr(gasPvt));
 
-        typedef std::shared_ptr<Opm::OilPvtMultiplexer<Scalar> > OilPvtSharedPtr;
+        typedef std::shared_ptr<Ewoms::OilPvtMultiplexer<Scalar> > OilPvtSharedPtr;
         FluidSystem::setOilPvt(OilPvtSharedPtr(oilPvt));
 
-        typedef std::shared_ptr<Opm::WaterPvtMultiplexer<Scalar> > WaterPvtSharedPtr;
+        typedef std::shared_ptr<Ewoms::WaterPvtMultiplexer<Scalar> > WaterPvtSharedPtr;
         FluidSystem::setWaterPvt(WaterPvtSharedPtr(waterPvt));
 
         FluidSystem::initEnd();
@@ -477,7 +476,6 @@ public:
      */
     //! \{
 
-
     /*!
      * \copydoc FvBaseMultiPhaseProblem::temperature
      *
@@ -487,9 +485,9 @@ public:
      * will need it one day?
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     // \}
@@ -507,9 +505,9 @@ public:
      */
     template <class Context>
     void boundary(BoundaryRateVector& values,
-                  const Context& context OPM_UNUSED,
-                  unsigned spaceIdx OPM_UNUSED,
-                  unsigned timeIdx OPM_UNUSED) const
+                  const Context& context EWOMS_UNUSED,
+                  unsigned spaceIdx EWOMS_UNUSED,
+                  unsigned timeIdx EWOMS_UNUSED) const
     {
         // no flow on top and bottom
         values.setNoFlow();
@@ -530,9 +528,9 @@ public:
      */
     template <class Context>
     void initial(PrimaryVariables& values,
-                 const Context& context OPM_UNUSED,
-                 unsigned spaceIdx OPM_UNUSED,
-                 unsigned timeIdx OPM_UNUSED) const
+                 const Context& context EWOMS_UNUSED,
+                 unsigned spaceIdx EWOMS_UNUSED,
+                 unsigned timeIdx EWOMS_UNUSED) const
     {
         values.assignNaive(initialFluidState_);
 
@@ -577,9 +575,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -639,7 +637,7 @@ private:
         fs.setMoleFraction(oilPhaseIdx, gasCompIdx, xoG);
         fs.setMoleFraction(oilPhaseIdx, oilCompIdx, xoO);
 
-        typedef Opm::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         CFRP::solve(fs,
                     paramCache,
@@ -746,6 +744,6 @@ private:
     Scalar maxDepth_;
     Scalar wellWidth_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,35 +23,35 @@
 /*!
  * \file
  *
- * \copydoc Opm::Tutorial1Problem
+ * \copydoc Ewoms::Tutorial1Problem
  */
 #ifndef EWOMS_TUTORIAL1_PROBLEM_HH /*@\label{tutorial1:guardian1}@*/
 #define EWOMS_TUTORIAL1_PROBLEM_HH /*@\label{tutorial1:guardian2}@*/
 
 // The numerical model
-#include <opm/models/immiscible/immisciblemodel.hh>
+#include <ewoms/numerics/models/immiscible/immisciblemodel.hh>
 
 // The spatial discretization (VCFV == Vertex-Centered Finite Volumes)
-#include <opm/models/discretization/vcfv/vcfvdiscretization.hh>  /*@\label{tutorial1:include-discretization}@*/
+#include <ewoms/numerics/discretizations/vcfv/vcfvdiscretization.hh>  /*@\label{tutorial1:include-discretization}@*/
 
 // The chemical species that are used
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/components/Lnapl.hpp>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/components/lnapl.hh>
 
 // Headers required for the capillary pressure law
-#include <opm/material/fluidmatrixinteractions/RegularizedBrooksCorey.hpp> /*@\label{tutorial1:rawLawInclude}@*/
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
+#include <ewoms/material/fluidmatrixinteractions/regularizedbrookscorey.hh> /*@\label{tutorial1:rawlawinclude}@*/
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
 
 // For the DUNE grid
 #include <dune/grid/yaspgrid.hh> /*@\label{tutorial1:include-grid-manager}@*/
-#include <opm/models/io/cubegridvanguard.hh> /*@\label{tutorial1:include-grid-manager}@*/
+#include <ewoms/numerics/io/cubegridvanguard.hh> /*@\label{tutorial1:include-grid-manager}@*/
 
 // For Dune::FieldMatrix
 #include <dune/common/fmatrix.hh>
 #include <dune/common/version.hh>
 
-namespace Opm {
+namespace Ewoms {
 // forward declaration of the problem class
 template <class TypeTag>
 class Tutorial1Problem;
@@ -68,23 +68,23 @@ SET_TAG_PROP(Tutorial1Problem, SpatialDiscretizationSplice,
 
 // Set the "Problem" property
 SET_TYPE_PROP(Tutorial1Problem, Problem,
-              Opm::Tutorial1Problem<TypeTag>); /*@\label{tutorial1:set-problem}@*/
+              Ewoms::Tutorial1Problem<TypeTag>); /*@\label{tutorial1:set-problem}@*/
 
 // Set grid and the grid manager to be used
 SET_TYPE_PROP(Tutorial1Problem, Grid, Dune::YaspGrid</*dim=*/2>); /*@\label{tutorial1:set-grid}@*/
-SET_TYPE_PROP(Tutorial1Problem, Vanguard, Opm::CubeGridVanguard<TypeTag>); /*@\label{tutorial1:set-grid-manager}@*/
+SET_TYPE_PROP(Tutorial1Problem, Vanguard, Ewoms::CubeGridVanguard<TypeTag>); /*@\label{tutorial1:set-grid-manager}@*/
 
 // Set the wetting phase /*@\label{tutorial1:2p-system-start}@*/
 SET_TYPE_PROP(Tutorial1Problem,
               WettingPhase, /*@\label{tutorial1:wettingPhase}@*/
-              Opm::LiquidPhase<typename GET_PROP_TYPE(TypeTag, Scalar),
-                               Opm::SimpleH2O<typename GET_PROP_TYPE(TypeTag, Scalar)> >);
+              Ewoms::LiquidPhase<typename GET_PROP_TYPE(TypeTag, Scalar),
+                               Ewoms::SimpleH2O<typename GET_PROP_TYPE(TypeTag, Scalar)> >);
 
 // Set the non-wetting phase
 SET_TYPE_PROP(Tutorial1Problem,
               NonwettingPhase, /*@\label{tutorial1:nonwettingPhase}@*/
-              Opm::LiquidPhase<typename GET_PROP_TYPE(TypeTag, Scalar),
-                               Opm::LNAPL<typename GET_PROP_TYPE(TypeTag, Scalar)> >); /*@\label{tutorial1:2p-system-end}@*/
+              Ewoms::LiquidPhase<typename GET_PROP_TYPE(TypeTag, Scalar),
+                               Ewoms::LNAPL<typename GET_PROP_TYPE(TypeTag, Scalar)> >); /*@\label{tutorial1:2p-system-end}@*/
 
 // Set the material law
 SET_PROP(Tutorial1Problem, MaterialLaw)
@@ -96,16 +96,16 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
-    typedef Opm::TwoPhaseMaterialTraits<Scalar, wettingPhaseIdx, nonWettingPhaseIdx> Traits;
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar, wettingPhaseIdx, nonWettingPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedBrooksCorey<Traits> RawMaterialLaw; /*@\label{tutorial1:rawlaw}@*/
+    typedef Ewoms::RegularizedBrooksCorey<Traits> RawMaterialLaw; /*@\label{tutorial1:rawlaw}@*/
 
 public:
     // Convert absolute saturations into effective ones before passing
     // it to the base capillary pressure law
-    typedef Opm::EffToAbsLaw<RawMaterialLaw> type; /*@\label{tutorial1:eff2abs}@*/
+    typedef Ewoms::EffToAbsLaw<RawMaterialLaw> type; /*@\label{tutorial1:eff2abs}@*/
 };
 
 // Disable gravity
@@ -129,7 +129,7 @@ SET_INT_PROP(Tutorial1Problem, CellsZ, 1); /*@\label{tutorial1:default-params-en
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 //! Tutorial problem using the "immiscible" model.
 template <class TypeTag>
 class Tutorial1Problem
@@ -232,7 +232,7 @@ public:
             // Free-flow conditions on left boundary
             const auto& materialParams = this->materialLawParams(context, spaceIdx, timeIdx);
 
-            Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+            Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
             Scalar Sw = 1.0;
             fs.setSaturation(wettingPhaseIdx, Sw);
             fs.setSaturation(nonWettingPhaseIdx, 1.0 - Sw);
@@ -281,7 +281,7 @@ public:
     void initial(PrimaryVariables& values, const Context& context,
                  unsigned spaceIdx, unsigned timeIdx) const
     {
-        Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+        Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
 
         // the domain is initially fully saturated by LNAPL
         Scalar Sw = 0.0;
@@ -309,7 +309,7 @@ private:
     // small epsilon value
     Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif
 

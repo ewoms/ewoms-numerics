@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -22,16 +22,16 @@
 */
 /*!
  * \file
- * \copydoc Opm::OutflowProblem
+ * \copydoc Ewoms::OutflowProblem
  */
 #ifndef EWOMS_OUTFLOW_PROBLEM_HH
 #define EWOMS_OUTFLOW_PROBLEM_HH
 
-#include <opm/models/pvs/pvsproperties.hh>
+#include <ewoms/numerics/models/pvs/pvsproperties.hh>
 
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidsystems/H2ON2LiquidPhaseFluidSystem.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidsystems/h2on2liquidphasefluidsystem.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -40,7 +40,7 @@
 #include <dune/common/fvector.hh>
 #include <dune/common/fmatrix.hh>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class OutflowProblem;
 }
@@ -53,7 +53,7 @@ NEW_TYPE_TAG(OutflowBaseProblem);
 SET_TYPE_PROP(OutflowBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
-SET_TYPE_PROP(OutflowBaseProblem, Problem, Opm::OutflowProblem<TypeTag>);
+SET_TYPE_PROP(OutflowBaseProblem, Problem, Ewoms::OutflowProblem<TypeTag>);
 
 // Set fluid system
 SET_PROP(OutflowBaseProblem, FluidSystem)
@@ -63,7 +63,7 @@ private:
 
 public:
     // Two-component single phase fluid system
-    typedef Opm::H2ON2LiquidPhaseFluidSystem<Scalar> type;
+    typedef Ewoms::H2ON2LiquidPhaseFluidSystem<Scalar> type;
 };
 
 // Disable gravity
@@ -83,7 +83,7 @@ SET_STRING_PROP(OutflowBaseProblem, GridFile, "./data/outflow.dgf");
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  *
@@ -197,9 +197,9 @@ public:
      * This problem assumes a temperature.
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; } // in [K]
 
     /*!
@@ -208,9 +208,9 @@ public:
      * This problem uses a constant intrinsic permeability.
      */
     template <class Context>
-    const DimMatrix& intrinsicPermeability(const Context& context OPM_UNUSED,
-                                           unsigned spaceIdx OPM_UNUSED,
-                                           unsigned timeIdx OPM_UNUSED) const
+    const DimMatrix& intrinsicPermeability(const Context& context EWOMS_UNUSED,
+                                           unsigned spaceIdx EWOMS_UNUSED,
+                                           unsigned timeIdx EWOMS_UNUSED) const
     { return perm_; }
 
     /*!
@@ -219,9 +219,9 @@ public:
      * This problem uses a constant porosity.
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return porosity_; }
 
 #if 0
@@ -260,7 +260,7 @@ public:
         const GlobalPosition& globalPos = context.pos(spaceIdx, timeIdx);
 
         if (onLeftBoundary_(globalPos)) {
-            Opm::CompositionalFluidState<Scalar, FluidSystem,
+            Ewoms::CompositionalFluidState<Scalar, FluidSystem,
                                          /*storeEnthalpy=*/false> fs;
             initialFluidState_(fs, context, spaceIdx, timeIdx);
             fs.setPressure(/*phaseIdx=*/0, fs.pressure(/*phaseIdx=*/0) + 1e5);
@@ -280,7 +280,7 @@ public:
             values.setFreeFlow(context, spaceIdx, timeIdx, fs);
         }
         else if (onRightBoundary_(globalPos)) {
-            Opm::CompositionalFluidState<Scalar, FluidSystem,
+            Ewoms::CompositionalFluidState<Scalar, FluidSystem,
                                          /*storeEnthalpy=*/false> fs;
             initialFluidState_(fs, context, spaceIdx, timeIdx);
 
@@ -308,7 +308,7 @@ public:
                  unsigned spaceIdx,
                  unsigned timeIdx) const
     {
-        Opm::CompositionalFluidState<Scalar, FluidSystem, /*storeEnthalpy=*/false> fs;
+        Ewoms::CompositionalFluidState<Scalar, FluidSystem, /*storeEnthalpy=*/false> fs;
         initialFluidState_(fs, context, spaceIdx, timeIdx);
 
         values.assignNaive(fs);
@@ -322,9 +322,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -369,6 +369,6 @@ private:
     Scalar porosity_;
     Scalar tortuosity_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

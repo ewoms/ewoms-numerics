@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,25 +23,25 @@
 /*!
  * \file
  *
- * \copydoc Opm::LensProblem
+ * \copydoc Ewoms::LensProblem
  */
 #ifndef EWOMS_LENS_PROBLEM_HH
 #define EWOMS_LENS_PROBLEM_HH
 
-#include <opm/models/io/structuredgridvanguard.hh>
-#include <opm/models/immiscible/immiscibleproperties.hh>
-#include <opm/models/discretization/common/fvbaseadlocallinearizer.hh>
-#include <opm/models/discretization/ecfv/ecfvdiscretization.hh>
+#include <ewoms/numerics/io/structuredgridvanguard.hh>
+#include <ewoms/numerics/models/immiscible/immiscibleproperties.hh>
+#include <ewoms/numerics/discretizations/common/fvbaseadlocallinearizer.hh>
+#include <ewoms/numerics/discretizations/ecfv/ecfvdiscretization.hh>
 
-#include <opm/material/fluidmatrixinteractions/RegularizedVanGenuchten.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/fluidsystems/TwoPhaseImmiscibleFluidSystem.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/components/Dnapl.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidmatrixinteractions/regularizedvangenuchten.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/fluidsystems/twophaseimmisciblefluidsystem.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/components/dnapl.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/common/version.hh>
 #include <dune/common/fvector.hh>
@@ -51,7 +51,7 @@
 #include <string>
 #include <iostream>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class LensProblem;
 }
@@ -69,7 +69,7 @@ NEW_PROP_TAG(LensUpperRightY);
 NEW_PROP_TAG(LensUpperRightZ);
 
 // Set the problem property
-SET_TYPE_PROP(LensBaseProblem, Problem, Opm::LensProblem<TypeTag>);
+SET_TYPE_PROP(LensBaseProblem, Problem, Ewoms::LensProblem<TypeTag>);
 
 // Use Dune-grid's YaspGrid
 SET_TYPE_PROP(LensBaseProblem, Grid, Dune::YaspGrid<2>);
@@ -81,7 +81,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::SimpleH2O<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
 };
 
 // Set the non-wetting phase
@@ -91,7 +91,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::DNAPL<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> > type;
 };
 
 // Set the material Law
@@ -103,17 +103,17 @@ private:
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Opm::RegularizedVanGenuchten<Traits> EffectiveLaw;
+    typedef Ewoms::RegularizedVanGenuchten<Traits> EffectiveLaw;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::EffToAbsLaw<EffectiveLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
 };
 
 // Write the solutions of individual newton iterations?
@@ -158,7 +158,7 @@ SET_BOOL_PROP(LensBaseProblem, EnableIntensiveQuantityCache, true);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 
 /*!
  * \ingroup TestProblems
@@ -326,7 +326,7 @@ public:
 
         std::string disc = "vertex centered finite volume";
         typedef typename GET_PROP_TYPE(TypeTag, Discretization) D;
-        bool useEcfv = std::is_same<D, Opm::EcfvDiscretization<TypeTag>>::value;
+        bool useEcfv = std::is_same<D, Ewoms::EcfvDiscretization<TypeTag>>::value;
         if (useEcfv)
             disc = "element centered finite volume";
 
@@ -360,9 +360,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return 0.4; }
 
     /*!
@@ -383,9 +383,9 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     //! \}
@@ -489,7 +489,7 @@ public:
             // specify a full fluid state using pw and Sw
             const MaterialLawParams& matParams = this->materialLawParams(context, spaceIdx, timeIdx);
 
-            Opm::ImmiscibleFluidState<Scalar, FluidSystem,
+            Ewoms::ImmiscibleFluidState<Scalar, FluidSystem,
                                       /*storeEnthalpy=*/false> fs;
             fs.setSaturation(wettingPhaseIdx, Sw);
             fs.setSaturation(nonWettingPhaseIdx, 1 - Sw);
@@ -539,7 +539,7 @@ public:
         const GlobalPosition& pos = context.pos(spaceIdx, timeIdx);
         Scalar depth = this->boundingBoxMax()[1] - pos[1];
 
-        Opm::ImmiscibleFluidState<Scalar, FluidSystem> fs;
+        Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> fs;
         fs.setPressure(wettingPhaseIdx, /*pressure=*/1e5);
 
         Scalar Sw = 1.0;
@@ -576,9 +576,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -625,6 +625,6 @@ private:
     Scalar eps_;
 };
 
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,23 +23,23 @@
 /*!
  * \file
  *
- * \copydoc Opm::ObstacleProblem
+ * \copydoc Ewoms::ObstacleProblem
  */
 #ifndef EWOMS_OBSTACLE_PROBLEM_HH
 #define EWOMS_OBSTACLE_PROBLEM_HH
 
-#include <opm/models/ncp/ncpproperties.hh>
+#include <ewoms/numerics/models/ncp/ncpproperties.hh>
 
-#include <opm/material/fluidsystems/H2ON2FluidSystem.hpp>
-#include <opm/material/constraintsolvers/ComputeFromReferencePhase.hpp>
-#include <opm/material/fluidstates/CompositionalFluidState.hpp>
-#include <opm/material/fluidmatrixinteractions/RegularizedBrooksCorey.hpp>
-#include <opm/material/fluidmatrixinteractions/EffToAbsLaw.hpp>
-#include <opm/material/fluidmatrixinteractions/LinearMaterial.hpp>
-#include <opm/material/fluidmatrixinteractions/MaterialTraits.hpp>
-#include <opm/material/thermal/ConstantSolidHeatCapLaw.hpp>
-#include <opm/material/thermal/SomertonThermalConductionLaw.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/fluidsystems/h2on2fluidsystem.hh>
+#include <ewoms/material/constraintsolvers/computefromreferencephase.hh>
+#include <ewoms/material/fluidstates/compositionalfluidstate.hh>
+#include <ewoms/material/fluidmatrixinteractions/regularizedbrookscorey.hh>
+#include <ewoms/material/fluidmatrixinteractions/efftoabslaw.hh>
+#include <ewoms/material/fluidmatrixinteractions/linearmaterial.hh>
+#include <ewoms/material/fluidmatrixinteractions/materialtraits.hh>
+#include <ewoms/material/thermal/constantsolidheatcaplaw.hh>
+#include <ewoms/material/thermal/somertonthermalconductionlaw.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -52,7 +52,7 @@
 #include <string>
 #include <iostream>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class ObstacleProblem;
 }
@@ -65,11 +65,11 @@ NEW_TYPE_TAG(ObstacleBaseProblem);
 SET_TYPE_PROP(ObstacleBaseProblem, Grid, Dune::YaspGrid<2>);
 
 // Set the problem property
-SET_TYPE_PROP(ObstacleBaseProblem, Problem, Opm::ObstacleProblem<TypeTag>);
+SET_TYPE_PROP(ObstacleBaseProblem, Problem, Ewoms::ObstacleProblem<TypeTag>);
 
 // Set fluid configuration
 SET_TYPE_PROP(ObstacleBaseProblem, FluidSystem,
-              Opm::H2ON2FluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::H2ON2FluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Set the material Law
 SET_PROP(ObstacleBaseProblem, MaterialLaw)
@@ -78,15 +78,15 @@ private:
     // define the material law
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef Opm::TwoPhaseMaterialTraits<Scalar,
+    typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx>
     MaterialTraits;
 
-    typedef Opm::LinearMaterial<MaterialTraits> EffMaterialLaw;
+    typedef Ewoms::LinearMaterial<MaterialTraits> EffMaterialLaw;
 
 public:
-    typedef Opm::EffToAbsLaw<EffMaterialLaw> type;
+    typedef Ewoms::EffToAbsLaw<EffMaterialLaw> type;
 };
 
 // Set the thermal conduction law
@@ -98,12 +98,12 @@ private:
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Opm::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
 };
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(ObstacleBaseProblem, SolidEnergyLaw,
-              Opm::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Enable gravity
 SET_BOOL_PROP(ObstacleBaseProblem, EnableGravity, true);
@@ -119,7 +119,7 @@ SET_STRING_PROP(ObstacleBaseProblem, GridFile, "./data/obstacle_24x16.dgf");
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  *
@@ -309,9 +309,9 @@ public:
      * This problem simply assumes a constant temperature.
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return temperature_; }
 
     /*!
@@ -366,9 +366,9 @@ public:
      */
     template <class Context>
     const SolidEnergyLawParams&
-    solidEnergyLawParams(const Context& context OPM_UNUSED,
-                         unsigned spaceIdx OPM_UNUSED,
-                         unsigned timeIdx OPM_UNUSED) const
+    solidEnergyLawParams(const Context& context EWOMS_UNUSED,
+                         unsigned spaceIdx EWOMS_UNUSED,
+                         unsigned timeIdx EWOMS_UNUSED) const
     { return solidEnergyLawParams_; }
 
     /*!
@@ -440,9 +440,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = 0.0; }
 
     //! \}
@@ -528,7 +528,7 @@ private:
 
         // make the fluid state consistent with local thermodynamic
         // equilibrium
-        typedef Opm::ComputeFromReferencePhase<Scalar, FluidSystem> ComputeFromReferencePhase;
+        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> ComputeFromReferencePhase;
 
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         ComputeFromReferencePhase::solve(fs, paramCache, refPhaseIdx,
@@ -563,12 +563,12 @@ private:
     ThermalConductionLawParams coarseThermalCondParams_;
     SolidEnergyLawParams solidEnergyLawParams_;
 
-    Opm::CompositionalFluidState<Scalar, FluidSystem> inletFluidState_;
-    Opm::CompositionalFluidState<Scalar, FluidSystem> outletFluidState_;
+    Ewoms::CompositionalFluidState<Scalar, FluidSystem> inletFluidState_;
+    Ewoms::CompositionalFluidState<Scalar, FluidSystem> outletFluidState_;
 
     Scalar temperature_;
     Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif

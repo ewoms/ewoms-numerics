@@ -1,20 +1,20 @@
 // -*- mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
 // vi: set et ts=4 sw=4 sts=4:
 /*
-  This file is part of the Open Porous Media project (OPM).
+  This file is part of the eWoms project.
 
-  OPM is free software: you can redistribute it and/or modify
+  eWoms is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 2 of the License, or
+  the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
 
-  OPM is distributed in the hope that it will be useful,
+  eWoms is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
 
   You should have received a copy of the GNU General Public License
-  along with OPM.  If not, see <http://www.gnu.org/licenses/>.
+  along with eWoms.  If not, see <http://www.gnu.org/licenses/>.
 
   Consult the COPYING file in the top-level source directory of this
   module for the precise wording of the license and the list of
@@ -23,18 +23,18 @@
 /*!
  * \file
  *
- * \copydoc Opm::GroundWaterProblem
+ * \copydoc Ewoms::GroundWaterProblem
  */
 #ifndef EWOMS_GROUND_WATER_PROBLEM_HH
 #define EWOMS_GROUND_WATER_PROBLEM_HH
 
-#include <opm/models/immiscible/immiscibleproperties.hh>
-#include <opm/simulators/linalg/parallelistlbackend.hh>
+#include <ewoms/numerics/models/immiscible/immiscibleproperties.hh>
+#include <ewoms/numerics/linear/parallelistlbackend.hh>
 
-#include <opm/material/components/SimpleH2O.hpp>
-#include <opm/material/fluidstates/ImmiscibleFluidState.hpp>
-#include <opm/material/fluidsystems/LiquidPhase.hpp>
-#include <opm/material/common/Unused.hpp>
+#include <ewoms/material/components/simpleh2o.hh>
+#include <ewoms/material/fluidstates/immisciblefluidstate.hh>
+#include <ewoms/material/fluidsystems/liquidphase.hh>
+#include <ewoms/common/unused.hh>
 
 #include <dune/grid/yaspgrid.hh>
 #include <dune/grid/io/file/dgfparser/dgfyasp.hh>
@@ -46,7 +46,7 @@
 #include <sstream>
 #include <string>
 
-namespace Opm {
+namespace Ewoms {
 template <class TypeTag>
 class GroundWaterProblem;
 }
@@ -70,7 +70,7 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
-    typedef Opm::LiquidPhase<Scalar, Opm::SimpleH2O<Scalar> > type;
+    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
 };
 
 // Set the grid type
@@ -78,7 +78,7 @@ SET_TYPE_PROP(GroundWaterBaseProblem, Grid, Dune::YaspGrid<2>);
 // SET_TYPE_PROP(GroundWaterBaseProblem, Grid, Dune::SGrid<2, 2>);
 
 SET_TYPE_PROP(GroundWaterBaseProblem, Problem,
-              Opm::GroundWaterProblem<TypeTag>);
+              Ewoms::GroundWaterProblem<TypeTag>);
 
 SET_SCALAR_PROP(GroundWaterBaseProblem, LensLowerLeftX, 0.25);
 SET_SCALAR_PROP(GroundWaterBaseProblem, LensLowerLeftY, 0.25);
@@ -105,11 +105,11 @@ SET_STRING_PROP(GroundWaterBaseProblem, GridFile, "./data/groundwater_2d.dgf");
 // ILU-0) from dune-istl
 SET_TAG_PROP(GroundWaterBaseProblem, LinearSolverSplice, ParallelIstlLinearSolver);
 SET_TYPE_PROP(GroundWaterBaseProblem, LinearSolverWrapper,
-              Opm::Linear::SolverWrapperConjugatedGradients<TypeTag>);
+              Ewoms::Linear::SolverWrapperConjugatedGradients<TypeTag>);
 
 END_PROPERTIES
 
-namespace Opm {
+namespace Ewoms {
 /*!
  * \ingroup TestProblems
  *
@@ -266,18 +266,18 @@ public:
      * \copydoc FvBaseMultiPhaseProblem::temperature
      */
     template <class Context>
-    Scalar temperature(const Context& context OPM_UNUSED,
-                       unsigned spaceIdx OPM_UNUSED,
-                       unsigned timeIdx OPM_UNUSED) const
+    Scalar temperature(const Context& context EWOMS_UNUSED,
+                       unsigned spaceIdx EWOMS_UNUSED,
+                       unsigned timeIdx EWOMS_UNUSED) const
     { return 273.15 + 10; } // 10C
 
     /*!
      * \copydoc FvBaseMultiPhaseProblem::porosity
      */
     template <class Context>
-    Scalar porosity(const Context& context OPM_UNUSED,
-                    unsigned spaceIdx OPM_UNUSED,
-                    unsigned timeIdx OPM_UNUSED) const
+    Scalar porosity(const Context& context EWOMS_UNUSED,
+                    unsigned spaceIdx EWOMS_UNUSED,
+                    unsigned timeIdx EWOMS_UNUSED) const
     { return 0.4; }
 
     /*!
@@ -317,7 +317,7 @@ public:
             else // on upper boundary
                 pressure = 1e5;
 
-            Opm::ImmiscibleFluidState<Scalar, FluidSystem,
+            Ewoms::ImmiscibleFluidState<Scalar, FluidSystem,
                                       /*storeEnthalpy=*/false> fs;
             fs.setSaturation(/*phaseIdx=*/0, 1.0);
             fs.setPressure(/*phaseIdx=*/0, pressure);
@@ -351,9 +351,9 @@ public:
      */
     template <class Context>
     void initial(PrimaryVariables& values,
-                 const Context& context OPM_UNUSED,
-                 unsigned spaceIdx OPM_UNUSED,
-                 unsigned timeIdx OPM_UNUSED) const
+                 const Context& context EWOMS_UNUSED,
+                 unsigned spaceIdx EWOMS_UNUSED,
+                 unsigned timeIdx EWOMS_UNUSED) const
     {
         // const GlobalPosition& globalPos = context.pos(spaceIdx, timeIdx);
         values[pressure0Idx] = 1.0e+5; // + 9.81*1.23*(20-globalPos[dim-1]);
@@ -364,9 +364,9 @@ public:
      */
     template <class Context>
     void source(RateVector& rate,
-                const Context& context OPM_UNUSED,
-                unsigned spaceIdx OPM_UNUSED,
-                unsigned timeIdx OPM_UNUSED) const
+                const Context& context EWOMS_UNUSED,
+                unsigned spaceIdx EWOMS_UNUSED,
+                unsigned timeIdx EWOMS_UNUSED) const
     { rate = Scalar(0.0); }
 
     //! \}
@@ -392,6 +392,6 @@ private:
 
     Scalar eps_;
 };
-} // namespace Opm
+} // namespace Ewoms
 
 #endif
