@@ -281,6 +281,7 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
 {
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef typename GET_PROP_TYPE(TypeTag, Vanguard) Vanguard;
     typedef typename GET_PROP_TYPE(TypeTag, Problem) Problem;
     typedef typename GET_PROP_TYPE(TypeTag, ThreadManager) ThreadManager;
 
@@ -301,6 +302,8 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
     int myRank = 0;
     try
     {
+        Vanguard::preDawn();
+
         int paramStatus = setupParameters_<TypeTag>(argc, const_cast<const char**>(argv), registerParams);
         if (paramStatus == 1)
             return 1;
@@ -308,6 +311,8 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
             return 0;
 
         ThreadManager::init();
+
+        Vanguard::dawn();
 
         // initialize MPI, finalize is done automatically on exit
 #if HAVE_DUNE_FEM

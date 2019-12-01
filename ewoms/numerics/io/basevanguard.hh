@@ -70,6 +70,19 @@ class BaseVanguard
 #endif
 
 public:
+    /*!
+     * \brief This method is called before the parameters are processed.
+     */
+    static void preDawn()
+    {}
+
+    /*!
+     * \brief This method is called after the parameters are processed, but before the
+     *        vanguard and simulator objects are instantiated.
+     */
+    static void dawn()
+    {}
+
     BaseVanguard(Simulator& simulator)
         : simulator_(simulator)
     {}
