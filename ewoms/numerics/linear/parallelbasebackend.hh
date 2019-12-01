@@ -39,7 +39,6 @@
 #include <ewoms/common/genericguard.hh>
 #include <ewoms/common/propertysystem.hh>
 #include <ewoms/common/parametersystem.hh>
-#include <ewoms/numerics/linear/matrixblock.hh>
 
 #include <dune/grid/io/file/vtk/vtkwriter.hh>
 
@@ -122,7 +121,7 @@ SET_PROP(ParallelBaseLinearSolver, SparseMatrixAdapter)
 private:
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
-    typedef Ewoms::MatrixBlock<Scalar, numEq, numEq> Block;
+    typedef Dune::FieldMatrix<Scalar, numEq, numEq> Block;
 
 public:
     typedef typename Ewoms::Linear::IstlSparseMatrixAdapter<Block> type;
@@ -467,7 +466,7 @@ SET_PROP(ParallelBaseLinearSolver, OverlappingMatrix)
 private:
     static constexpr int numEq = GET_PROP_VALUE(TypeTag, NumEq);
     typedef typename GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
-    typedef Ewoms::MatrixBlock<LinearSolverScalar, numEq, numEq> MatrixBlock;
+    typedef Dune::FieldMatrix<LinearSolverScalar, numEq, numEq> MatrixBlock;
     typedef Dune::BCRSMatrix<MatrixBlock> NonOverlappingMatrix;
 
 public:

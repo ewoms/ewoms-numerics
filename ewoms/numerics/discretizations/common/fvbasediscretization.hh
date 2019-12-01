@@ -53,7 +53,6 @@
 #include <ewoms/common/alignedallocator.hh>
 #include <ewoms/common/timer.hh>
 #include <ewoms/common/timerguard.hh>
-#include <ewoms/numerics/linear/matrixblock.hh>
 
 #include <ewoms/common/mathtoolbox.hh>
 #include <ewoms/common/valgrind.hh>
