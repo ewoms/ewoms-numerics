@@ -48,7 +48,6 @@
 #include "baseauxiliarymodule.hh"
 
 #include <ewoms/numerics/parallel/gridcommhandles.hh>
-#include <ewoms/numerics/parallel/threadmanager.hh>
 #include <ewoms/numerics/linear/nullborderlistmanager.hh>
 #include <ewoms/numerics/utils/simulator.hh>
 #include <ewoms/common/alignedallocator.hh>
@@ -201,10 +200,6 @@ SET_TYPE_PROP(FvBaseDiscretization, ElementContext, Ewoms::FvBaseElementContext<
 SET_TYPE_PROP(FvBaseDiscretization, BoundaryContext, Ewoms::FvBaseBoundaryContext<TypeTag>);
 SET_TYPE_PROP(FvBaseDiscretization, ConstraintsContext, Ewoms::FvBaseConstraintsContext<TypeTag>);
 
-/*!
- * \brief The OpenMP threads manager
- */
-SET_TYPE_PROP(FvBaseDiscretization, ThreadManager, Ewoms::ThreadManager<TypeTag>);
 SET_INT_PROP(FvBaseDiscretization, ThreadsPerProcess, 1);
 SET_BOOL_PROP(FvBaseDiscretization, UseLinearizationLock, true);
 
@@ -313,8 +308,6 @@ class FvBaseDiscretization
     typedef typename GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
     typedef typename GET_PROP_TYPE(TypeTag, GridCommHandleFactory) GridCommHandleFactory;
     typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
-    typedef typename GET_PROP_TYPE(TypeTag, ThreadManager) ThreadManager;
-
     typedef typename GET_PROP_TYPE(TypeTag, LocalLinearizer) LocalLinearizer;
     typedef typename GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
 
@@ -387,7 +380,7 @@ public:
         , vertexMapper_(gridView_)
 #endif
         , newtonMethod_(simulator)
-        , localLinearizer_(ThreadManager::maxThreads())
+        , localLinearizer_(std::max(simulator_.numWorkerThreads(), 1))
         , linearizer_(new Linearizer())
 #if HAVE_DUNE_FEM
         , space_( simulator.vanguard().gridPart() )
@@ -460,6 +453,7 @@ public:
         // register runtime parameters of the output modules
         Ewoms::VtkPrimaryVarsModule<TypeTag>::registerParameters();
 
+        EWOMS_REGISTER_PARAM(TypeTag, int, ThreadsPerProcess, "The number of worker threads spawned for each MPI process.");
         EWOMS_REGISTER_PARAM(TypeTag, bool, EnableGridAdaptation, "Enable adaptive grid refinement/coarsening");
         EWOMS_REGISTER_PARAM(TypeTag, bool, EnableVtkOutput, "Global switch for turning on writing VTK files");
         EWOMS_REGISTER_PARAM(TypeTag, bool, EnableThermodynamicHints, "Enable thermodynamic hints");
@@ -527,7 +521,8 @@ public:
         gridTotalVolume_ = gridView_.comm().sum(gridTotalVolume_);
 
         linearizer_->init(simulator_);
-        for (unsigned threadId = 0; threadId < ThreadManager::maxThreads(); ++threadId)
+        int numThreads = std::max(simulator_.numWorkerThreads(), 1);
+        for (int threadId = 0; threadId < numThreads; ++threadId)
             localLinearizer_[threadId].init(simulator_);
 
         resizeAndResetIntensiveQuantitiesCache_();
@@ -825,13 +820,14 @@ public:
         dest = 0;
 
         std::mutex mutex;
+        auto& taskletRunner = simulator_.taskletRunner();
+        int numThreads = std::max(taskletRunner.numWorkerThreads(), 1);
         ThreadedEntityIterator<GridView, /*codim=*/0> threadedElemIt(gridView_);
-#ifdef _OPENMP
-#endif
+        auto globalResidLambda = [this, &mutex, &threadedElemIt, &dest]() -> void
         {
             // Attention: the variables below are thread specific and thus cannot be
-            // moved in front of the #pragma!
-            unsigned threadId = ThreadManager::threadId();
+            // moved out of the lambda!
+            int threadId = std::max(simulator_.taskletRunner().workerThreadIndex(), 0);
             ElementContext elemCtx(simulator_);
             ElementIterator elemIt = threadedElemIt.beginParallel();
             LocalEvalBlockVector residual, storageTerm;
@@ -855,7 +851,10 @@ public:
                 }
                 mutex.unlock();
             }
-        }
+        };
+
+        taskletRunner.dispatchFunction(globalResidLambda, /*numInvokations=*/numThreads);
+        taskletRunner.barrier();
 
         // add up the residuals on the process borders
         const auto sumHandle =
@@ -886,12 +885,12 @@ public:
 
         std::mutex mutex;
         ThreadedEntityIterator<GridView, /*codim=*/0> threadedElemIt(gridView());
-#ifdef _OPENMP
-#endif
+
+        auto globalStorageLambda = [this, &mutex, &threadedElemIt, &storage, timeIdx]() -> void
         {
             // Attention: the variables below are thread specific and thus cannot be
-            // moved in front of the #pragma!
-            unsigned threadId = ThreadManager::threadId();
+            // moved out of the lambda!
+            unsigned threadId = std::max(0, simulator_.taskletRunner().workerThreadIndex());
             ElementContext elemCtx(simulator_);
             ElementIterator elemIt = threadedElemIt.beginParallel();
             LocalEvalBlockVector elemStorage;
@@ -919,7 +918,12 @@ public:
                         storage[eqIdx] += Toolbox::value(elemStorage[dofIdx][eqIdx]);
                 mutex.unlock();
             }
-        }
+        };
+
+        auto& taskletRunner = simulator_.taskletRunner();
+        unsigned numThreads = std::max(1, taskletRunner.numWorkerThreads());
+        taskletRunner.dispatchFunction(globalStorageLambda, /*numInvokations=*/numThreads);
+        taskletRunner.barrier();
 
         storage = gridView_.comm().sum(storage);
     }
@@ -1656,9 +1660,10 @@ public:
 
         // iterate over grid
         ThreadedEntityIterator<GridView, /*codim=*/0> threadedElemIt(gridView());
-#ifdef _OPENMP
-#endif
+
+        auto prepareOutputLambda = [this, &threadedElemIt, needFullContextUpdate]() -> void
         {
+            const auto& modEndIt = outputModules_.end();
             ElementContext elemCtx(simulator_);
             ElementIterator elemIt = threadedElemIt.beginParallel();
             for (; !threadedElemIt.isFinished(elemIt); elemIt = threadedElemIt.increment()) {
@@ -1681,7 +1686,12 @@ public:
                 for (; modIt2 != modEndIt; ++modIt2)
                     (*modIt2)->processElement(elemCtx);
             }
-        }
+        };
+
+        auto& taskletRunner = simulator_.taskletRunner();
+        int numThreads = std::max(1, taskletRunner.numWorkerThreads());
+        taskletRunner.dispatchFunction(prepareOutputLambda, /*numInvokations=*/numThreads);
+        taskletRunner.barrier();
     }
 
     /*!

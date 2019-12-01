@@ -71,7 +71,6 @@ BEGIN_PROPERTIES
 // forward declaration of property tags
 NEW_PROP_TAG(Scalar);
 NEW_PROP_TAG(Simulator);
-NEW_PROP_TAG(ThreadManager);
 NEW_PROP_TAG(PrintProperties);
 NEW_PROP_TAG(PrintParameters);
 NEW_PROP_TAG(ParameterFile);
@@ -89,7 +88,6 @@ template <class TypeTag>
 static inline void registerAllParameters_(bool finalizeRegistration = true)
 {
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, ThreadManager) ThreadManager;
 
     EWOMS_REGISTER_PARAM(TypeTag, std::string, ParameterFile,
                          "An .ini file which contains a set of run-time "
@@ -102,7 +100,6 @@ static inline void registerAllParameters_(bool finalizeRegistration = true)
                          "start of the simulation");
 
     Simulator::registerParameters();
-    ThreadManager::registerParameters();
 
     if (finalizeRegistration)
         EWOMS_END_PARAM_REGISTRATION(TypeTag);
@@ -283,7 +280,6 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, Vanguard) Vanguard;
     typedef typename GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef typename GET_PROP_TYPE(TypeTag, ThreadManager) ThreadManager;
 
     // set the signal handlers to reset the TTY to a well defined state on unexpected
     // program aborts
@@ -309,8 +305,6 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
             return 1;
         if (paramStatus == 2)
             return 0;
-
-        ThreadManager::init();
 
         Vanguard::dawn();
 
