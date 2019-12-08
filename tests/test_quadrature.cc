@@ -164,9 +164,9 @@ void writeTetrahedronSubControlVolumes(const Grid& EWOMS_NO_ALUGRID_UNUSED grid)
         }
     }
 
-    const auto &grid2 = *gf2.createGrid();
+    std::unique_ptr<Grid2> grid2(gf2.createGrid());
     typedef Dune::VTKWriter<GridView2> VtkWriter;
-    VtkWriter writer(grid2.leafView(), Dune::VTK::conforming);
+    VtkWriter writer(grid2->leafView(), Dune::VTK::conforming);
     writer.write("tetrahedron-scvs", Dune::VTK::ascii);
 #endif // HAVE_DUNE_ALUGRID
 }
@@ -188,10 +188,10 @@ void testTetrahedron()
     std::vector<unsigned int> v = { 0, 1, 2, 3 };
     // in Dune >= 2.6 topologyIds seem to be opaque integers. WTF!?
     gf.insertElement(Dune::GeometryType(/*topologyId=*/0, dim), v);
-    const auto& grid = *gf.createGrid();
+    std::unique_ptr<Grid> gridPtr(gf.createGrid());
 
     // write the sub-control volumes to a VTK file.
-    writeTetrahedronSubControlVolumes(grid);
+    writeTetrahedronSubControlVolumes(*gridPtr);
 #endif // HAVE_DUNE_ALUGRID
 }
 
@@ -250,9 +250,9 @@ void writeCubeSubControlVolumes(const Grid& EWOMS_NO_ALUGRID_UNUSED grid)
         }
     }
 
-    const auto &grid2 = *gf2.createGrid();
+    std::unique_ptr<Grid2> grid2(gf2.createGrid());
     typedef Dune::VTKWriter<GridView2> VtkWriter;
-    VtkWriter writer(grid2.leafView(), Dune::VTK::conforming);
+    VtkWriter writer(grid2->leafView(), Dune::VTK::conforming);
     writer.write("cube-scvs", Dune::VTK::ascii);
 #endif // HAVE_DUNE_ALUGRID
 }
@@ -281,10 +281,10 @@ void testCube()
     std::vector<unsigned int> v = { 0, 1, 2, 3, 4, 5, 6, 7 };
     // in Dune >= 2.6 topologyIds seem to be opaque integers. WTF!?
     gf.insertElement(Dune::GeometryType((1 << dim) - 1, dim), v);
-    const auto& grid = *gf.createGrid();
+    std::unique_ptr<Grid> gridPtr(gf.createGrid());
 
     // write the sub-control volumes to a VTK file.
-    writeCubeSubControlVolumes(grid);
+    writeCubeSubControlVolumes(*gridPtr);
 #endif // HAVE_DUNE_ALUGRID
 }
 
