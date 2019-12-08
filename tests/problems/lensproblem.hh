@@ -28,6 +28,8 @@
 #ifndef EWOMS_LENS_PROBLEM_HH
 #define EWOMS_LENS_PROBLEM_HH
 
+#define LENS_USE_ALUGRID 1
+
 #include <ewoms/numerics/io/structuredgridvanguard.hh>
 #include <ewoms/numerics/models/immiscible/immiscibleproperties.hh>
 #include <ewoms/numerics/discretizations/common/fvbaseadlocallinearizer.hh>
@@ -42,6 +44,10 @@
 #include <ewoms/material/components/simpleh2o.hh>
 #include <ewoms/material/components/dnapl.hh>
 #include <ewoms/common/unused.hh>
+
+#if HAVE_DUNE_ALUGRID
+#include <dune/alugrid/grid.hh>
+#endif
 
 #include <dune/common/version.hh>
 #include <dune/common/fvector.hh>
@@ -71,8 +77,15 @@ NEW_PROP_TAG(LensUpperRightZ);
 // Set the problem property
 SET_TYPE_PROP(LensBaseProblem, Problem, Ewoms::LensProblem<TypeTag>);
 
+#if HAVE_DUNE_ALUGRID && LENS_USE_ALUGRID
+// use dune-alugrid. this code is intentionally hidden because while dune-alugrid is
+// useful for testing features like adaptivity it is quite a bit slower than YaspGrid,
+// i.e., when doing performance work it would be too easy to shot oneself into the foot
+SET_TYPE_PROP(LensBaseProblem, Grid, Dune::ALUGrid</*dim=*/2, /*dimWorld=*/2, Dune::cube, Dune::nonconforming>);
+#else
 // Use Dune-grid's YaspGrid
 SET_TYPE_PROP(LensBaseProblem, Grid, Dune::YaspGrid<2>);
+#endif
 
 // Set the wetting phase
 SET_PROP(LensBaseProblem, WettingPhase)
