@@ -40,6 +40,8 @@
 #include <ewoms/eclio/parser/eclipsestate/eclipsestate.hh>
 #include <ewoms/eclio/parser/eclipsestate/tables/foamadstable.hh>
 #include <ewoms/eclio/parser/eclipsestate/tables/foammobtable.hh>
+#include <ewoms/eclio/parser/deck/deck.hh>
+#include <ewoms/eclio/opmlog/opmlog.hh>
 #endif
 
 #include <ewoms/common/valgrind.hh>
@@ -246,9 +248,11 @@ public:
             // foam have been disabled at compile time
             return;
 
+#if HAVE_EWOMS_ECLIO
         if (enableVtkOutput) {
             Ewoms::OpmLog::warning("VTK output requested, currently unsupported by the foam module.");
         }
+#endif
         //model.addOutputModule(new Ewoms::VtkBlackOilFoamModule<TypeTag>(simulator));
     }
 
