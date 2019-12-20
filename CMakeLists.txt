@@ -180,7 +180,7 @@ ewoms_add_test(lens_immiscible_vcfv_ad_parallel
              EXE_NAME lens_immiscible_vcfv_ad
              NO_COMPILE
              PROCESSORS 4
-             CONDITION ${MPI_FOUND}
+             CONDITION MPI_FOUND
              DRIVER_ARGS --parallel-simulation=4
              TEST_ARGS --end-time=250 --initial-time-step-size=250)
 
