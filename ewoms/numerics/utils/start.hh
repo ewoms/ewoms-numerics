@@ -306,8 +306,6 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
         if (paramStatus == 2)
             return 0;
 
-        Vanguard::dawn();
-
         // initialize MPI, finalize is done automatically on exit
 #if HAVE_DUNE_FEM
         Dune::Fem::MPIManager::initialize(argc, argv);
@@ -315,6 +313,8 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
 #else
         myRank = Dune::MPIHelper::instance(argc, argv).rank();
 #endif
+
+        Vanguard::dawn();
 
         // read the initial time step and the end time
         Scalar endTime = EWOMS_GET_PARAM(TypeTag, Scalar, EndTime);
