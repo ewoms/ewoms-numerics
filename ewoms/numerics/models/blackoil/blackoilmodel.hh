@@ -247,6 +247,12 @@ class BlackOilModel
 
     static const bool compositionSwitchEnabled = Indices::gasEnabled;
     static const bool waterEnabled = Indices::waterEnabled;
+    static const bool gasEnabled = Indices::gasEnabled;
+
+    static const int waterPhaseIdx = FluidSystem::waterPhaseIdx;
+    static const int gasPhaseIdx = FluidSystem::gasPhaseIdx;
+
+    static constexpr Scalar maxWaterPriority = 1.0;
 
     typedef BlackOilSolventModule<TypeTag> SolventModule;
     typedef BlackOilPolymerModule<TypeTag> PolymerModule;
@@ -254,7 +260,9 @@ class BlackOilModel
 public:
     BlackOilModel(Simulator& simulator)
         : ParentType(simulator)
-    {}
+    {
+        waterPriority_ = maxWaterPriority;
+    }
 
     /*!
      * \brief Register all run-time parameters for the immiscible model.
@@ -380,16 +388,13 @@ public:
         if (globalDofIdx >= this->numGridDof())
             return 1.0;
 
-        // we do not care much about water, so it gets de-prioritized by a factor of 100
-        static constexpr Scalar waterPriority = 1e-2;
-
         if (GET_PROP_VALUE(TypeTag, BlackoilConserveSurfaceVolume)) {
             // Roughly convert the surface volume of the fluids from m^3 to kg. (in this
             // context, it does not really matter if the actual densities are off by a
             // factor of two or three.)
             switch (eqIdx) {
             case Indices::conti0EqIdx + FluidSystem::waterCompIdx:
-                return 1000.0*waterPriority;
+                return 1000.0*waterPriority_;
 
             case Indices::conti0EqIdx + FluidSystem::gasCompIdx:
                 return 1.0;
@@ -410,7 +415,7 @@ public:
 
         // it is said that all kilograms are born equal (except water)!
         if (eqIdx == Indices::conti0EqIdx + FluidSystem::waterCompIdx)
-            return waterPriority;
+            return waterPriority_;
         return 1.0;
     }
 
@@ -487,6 +492,61 @@ public:
     }
 
     /*!
+     * \brief Calculate the priority of the water component relative to the other
+     *        components.
+     *
+     * This assumes that we're not that much interested in conservation of water. It can
+     * considerably improve numerical performance, but it is strongly dependent on the
+     * actual reservoir conditions if this is a good idea.
+     *
+     * Note that the only purpose of this method is to improve performance, i.e., calling
+     * it is completely optional from a correctness point of view.
+     */
+    void updateWaterPriority()
+    {
+        if (!gasEnabled || !waterEnabled)
+            // there is little point in determining a water priority if either water or
+            // gas are not active...
+            return;
+
+        Scalar sumPv = 0.0;
+        Scalar sumGasPv = 0.0;
+
+        ElementContext elemCtx(this->simulator_);
+        auto elemIt = this->gridView().template begin</*codim=*/0>();
+        auto elemEndIt = this->gridView().template end</*codim=*/0>();
+        for (; elemIt != elemEndIt; ++ elemIt) {
+            const auto& elem = *elemIt;
+            if (elem.partitionType() != Dune::InteriorEntity)
+                // ignore non-interior elements
+                continue;
+
+            elemCtx.updatePrimaryStencil(elem);
+            elemCtx.updatePrimaryIntensiveQuantities(/*timeIdx=*/0);
+
+            for (size_t dofIdx = 0; dofIdx < elemCtx.numPrimaryDof(/*timeIdx=*/0); ++dofIdx) {
+                const auto& iq = elemCtx.intensiveQuantities(dofIdx, /*timeIdx=*/0);
+
+                Scalar dofPv = Ewoms::decay<Scalar>(iq.porosity())*elemCtx.dofVolume(dofIdx, /*timeIdx=*/0);
+                sumPv += dofPv;
+                sumGasPv += dofPv*Ewoms::decay<Scalar>(iq.fluidState().saturation(gasPhaseIdx));
+            }
+        }
+
+        // take the other processes into account
+        sumPv = this->gridView().comm().sum(sumPv);
+        sumGasPv = this->gridView().comm().sum(sumGasPv);
+
+        // linear interpolation with crash barriers
+        Scalar x = sumGasPv/sumPv;
+        Scalar b = maxWaterPriority;
+        Scalar m = (0.001 - b)/0.01;
+
+        waterPriority_ = m*x + b;
+        waterPriority_ = std::max(0.001, std::min(1.0, waterPriority_));
+    }
+
+    /*!
      * \brief Deserializes the state of the model.
      *
      * \tparam Restarter The type of the serializer class
@@ -560,6 +620,8 @@ private:
         unsigned regionIdx = context.problem().pvtRegionIndex(context, dofIdx, timeIdx);
         priVars.setPvtRegionIndex(regionIdx);
     }
+
+    Scalar waterPriority_;
 };
 } // namespace Ewoms
 
