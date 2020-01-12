@@ -379,7 +379,7 @@ public:
         , vertexMapper_(gridView_)
 #endif
         , newtonMethod_(simulator)
-        , localLinearizer_(std::max(simulator_.numWorkerThreads(), 1))
+        , localLinearizer_(std::max<int>(simulator_.numWorkerThreads(), 1))
         , linearizer_(new Linearizer())
 #if HAVE_DUNE_FEM
         , space_( simulator.vanguard().gridPart() )
@@ -520,7 +520,7 @@ public:
         gridTotalVolume_ = gridView_.comm().sum(gridTotalVolume_);
 
         linearizer_->init(simulator_);
-        int numThreads = std::max(simulator_.numWorkerThreads(), 1);
+        int numThreads = std::max<int>(simulator_.numWorkerThreads(), 1);
         for (int threadId = 0; threadId < numThreads; ++threadId)
             localLinearizer_[threadId].init(simulator_);
 
