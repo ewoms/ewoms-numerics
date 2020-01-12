@@ -27,6 +27,8 @@
 #ifndef EWOMS_GLOBAL_INDICES_HH
 #define EWOMS_GLOBAL_INDICES_HH
 
+#include <ewoms/common/unused.hh>
+
 #include <dune/grid/common/datahandleif.hh>
 #include <dune/istl/bcrsmatrix.hh>
 #include <dune/istl/scalarproducts.hh>

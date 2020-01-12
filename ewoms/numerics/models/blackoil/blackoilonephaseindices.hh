@@ -28,6 +28,8 @@
 #ifndef EWOMS_BLACK_OIL_ONE_PHASE_INDICES_HH
 #define EWOMS_BLACK_OIL_ONE_PHASE_INDICES_HH
 
+#include <ewoms/common/unused.hh>
+
 #include <cassert>
 
 namespace Ewoms {
