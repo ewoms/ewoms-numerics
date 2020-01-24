@@ -38,15 +38,15 @@
 
 #include <mpi.h>
 
-namespace mpiutil_details
+namespace Ewoms
 {
 
     template <typename T>
     int packSize()
     {
-        int pack_size;
-        MPI_Pack_size(1, Dune::MPITraits<T>::getType(), MPI_COMM_WORLD, &pack_size);
-        return pack_size;
+        int packSize;
+        MPI_Pack_size(1, Dune::MPITraits<T>::getType(), MPI_COMM_WORLD, &packSize);
+        return packSize;
     }
 
     // --------  Packer --------
@@ -63,11 +63,11 @@ namespace mpiutil_details
             MPI_Pack(&content, 1, Dune::MPITraits<T>::getType(), buf.data(), buf.size(), &offset, MPI_COMM_WORLD);
         }
 
-        static T unpack(const std::vector<char>& recv_buffer, int& offset)
+        static T unpack(const std::vector<char>& recvBuffer, int& offset)
         {
             T content;
-            auto* data = const_cast<char*>(recv_buffer.data());
-            MPI_Unpack(data, recv_buffer.size(), &offset, &content, 1, Dune::MPITraits<T>::getType(), MPI_COMM_WORLD);
+            auto* data = const_cast<char*>(recvBuffer.data());
+            MPI_Unpack(data, recvBuffer.size(), &offset, &content, 1, Dune::MPITraits<T>::getType(), MPI_COMM_WORLD);
             return content;
         }
     };
@@ -90,14 +90,14 @@ namespace mpiutil_details
             }
         }
 
-        static std::string unpack(const std::vector<char>& recv_buffer, int& offset)
+        static std::string unpack(const std::vector<char>& recvBuffer, int& offset)
         {
-            unsigned int size = Packer<unsigned int>::unpack(recv_buffer, offset);
+            unsigned int size = Packer<unsigned int>::unpack(recvBuffer, offset);
             std::string text;
             if (size > 0) {
-                auto* data = const_cast<char*>(recv_buffer.data());
+                auto* data = const_cast<char*>(recvBuffer.data());
                 std::vector<char> chars(size);
-                MPI_Unpack(data, recv_buffer.size(), &offset, chars.data(), size, MPI_CHAR, MPI_COMM_WORLD);
+                MPI_Unpack(data, recvBuffer.size(), &offset, chars.data(), size, MPI_CHAR, MPI_COMM_WORLD);
                 text = std::string(chars.data(), size);
             }
             return text;
@@ -127,13 +127,13 @@ namespace mpiutil_details
             }
         }
 
-        static std::vector<T> unpack(const std::vector<char>& recv_buffer, int& offset)
+        static std::vector<T> unpack(const std::vector<char>& recvBuffer, int& offset)
         {
-            unsigned int size = Packer<T>::unpack(recv_buffer, offset);
+            unsigned int size = Packer<T>::unpack(recvBuffer, offset);
             std::vector<T> content;
             content.reserve(size);
             for (unsigned int i = 0; i < size; ++i) {
-                content.push_back(Packer<T>::unpack(recv_buffer, offset));
+                content.push_back(Packer<T>::unpack(recvBuffer, offset));
             }
             return content;
         }
@@ -145,37 +145,37 @@ namespace Ewoms
 {
 
     /// From each rank, gather its string (if not empty) into a vector.
-    inline std::vector<std::string> gatherStrings(const std::string& local_string)
+    inline std::vector<std::string> gatherStrings(const std::string& localString)
     {
-        using StringPacker = mpiutil_details::Packer<std::string>;
+        using StringPacker = Ewoms::Packer<std::string>;
 
         // Pack local messages.
-        const int message_size = StringPacker::size(local_string);
-        std::vector<char> buffer(message_size);
+        const int messageSize = StringPacker::size(localString);
+        std::vector<char> buffer(messageSize);
         int offset = 0;
-        StringPacker::pack(local_string, buffer, offset);
-        assert(offset == message_size);
+        StringPacker::pack(localString, buffer, offset);
+        assert(offset == messageSize);
 
         // Get message sizes and create offset/displacement array for gathering.
-        int num_processes = -1;
-        MPI_Comm_size(MPI_COMM_WORLD, &num_processes);
-        std::vector<int> message_sizes(num_processes);
-        MPI_Allgather(&message_size, 1, MPI_INT, message_sizes.data(), 1, MPI_INT, MPI_COMM_WORLD);
-        std::vector<int> displ(num_processes + 1, 0);
-        std::partial_sum(message_sizes.begin(), message_sizes.end(), displ.begin() + 1);
+        int numProcesses = -1;
+        MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
+        std::vector<int> messageSizes(numProcesses);
+        MPI_Allgather(&messageSize, 1, MPI_INT, messageSizes.data(), 1, MPI_INT, MPI_COMM_WORLD);
+        std::vector<int> displ(numProcesses + 1, 0);
+        std::partial_sum(messageSizes.begin(), messageSizes.end(), displ.begin() + 1);
 
         // Gather.
-        std::vector<char> recv_buffer(displ.back());
+        std::vector<char> recvBuffer(displ.back());
         MPI_Allgatherv(buffer.data(), buffer.size(), MPI_PACKED,
-                       const_cast<char*>(recv_buffer.data()), message_sizes.data(),
+                       const_cast<char*>(recvBuffer.data()), messageSizes.data(),
                        displ.data(), MPI_PACKED,
                        MPI_COMM_WORLD);
 
         // Unpack and return.
         std::vector<std::string> ret;
-        for (int process = 0; process < num_processes; ++process) {
+        for (int process = 0; process < numProcesses; ++process) {
             offset = displ[process];
-            std::string s = StringPacker::unpack(recv_buffer, offset);
+            std::string s = StringPacker::unpack(recvBuffer, offset);
             if (!s.empty()) {
                 ret.push_back(s);
             }
@@ -190,12 +190,12 @@ namespace Ewoms
 
 namespace Ewoms
 {
-    inline std::vector<std::string> gatherStrings(const std::string& local_string)
+    inline std::vector<std::string> gatherStrings(const std::string& localString)
     {
-        if (local_string.empty()) {
+        if (localString.empty()) {
             return {};
         } else {
-            return { local_string };
+            return { localString };
         }
     }
 } // namespace Ewoms

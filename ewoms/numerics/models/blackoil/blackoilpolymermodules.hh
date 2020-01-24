@@ -94,7 +94,7 @@ class BlackOilPolymerModule
 
     struct SkprpolyTable {
         double refConcentration;
-        TabulatedTwoDFunction table_func;
+        TabulatedTwoDFunction tableFunc;
     };
 
 public:
@@ -937,7 +937,7 @@ public:
         for (const auto& it : skprpolyTables_) {
             size += serializer.packSize(it.first);
             size += serializer.packSize(it.second.refConcentration);
-            size += serializer.packSize(it.second.table_func);
+            size += serializer.packSize(it.second.tableFunc);
         }
 
         return size;
@@ -974,7 +974,7 @@ public:
         for (const auto& it : skprpolyTables_) {
             serializer.pack(it.first, buffer, position);
             serializer.pack(it.second.refConcentration, buffer, position);
-            serializer.pack(it.second.table_func, buffer, position);
+            serializer.pack(it.second.tableFunc, buffer, position);
         }
     }
 
@@ -1013,7 +1013,7 @@ public:
             int key;
             serializer.unpack(key, buffer, position);
             serializer.unpack(skprpolyTables_[key].refConcentration, buffer, position);
-            serializer.unpack(skprpolyTables_[key].table_func, buffer, position);
+            serializer.unpack(skprpolyTables_[key].tableFunc, buffer, position);
         }
     }
 

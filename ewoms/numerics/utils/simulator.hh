@@ -48,6 +48,10 @@
 #include <memory>
 #include <cstdlib>
 
+#if _OPENMP
+#include <omp.h>
+#endif
+
 BEGIN_PROPERTIES
 
 NEW_PROP_TAG(Scalar);
@@ -175,9 +179,9 @@ public:
         }
 
         if (comm.max(exceptionThrown)) {
-            auto all_what = gatherStrings(what);
-            assert(!all_what.empty());
-            throw std::runtime_error("Allocating the simulation vanguard failed: " + all_what.front());
+            auto allWhat = gatherStrings(what);
+            assert(!allWhat.empty());
+            throw std::runtime_error("Allocating the simulation vanguard failed: " + allWhat.front());
         }
 
         if (verbose_)
@@ -196,9 +200,9 @@ public:
         }
 
         if (comm.max(exceptionThrown)) {
-            auto all_what = gatherStrings(what);
-            assert(!all_what.empty());
-            throw std::runtime_error("Could not distribute the vanguard data: " + all_what.front());
+            auto allWhat = gatherStrings(what);
+            assert(!allWhat.empty());
+            throw std::runtime_error("Could not distribute the vanguard data: " + allWhat.front());
         }
 
         if (verbose_)
@@ -225,9 +229,9 @@ public:
         }
 
         if (comm.max(exceptionThrown)) {
-            auto all_what = gatherStrings(what);
-            assert(!all_what.empty());
-            throw std::runtime_error("Could not initialize the model: " + all_what.front());
+            auto allWhat = gatherStrings(what);
+            assert(!allWhat.empty());
+            throw std::runtime_error("Could not initialize the model: " + allWhat.front());
         }
 
         if (verbose_)
@@ -246,9 +250,9 @@ public:
         }
 
         if (comm.max(exceptionThrown)) {
-            auto all_what = gatherStrings(what);
-            assert(!all_what.empty());
-            throw std::runtime_error("Could not initialize the problem: " + all_what.front());
+            auto allWhat = gatherStrings(what);
+            assert(!allWhat.empty());
+            throw std::runtime_error("Could not initialize the problem: " + allWhat.front());
         }
 
         setupTimer_.stop();
