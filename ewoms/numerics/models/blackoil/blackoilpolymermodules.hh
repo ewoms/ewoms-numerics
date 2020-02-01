@@ -217,7 +217,7 @@ public:
         if (!plymaxTables.empty()) {
             for (unsigned mixRegionIdx = 0; mixRegionIdx < numMixRegions; ++ mixRegionIdx) {
                 const auto& plymaxTable = plymaxTables.template getTable<Ewoms::PlymaxTable>(mixRegionIdx);
-                setPlymax(mixRegionIdx, plymaxTable.getPolymerConcentrationColumn()[mixRegionIdx]);
+                setPlymax(mixRegionIdx, plymaxTable.getPolymerConcentrationColumn()[0]);
             }
         }
         else {
