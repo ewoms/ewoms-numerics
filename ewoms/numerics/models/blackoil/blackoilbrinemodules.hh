@@ -38,7 +38,6 @@
 #include <ewoms/eclio/parser/deck/deck.hh>
 #include <ewoms/eclio/parser/eclipsestate/eclipsestate.hh>
 #include <ewoms/eclio/parser/eclipsestate/tables/pvtwsalttable.hh>
-#include <ewoms/eclio/parser/eclipsestate/tables/brinedensitytable.hh>
 #endif
 
 #include <ewoms/common/valgrind.hh>
@@ -124,8 +123,7 @@ public:
                 const auto& bdensityTable = bdensityTables[pvtRegionIdx];
                 const auto& pvtwsaltTable = pvtwsaltTables[pvtRegionIdx];
                 const auto& c = pvtwsaltTable.getSaltConcentrationColumn();
-                const auto& density = bdensityTable.getBrineDensityColumn();
-                bdensityTable_[pvtRegionIdx].setXYContainers(c, density);
+                bdensityTable_[pvtRegionIdx].setXYContainers(c, bdensityTable);
             }
         }
     }
@@ -258,10 +256,10 @@ public:
     /*!
      * \brief Return how much a Newton-Raphson update is considered an error
      */
-    static Scalar computeUpdateError(const PrimaryVariables& oldPv EWOMS_OPTIM_UNUSED,
-                                     const EqVector& delta EWOMS_OPTIM_UNUSED)
+    static Scalar computeUpdateError(const PrimaryVariables& oldPv EWOMS_UNUSED,
+                                     const EqVector& delta EWOMS_UNUSED)
     {
-        // do not consider consider the cange of Brine primary variables for
+        // do not consider consider the change of Brine primary variables for
         // convergence
         // TODO: maybe this should be changed
         return static_cast<Scalar>(0.0);
