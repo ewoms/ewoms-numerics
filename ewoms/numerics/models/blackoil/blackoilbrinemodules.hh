@@ -91,20 +91,20 @@ public:
     /*!
      * \brief Initialize all internal data structures needed by the brine module
      */
-    static void initFromDeck(const Ewoms::Deck& deck, const Ewoms::EclipseState& eclState)
+    static void initFromEclState(const Ewoms::EclipseState& eclState)
     {
         // some sanity checks: if brine are enabled, the BRINE keyword must be
         // present, if brine are disabled the keyword must not be present.
-        if (enableBrine && !deck.hasKeyword("BRINE")) {
+        if (enableBrine && !eclState.runspec().phases().active(Phase::BRINE)) {
             throw std::runtime_error("Non-trivial brine treatment requested at compile time, but "
                                      "the deck does not contain the BRINE keyword");
         }
-        else if (!enableBrine && deck.hasKeyword("BRINE")) {
+        else if (!enableBrine && eclState.runspec().phases().active(Phase::BRINE)) {
             throw std::runtime_error("Brine treatment disabled at compile time, but the deck "
                                      "contains the BRINE keyword");
         }
 
-        if (!deck.hasKeyword("BRINE"))
+        if (!eclState.runspec().phases().active(Phase::BRINE))
             return; // brine treatment is supposed to be disabled
 
         const auto& tableManager = eclState.getTableManager();
@@ -311,29 +311,6 @@ public:
     static bool hasBDensityTables()
     {
         return !bdensityTable_.empty();
-    }
-
-    template<class Serializer>
-    static std::size_t packSize(Serializer& serializer)
-    {
-        return serializer.packSize(bdensityTable_) +
-               serializer.packSize(referencePressure_);
-    }
-
-    template<class Serializer>
-    static void pack(std::vector<char>& buffer, int& position,
-                     Serializer& serializer)
-    {
-        serializer.pack(bdensityTable_, buffer, position);
-        serializer.pack(referencePressure_, buffer, position);
-    }
-
-    template<class Serializer>
-    static void unpack(std::vector<char>& buffer, int& position,
-                       Serializer& serializer)
-    {
-        serializer.unpack(bdensityTable_, buffer, position);
-        serializer.unpack(referencePressure_, buffer, position);
     }
 
 private:
