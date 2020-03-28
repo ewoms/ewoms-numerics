@@ -170,7 +170,7 @@ public:
         dgffile << "#" << std::endl;
 
         // use DGF parser to create a grid from interval block
-        gridPtr_.reset( Dune::GridPtr< Grid >( dgffile ).release() );
+        gridPtr_.reset(Dune::GridPtr<Grid>(dgffile).release());
 
         unsigned numRefinements = EWOMS_GET_PARAM(TypeTag, unsigned, GridGlobalRefinements);
         gridPtr_->globalRefine(static_cast<int>(numRefinements));

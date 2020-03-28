@@ -72,7 +72,12 @@ class CubeGridVanguard : public BaseVanguard<TypeTag>
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, Grid) Grid;
 
-    typedef Dune::shared_ptr<Grid> GridPointer;
+#if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
+    typedef std::unique_ptr<Grid> GridPointer;
+#else
+    typedef std::shared_ptr<Grid> GridPointer;
+#endif
+
     typedef typename Grid::ctype CoordScalar;
     enum { dimWorld = Grid::dimensionworld };
     typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
