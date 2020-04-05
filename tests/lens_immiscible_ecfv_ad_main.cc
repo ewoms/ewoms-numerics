@@ -32,6 +32,8 @@
  * compile units. This file calls contains main() and just calls the main entry point
  * defined by the first compile unit.
  */
+#include "config.h"
+
 int mainCU1(int argc, char **argv);
 int mainCU2(int argc, char **argv);
 

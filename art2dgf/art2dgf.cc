@@ -20,6 +20,8 @@
   module for the precise wording of the license and the list of
   copyright holders.
 */
+#include "config.h"
+
 #include <ewoms/common/exceptions.hh>
 
 #include <dune/common/version.hh>
