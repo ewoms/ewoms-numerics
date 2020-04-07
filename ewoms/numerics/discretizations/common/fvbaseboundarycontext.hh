@@ -58,7 +58,6 @@ class FvBaseBoundaryContext
     typedef typename GridView::IntersectionIterator IntersectionIterator;
     typedef typename GridView::Intersection Intersection;
 
-    enum { dim = GridView::dimension };
     enum { dimWorld = GridView::dimensionworld };
 
     typedef typename GridView::ctype CoordScalar;

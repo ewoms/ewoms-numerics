@@ -54,7 +54,6 @@ class PvsExtensiveQuantities
 {
     typedef MultiPhaseBaseExtensiveQuantities<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     enum { enableDiffusion = GET_PROP_VALUE(TypeTag, EnableDiffusion) };

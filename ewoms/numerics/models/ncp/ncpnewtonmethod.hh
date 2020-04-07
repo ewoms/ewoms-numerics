@@ -55,7 +55,6 @@ class NcpNewtonMethod : public GET_PROP_TYPE(TypeTag, DiscNewtonMethod)
     typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
     typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
 
-    enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { fugacity0Idx = Indices::fugacity0Idx };

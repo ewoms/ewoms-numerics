@@ -152,7 +152,6 @@ private:
     typedef typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter)::MatrixBlock ScalarMatrixBlock;
     typedef Dune::FieldVector<Scalar, numEq> ScalarVectorBlock;
 
-    typedef Dune::BlockVector<ScalarVectorBlock> ScalarLocalBlockVector;
     typedef Dune::Matrix<ScalarMatrixBlock> ScalarLocalBlockMatrix;
 
     typedef typename LocalResidual::LocalEvalBlockVector LocalEvalBlockVector;

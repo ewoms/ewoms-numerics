@@ -59,7 +59,6 @@ class BlackOilExtensiveQuantities
 
     typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
 public:
     /*!

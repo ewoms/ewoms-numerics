@@ -67,7 +67,6 @@ class BlackOilPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) Implementation;
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
     typedef typename GET_PROP_TYPE(TypeTag, Problem) Problem;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
@@ -98,17 +97,9 @@ class BlackOilPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
-    enum { gasCompIdx = FluidSystem::gasCompIdx };
-    enum { waterCompIdx = FluidSystem::waterCompIdx };
-    enum { oilCompIdx = FluidSystem::oilCompIdx };
 
-    typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
-    typedef BlackOilSolventModule<TypeTag, enableSolvent> SolventModule;
-    typedef BlackOilPolymerModule<TypeTag, enablePolymer> PolymerModule;
     typedef BlackOilEnergyModule<TypeTag, enableEnergy> EnergyModule;
-    typedef BlackOilFoamModule<TypeTag, enableFoam> FoamModule;
-    typedef BlackOilBrineModule<TypeTag, enableBrine> BrineModule;
 
     static_assert(numPhases == 3, "The black-oil model assumes three phases!");
     static_assert(numComponents == 3, "The black-oil model assumes three components!");

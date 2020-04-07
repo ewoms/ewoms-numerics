@@ -89,7 +89,6 @@ class BlackOilPolymerModule
     static constexpr bool enablePolymerMolarWeight = GET_PROP_VALUE(TypeTag, EnablePolymerMW);
 
     static constexpr unsigned numEq = GET_PROP_VALUE(TypeTag, NumEq);
-    static constexpr unsigned numPhases = FluidSystem::numPhases;
 
     struct SkprpolyTable {
         double refConcentration;
@@ -1015,13 +1014,11 @@ class BlackOilPolymerIntensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     typedef BlackOilPolymerModule<TypeTag> PolymerModule;
 
-    enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     static constexpr int polymerConcentrationIdx = Indices::polymerConcentrationIdx;
     static constexpr int waterPhaseIdx = FluidSystem::waterPhaseIdx;
     static constexpr bool enablePolymerMolarWeight = GET_PROP_VALUE(TypeTag, EnablePolymerMW);
@@ -1196,16 +1193,11 @@ class BlackOilPolymerExtensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
 
-    static constexpr unsigned gasPhaseIdx = FluidSystem::gasPhaseIdx;
-    static constexpr int dimWorld = GridView::dimensionworld;
     static constexpr unsigned waterPhaseIdx =  FluidSystem::waterPhaseIdx;
 
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef BlackOilPolymerModule<TypeTag> PolymerModule;
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
-    typedef Dune::FieldVector<Evaluation, dimWorld> DimEvalVector;
 
 public:
     /*!

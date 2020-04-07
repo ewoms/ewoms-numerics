@@ -47,7 +47,6 @@ template <class TypeTag>
 class PvsLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
     typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;

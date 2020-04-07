@@ -50,7 +50,6 @@ class NcpRateVector
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef Dune::FieldVector<Evaluation, numEq> ParentType;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
@@ -62,7 +61,6 @@ class NcpRateVector
 
     typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
 public:
     NcpRateVector() : ParentType()

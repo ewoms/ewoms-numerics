@@ -60,7 +60,6 @@ class FlashPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     typedef FvBasePrimaryVariables<TypeTag> ParentType;
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
@@ -71,7 +70,6 @@ class FlashPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
 
-    typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef Ewoms::EnergyModule<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)> EnergyModule;
 
 public:

@@ -50,7 +50,6 @@ namespace Ewoms {
 template <class TypeTag>
 class FvBaseConstraints : public GET_PROP_TYPE(TypeTag, PrimaryVariables)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) ParentType;
 
 public:
     FvBaseConstraints()

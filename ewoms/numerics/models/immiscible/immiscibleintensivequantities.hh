@@ -69,9 +69,7 @@ class ImmiscibleIntensiveQuantities
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
     typedef Dune::FieldVector<Evaluation, numPhases> EvalPhaseVector;
 
     typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;

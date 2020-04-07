@@ -138,7 +138,6 @@ class BoundaryPressureCallback
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQRawFluidState;
     typedef typename std::remove_const<typename std::remove_reference<IQRawFluidState>::type>::type IQFluidState;
     typedef typename IQFluidState::Scalar IQScalar;
-    typedef Ewoms::MathToolbox<IQScalar> Toolbox;
 
 public:
     typedef IQScalar ResultType;
@@ -341,11 +340,9 @@ class VelocityCallback
 {
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
 
     typedef decltype(IntensiveQuantities().velocityCenter()) ResultRawType;
 
-    enum { dim = GridView::dimensionworld };
 
 public:
     typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;

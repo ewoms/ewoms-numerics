@@ -85,13 +85,11 @@ class ParallelIstlSolverBackend : public ParallelBaseBackend<TypeTag>
 {
     typedef ParallelBaseBackend<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, LinearSolverWrapper) LinearSolverWrapper;
     typedef typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
 
     typedef typename ParentType::ParallelOperator ParallelOperator;
-    typedef typename ParentType::OverlappingVector OverlappingVector;
     typedef typename ParentType::ParallelPreconditioner ParallelPreconditioner;
     typedef typename ParentType::ParallelScalarProduct ParallelScalarProduct;
 

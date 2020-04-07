@@ -132,7 +132,6 @@ class DarcyExtensiveQuantities
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
     typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef typename FluidSystem::template ParameterCache<Evaluation> ParameterCache;
     typedef Dune::FieldVector<Evaluation, dimWorld> EvalDimVector;
     typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;

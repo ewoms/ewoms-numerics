@@ -58,14 +58,10 @@ class BlackOilRateVector
 
     typedef BlackOilSolventModule<TypeTag> SolventModule;
     typedef BlackOilPolymerModule<TypeTag> PolymerModule;
-    typedef BlackOilFoamModule<TypeTag> FoamModule;
-    typedef BlackOilBrineModule<TypeTag> BrineModule;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { conti0EqIdx = Indices::conti0EqIdx };
-    enum { contiEnergyEqIdx = Indices::contiEnergyEqIdx };
-    enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { enableSolvent = GET_PROP_VALUE(TypeTag, EnableSolvent) };
     enum { enablePolymer = GET_PROP_VALUE(TypeTag, EnablePolymer) };
     enum { enablePolymerMolarWeight = GET_PROP_VALUE(TypeTag, EnablePolymerMW) };

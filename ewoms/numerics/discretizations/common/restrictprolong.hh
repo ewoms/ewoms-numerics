@@ -47,7 +47,6 @@ namespace Ewoms
     : public Dune::Fem::RestrictProlongInterfaceDefault< CopyRestrictProlongTraits< Grid, Container > >
 #endif
     {
-      typedef CopyRestrictProlong< Grid, Container > ThisType;
 
       Container& container_;
     public:
@@ -141,7 +140,6 @@ namespace Ewoms
     : public Dune::Fem::RestrictProlongInterfaceDefault< EmptyRestrictProlongTraits >
 #endif
     {
-      typedef EmptyRestrictProlong ThisType;
 
     public:
       /** \brief explicit set volume ratio of son and father

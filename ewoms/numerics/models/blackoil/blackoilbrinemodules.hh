@@ -62,11 +62,9 @@ class BlackOilBrineModule
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
     typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
@@ -74,7 +72,6 @@ class BlackOilBrineModule
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
     typedef typename Ewoms::Tabulated1DFunction<Scalar> TabulatedFunction;
-    typedef typename Ewoms::IntervalTabulated2DFunction<Scalar> TabulatedTwoDFunction;
 
     static constexpr unsigned saltConcentrationIdx = Indices::saltConcentrationIdx;
     static constexpr unsigned contiBrineEqIdx = Indices::contiBrineEqIdx;
@@ -83,7 +80,6 @@ class BlackOilBrineModule
     static constexpr unsigned enableBrine = enableBrineV;
 
     static constexpr unsigned numEq = GET_PROP_VALUE(TypeTag, NumEq);
-    static constexpr unsigned numPhases = FluidSystem::numPhases;
 
 public:
 
@@ -342,16 +338,13 @@ class BlackOilBrineIntensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     typedef BlackOilBrineModule<TypeTag> BrineModule;
 
-    enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     static constexpr int saltConcentrationIdx = Indices::saltConcentrationIdx;
     static constexpr int waterPhaseIdx = FluidSystem::waterPhaseIdx;
-    static constexpr int oilPhaseIdx = FluidSystem::oilPhaseIdx;
     static constexpr unsigned enableBrine = enableBrineV;
     static constexpr int contiBrineEqIdx = Indices::contiBrineEqIdx;
 

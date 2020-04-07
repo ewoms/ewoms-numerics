@@ -45,10 +45,8 @@ namespace Ewoms {
 template <class TypeTag>
 class NcpLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, DiscLocalResidual) ParentType;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
     typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
@@ -66,8 +64,6 @@ class NcpLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
 
-    typedef Dune::FieldVector<Evaluation, numEq> EvalEqVector;
-    typedef Dune::BlockVector<EvalEqVector> ElemEvalEqVector;
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
 public:

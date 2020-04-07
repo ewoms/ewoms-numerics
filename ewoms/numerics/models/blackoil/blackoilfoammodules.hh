@@ -66,7 +66,6 @@ class BlackOilFoamModule
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
@@ -87,7 +86,6 @@ class BlackOilFoamModule
     static constexpr bool enableVtkOutput = GET_PROP_VALUE(TypeTag, EnableVtkOutput);
 
     static constexpr unsigned numEq = GET_PROP_VALUE(TypeTag, NumEq);
-    static constexpr unsigned numPhases = FluidSystem::numPhases;
 
 public:
     // a struct containing constants to calculate change to relative permeability,
@@ -486,13 +484,11 @@ class BlackOilFoamIntensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     typedef BlackOilFoamModule<TypeTag> FoamModule;
 
-    enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     static constexpr int foamConcentrationIdx = Indices::foamConcentrationIdx;
     static constexpr unsigned waterPhaseIdx = FluidSystem::waterPhaseIdx;
     static constexpr unsigned oilPhaseIdx = FluidSystem::oilPhaseIdx;

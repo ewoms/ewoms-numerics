@@ -87,7 +87,6 @@ class ParallelAmgBackend : public ParallelBaseBackend<TypeTag>
 
     typedef typename ParentType::ParallelOperator ParallelOperator;
     typedef typename ParentType::OverlappingVector OverlappingVector;
-    typedef typename ParentType::ParallelPreconditioner ParallelPreconditioner;
     typedef typename ParentType::ParallelScalarProduct ParallelScalarProduct;
 
     static constexpr int numEq = GET_PROP_VALUE(TypeTag, NumEq);

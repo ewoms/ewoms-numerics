@@ -79,11 +79,9 @@ class PvsIntensiveQuantities
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem, Evaluation> MiscibleMultiPhaseComposition;
     typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem, Evaluation> ComputeFromReferencePhase;
 
-    typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
     typedef Dune::FieldVector<Evaluation, numPhases> EvalPhaseVector;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
 

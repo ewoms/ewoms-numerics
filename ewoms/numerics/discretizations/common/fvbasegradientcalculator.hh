@@ -50,17 +50,13 @@ class FvBaseGradientCalculator
     typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, Discretization) Discretization;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
-    enum { dim = GridView::dimension };
     enum { dimWorld = GridView::dimensionworld };
 
     // maximum number of flux approximation points. to calculate this,
     // we assume that the geometry with the most pointsq is a cube.
-    enum { maxFap = 2 << dim };
 
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
     typedef Dune::FieldVector<Evaluation, dimWorld> EvalDimVector;
 
 public:

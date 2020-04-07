@@ -41,7 +41,6 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;

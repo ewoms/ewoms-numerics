@@ -79,7 +79,6 @@ class VtkBlackOilPolymerModule : public BaseOutputModule<TypeTag>
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);

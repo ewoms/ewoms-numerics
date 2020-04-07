@@ -68,39 +68,29 @@ class FvBaseLinearizer
 {
 //! \cond SKIP_THIS
     typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, Discretization) Discretization;
     typedef typename GET_PROP_TYPE(TypeTag, Problem) Problem;
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
     typedef typename GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
-    typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
     typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
     typedef typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
     typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
     typedef typename GET_PROP_TYPE(TypeTag, Constraints) Constraints;
     typedef typename GET_PROP_TYPE(TypeTag, Stencil) Stencil;
 
-    typedef typename GET_PROP_TYPE(TypeTag, GridCommHandleFactory) GridCommHandleFactory;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
     typedef typename GridView::template Codim<0>::Entity Element;
     typedef typename GridView::template Codim<0>::Iterator ElementIterator;
 
     typedef GlobalEqVector Vector;
 
-    typedef typename SparseMatrixAdapter::IstlMatrix IstlMatrix;
 
-    enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
-    enum { historySize = GET_PROP_VALUE(TypeTag, TimeDiscHistorySize) };
 
-    typedef typename SparseMatrixAdapter::MatrixBlock MatrixBlock;
-    typedef Dune::FieldVector<Scalar, numEq> VectorBlock;
 
     static const bool linearizeNonLocalElements = GET_PROP_VALUE(TypeTag, LinearizeNonLocalElements);
 

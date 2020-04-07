@@ -51,7 +51,6 @@ class PvsRateVector
     : public Dune::FieldVector<typename GET_PROP_TYPE(TypeTag, Evaluation),
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;

@@ -66,7 +66,6 @@ class P1FeGradientCalculator : public FvBaseGradientCalculator<TypeTag>
 {
     typedef FvBaseGradientCalculator<TypeTag> ParentType;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 

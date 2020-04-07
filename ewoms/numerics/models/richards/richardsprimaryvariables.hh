@@ -54,7 +54,6 @@ class RichardsPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
     typedef FvBasePrimaryVariables<TypeTag> ParentType;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
     typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
@@ -72,7 +71,6 @@ class RichardsPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 
     typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
     typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
-    typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef Ewoms::ImmiscibleFlash<Scalar, FluidSystem> ImmiscibleFlash;
 
 public:

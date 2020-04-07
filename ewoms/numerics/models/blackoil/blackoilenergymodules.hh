@@ -342,7 +342,6 @@ class BlackOilEnergyIntensiveQuantities
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     static constexpr int temperatureIdx = Indices::temperatureIdx;
-    static constexpr int waterPhaseIdx = FluidSystem::waterPhaseIdx;
 
 public:
     /*!
@@ -466,15 +465,10 @@ class BlackOilEnergyExtensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
     typedef BlackOilEnergyModule<TypeTag> EnergyModule;
 
-    static const int dimWorld = GridView::dimensionworld;
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
-    typedef Dune::FieldVector<Evaluation, dimWorld> DimEvalVector;
 
 public:
     void updateEnergy(const ElementContext& elemCtx,

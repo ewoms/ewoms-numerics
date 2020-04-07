@@ -77,7 +77,6 @@ class EnergyModule<TypeTag, /*enableEnergy=*/false>
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
 
-    typedef Dune::FieldVector<Evaluation, numEq> EvalEqVector;
 
 public:
     /*!
@@ -249,7 +248,6 @@ class EnergyModule<TypeTag, /*enableEnergy=*/true>
     enum { energyEqIdx = Indices::energyEqIdx };
     enum { temperatureIdx = Indices::temperatureIdx };
 
-    typedef Dune::FieldVector<Evaluation, numEq> EvalEqVector;
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
 public:

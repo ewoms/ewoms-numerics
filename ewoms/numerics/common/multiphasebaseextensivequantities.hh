@@ -54,7 +54,6 @@ class MultiPhaseBaseExtensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, DiscExtensiveQuantities) ParentType;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 

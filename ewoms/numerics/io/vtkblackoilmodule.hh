@@ -87,7 +87,6 @@ class VtkBlackOilModule : public BaseOutputModule<TypeTag>
 
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
@@ -102,7 +101,6 @@ class VtkBlackOilModule : public BaseOutputModule<TypeTag>
 
     enum { gasCompIdx = FluidSystem::gasCompIdx };
     enum { oilCompIdx = FluidSystem::oilCompIdx };
-    enum { waterCompIdx = FluidSystem::waterCompIdx };
 
     typedef typename ParentType::ScalarBuffer ScalarBuffer;
 

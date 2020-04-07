@@ -56,7 +56,6 @@ class NcpPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     typedef FvBasePrimaryVariables<TypeTag> ParentType;
 
     typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
     typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
@@ -74,7 +73,6 @@ class NcpPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
 
     typedef Ewoms::NcpFlash<Scalar, FluidSystem> NcpFlash;
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
 public:
     NcpPrimaryVariables() : ParentType()

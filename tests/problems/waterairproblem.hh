@@ -186,8 +186,6 @@ class WaterAirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         numPhases = FluidSystem::numPhases,
 
         // energy related indices
-        temperatureIdx = Indices::temperatureIdx,
-        energyEqIdx = Indices::energyEqIdx,
 
         // component indices
         H2OIdx = FluidSystem::H2OIdx,
@@ -211,7 +209,6 @@ class WaterAirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
     typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, Constraints) Constraints;
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
     typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;

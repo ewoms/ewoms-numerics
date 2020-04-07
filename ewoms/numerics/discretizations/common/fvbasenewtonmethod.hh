@@ -92,10 +92,8 @@ class FvBaseNewtonMethod : public NewtonMethod<TypeTag>
     typedef Ewoms::NewtonMethod<TypeTag> ParentType;
     typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) Implementation;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
     typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, Linearizer) Linearizer;
     typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
     typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
     typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;

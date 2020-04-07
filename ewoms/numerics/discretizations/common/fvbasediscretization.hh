@@ -303,7 +303,6 @@ class FvBaseDiscretization
     typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
     typedef typename GET_PROP_TYPE(TypeTag, GradientCalculator) GradientCalculator;
-    typedef typename GET_PROP_TYPE(TypeTag, Stencil) Stencil;
     typedef typename GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
     typedef typename GET_PROP_TYPE(TypeTag, GridCommHandleFactory) GridCommHandleFactory;
     typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
@@ -321,7 +320,6 @@ class FvBaseDiscretization
     typedef typename GridView::template Codim<0>::Iterator ElementIterator;
 
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldVector<Evaluation, numEq> VectorBlock;
     typedef Dune::FieldVector<Evaluation, numEq> EvalEqVector;
 
     typedef typename LocalResidual::LocalEvalBlockVector LocalEvalBlockVector;

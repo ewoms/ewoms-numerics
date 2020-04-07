@@ -70,32 +70,21 @@ class BlackOilIntensiveQuantities
     typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
     typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
     typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GET_PROP_TYPE(TypeTag, FluxModule) FluxModule;
 
-    enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { enableSolvent = GET_PROP_VALUE(TypeTag, EnableSolvent) };
-    enum { enablePolymer = GET_PROP_VALUE(TypeTag, EnablePolymer) };
-    enum { enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
     enum { enableTemperature = GET_PROP_VALUE(TypeTag, EnableTemperature) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
-    enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
-    enum { waterCompIdx = FluidSystem::waterCompIdx };
-    enum { oilCompIdx = FluidSystem::oilCompIdx };
-    enum { gasCompIdx = FluidSystem::gasCompIdx };
     enum { waterPhaseIdx = FluidSystem::waterPhaseIdx };
     enum { oilPhaseIdx = FluidSystem::oilPhaseIdx };
     enum { gasPhaseIdx = FluidSystem::gasPhaseIdx };
-    enum { dimWorld = GridView::dimensionworld };
     enum { compositionSwitchIdx = Indices::compositionSwitchIdx };
 
     static const bool compositionSwitchEnabled = Indices::gasEnabled;
     static const bool waterEnabled = Indices::waterEnabled;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
     typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;
     typedef Ewoms::BlackOilFluidState<Evaluation, FluidSystem, enableTemperature, enableEnergy, compositionSwitchEnabled,  enableBrine, Indices::numPhases > FluidState;
 
