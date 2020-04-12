@@ -35,11 +35,11 @@
 #include <ewoms/common/parametersystem.hh>
 #include <ewoms/common/propertysystem.hh>
 #include <ewoms/numerics/utils/simulator.hh>
+
 #include <ewoms/common/timer.hh>
-
 #include <ewoms/common/valgrind.hh>
-
 #include <ewoms/common/resetlocale.hh>
+#include <ewoms/common/genericguard.hh>
 
 #include <dune/grid/io/file/dgfparser/dgfparser.hh>
 #include <dune/common/version.hh>
@@ -306,12 +306,35 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
         if (paramStatus == 2)
             return 0;
 
-        // initialize MPI, finalize is done automatically on exit
+        // initialize MPI. we do this after setupParameters() because in some cases
+        // initializing takes a few seconds and if only the help message is needed (e.g.,
+        // for parameter completion), this delay is really annoying. Also not that we do
+        // this manually because Dune's MPI helper mechanisms do not seem work properly
+        // (in particular, the MPIHelper singleton seems to sometimes get destroyed at
+        // inappropriate times. This only matters if stuff that uses MPI on exit is
+        // enabled, e.g. dune-alugrid.)
+#if HAVE_MPI
+        int wasInitialized;
+        MPI_Initialized(&wasInitialized);
+        if (!wasInitialized)
+            MPI_Init(&argc, &argv);
+
+        auto mpiFinalizeLambda = []() {
+            int wasFinalized;
+            MPI_Finalized(&wasFinalized);
+            if (!wasFinalized)
+                MPI_Finalize();
+        };
+        Ewoms::GenericGuard<decltype(mpiFinalizeLambda)> mpiFinalizeGuard(mpiFinalizeLambda);
+        MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
+
+        // make DUNE happy (or at least make it stop aborting the process)
 #if HAVE_DUNE_FEM
         Dune::Fem::MPIManager::initialize(argc, argv);
-        myRank = Dune::Fem::MPIManager::rank();
 #else
-        myRank = Dune::MPIHelper::instance(argc, argv).rank();
+        Dune::MPIHelper::instance(argc, argv);
+#endif
+
 #endif
 
         Vanguard::dawn();
