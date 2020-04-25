@@ -157,14 +157,14 @@ public:
         priVars[saltConcentrationIdx] = fluidState.saltConcentration();
     }
 
-    static std::string primaryVarName(unsigned pvIdx)
+    static std::string primaryVarName([[maybe_unused]] unsigned pvIdx)
     {
         assert(primaryVarApplies(pvIdx));
 
         return "saltConcentration";
     }
 
-    static Scalar primaryVarWeight(unsigned pvIdx EWOMS_OPTIM_UNUSED)
+    static Scalar primaryVarWeight([[maybe_unused]] unsigned pvIdx)
     {
         assert(primaryVarApplies(pvIdx));
 
@@ -180,14 +180,14 @@ public:
         return eqIdx == contiBrineEqIdx;
     }
 
-    static std::string eqName(unsigned eqIdx)
+    static std::string eqName([[maybe_unused]] unsigned eqIdx)
     {
         assert(eqApplies(eqIdx));
 
         return "conti^brine";
     }
 
-    static Scalar eqWeight(unsigned eqIdx EWOMS_OPTIM_UNUSED)
+    static Scalar eqWeight([[maybe_unused]] unsigned eqIdx)
     {
         assert(eqApplies(eqIdx));
 
