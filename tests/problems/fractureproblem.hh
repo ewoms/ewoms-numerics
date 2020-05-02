@@ -211,15 +211,6 @@ class FractureProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 
     typedef Dune::FieldVector<Scalar, dimWorld> GlobalPosition;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-
-    template <int dim>
-    struct FaceLayout
-    {
-        bool contains(Dune::GeometryType gt)
-        { return gt.dim() == dim - 1; }
-    };
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView, FaceLayout> FaceMapper;
-
     typedef Ewoms::FractureMapper<TypeTag> FractureMapper;
 
 public:
