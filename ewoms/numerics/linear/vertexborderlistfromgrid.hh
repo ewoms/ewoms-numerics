@@ -83,8 +83,13 @@ public:
     bool contains(int dim, int codim) const
     { return dim == codim; }
 
+#if DUNE_VERSION_NEWER(DUNE_GRID, 2,7)
+    bool fixedSize(int dim EWOMS_UNUSED, int codim EWOMS_UNUSED) const
+    { return true; }
+#else
     bool fixedsize(int dim EWOMS_UNUSED, int codim EWOMS_UNUSED) const
     { return true; }
+#endif
 
     template <class EntityType>
     size_t size(const EntityType& e EWOMS_UNUSED) const
