@@ -51,7 +51,7 @@ int main(void){
 endif()
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(Papi
+find_package_handle_standard_args(PAPI
   DEFAULT_MSG
   PAPI_INCLUDE_DIRS
   PAPI_LIBRARIES
