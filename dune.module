@@ -1,7 +1,7 @@
 Module: ewoms-numerics
 Description: The numerical core code of the eWoms project
-Version: 2020.04-pre
-Label: 2020.04-pre
+Version: 2020.05
+Label: 2020.05
 Codename: Ezekiel
 Maintainer: ewoms@ewoms.org
 MaintainerName: The eWoms Project
