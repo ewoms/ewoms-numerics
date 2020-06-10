@@ -231,6 +231,9 @@ public:
             }
 
             for (unsigned phaseIdx = 0; phaseIdx < numPhases; ++phaseIdx) {
+                if (!FluidSystem::phaseIsActive(phaseIdx)) {
+                    continue;
+                }
                 if (pressureOutput_())
                     pressure_[phaseIdx][I] = Ewoms::getValue(fs.pressure(phaseIdx));
                 if (densityOutput_())

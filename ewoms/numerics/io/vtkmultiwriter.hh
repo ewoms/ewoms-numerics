@@ -35,6 +35,8 @@
 #include <ewoms/numerics/io/baseoutputwriter.hh>
 #include <ewoms/common/parallel/tasklets.hh>
 
+#include <ewoms/common/filesystem.hh>
+
 #include <ewoms/common/valgrind.hh>
 #include <ewoms/common/unused.hh>
 
@@ -85,9 +87,12 @@ class VtkMultiWriter : public BaseOutputWriter
 
             // determine name to write into the multi-file for the
             // current time step
+            // The file names in the pvd file are relative, the path should therefore be stripped.
+            const Ewoms::filesystem::path fullPath{fileName};
+            const std::string localFileName = fullPath.filename();
             multiWriter_.multiFile_.precision(16);
             multiWriter_.multiFile_ << "   <DataSet timestep=\"" << multiWriter_.curTime_ << "\" file=\""
-                                    << fileName << "\"/>\n";
+                                    << localFileName << "\"/>\n";
         }
 
     private:
