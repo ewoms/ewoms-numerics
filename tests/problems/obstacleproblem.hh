@@ -69,15 +69,15 @@ SET_TYPE_PROP(ObstacleBaseProblem, Problem, Ewoms::ObstacleProblem<TypeTag>);
 
 // Set fluid configuration
 SET_TYPE_PROP(ObstacleBaseProblem, FluidSystem,
-              Ewoms::H2ON2FluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::H2ON2FluidSystem<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Set the material Law
 SET_PROP(ObstacleBaseProblem, MaterialLaw)
 {
 private:
     // define the material law
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx>
@@ -93,8 +93,8 @@ public:
 SET_PROP(ObstacleBaseProblem, ThermalConductionLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
 public:
     // define the material law parameterized by absolute saturations
@@ -103,7 +103,7 @@ public:
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(ObstacleBaseProblem, SolidEnergyLaw,
-              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Enable gravity
 SET_BOOL_PROP(ObstacleBaseProblem, EnableGravity, true);
@@ -149,19 +149,19 @@ namespace Ewoms {
 template <class TypeTag>
 class ObstacleProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
+    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
 
     enum {
         // Grid and world dimension
@@ -177,8 +177,8 @@ class ObstacleProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     typedef Dune::FieldVector<typename GridView::ctype, dimWorld> GlobalPosition;
     typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Model) Model;
 
 public:
     /*!

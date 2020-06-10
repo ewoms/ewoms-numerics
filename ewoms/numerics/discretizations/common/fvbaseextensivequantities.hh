@@ -43,8 +43,8 @@ namespace Ewoms {
 template <class TypeTag>
 class FvBaseExtensiveQuantities
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
 public:
     /*!

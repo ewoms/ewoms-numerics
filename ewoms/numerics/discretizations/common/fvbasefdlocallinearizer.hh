@@ -75,7 +75,7 @@ SET_TYPE_PROP(FiniteDifferenceLocalLinearizer, LocalLinearizer,
               Ewoms::FvBaseFdLocalLinearizer<TypeTag>);
 
 SET_TYPE_PROP(FiniteDifferenceLocalLinearizer, Evaluation,
-              typename GET_PROP_TYPE(TypeTag, Scalar));
+              GET_PROP_TYPE(TypeTag, Scalar));
 
 /*!
  * \brief Specify which kind of method should be used to numerically
@@ -135,15 +135,15 @@ template<class TypeTag>
 class FvBaseFdLocalLinearizer
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, LocalLinearizer) Implementation;
-    typedef typename GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, LocalLinearizer) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
+    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GridView::template Codim<0>::Entity Element;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };

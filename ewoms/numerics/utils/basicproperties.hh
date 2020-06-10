@@ -147,11 +147,11 @@ SET_STRING_PROP(NumericModel, GridFile, "");
 #if HAVE_DUNE_FEM
 SET_PROP(NumericModel, GridPart)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Grid) Grid;
+    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
     typedef Dune::Fem::AdaptiveLeafGridPart<Grid> type;
 };
 
-SET_TYPE_PROP(NumericModel, GridView, typename GET_PROP_TYPE(TypeTag, GridPart)::GridViewType);
+SET_TYPE_PROP(NumericModel, GridView, GET_PROP_TYPE(TypeTag, GridPart)::GridViewType);
 #else
 //! Use the leaf grid view by default.
 //!

@@ -56,7 +56,7 @@ BEGIN_PROPERTIES
 SET_PROP(VcfvDiscretization, Stencil)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
     typedef typename GridView::ctype CoordScalar;
 
 public:
@@ -64,7 +64,7 @@ public:
 };
 
 //! Mapper for the degrees of freedoms.
-SET_TYPE_PROP(VcfvDiscretization, DofMapper, typename GET_PROP_TYPE(TypeTag, VertexMapper));
+SET_TYPE_PROP(VcfvDiscretization, DofMapper, GET_PROP_TYPE(TypeTag, VertexMapper));
 
 //! The concrete class which manages the spatial discretization
 SET_TYPE_PROP(VcfvDiscretization, Discretization, Ewoms::VcfvDiscretization<TypeTag>);
@@ -90,8 +90,8 @@ SET_BOOL_PROP(VcfvDiscretization, UseP1FiniteElementGradients, false);
 SET_PROP(VcfvDiscretization, DiscreteFunctionSpace)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar)   Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, GridPart) GridPart;
+    typedef GET_PROP_TYPE(TypeTag, Scalar)   Scalar;
+    typedef GET_PROP_TYPE(TypeTag, GridPart) GridPart;
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     typedef Dune::Fem::FunctionSpace<typename GridPart::GridType::ctype,
                                      Scalar,
@@ -106,8 +106,8 @@ public:
 //! Set the border list creator for vertices
 SET_PROP(VcfvDiscretization, BorderListCreator)
 { private:
-    typedef typename GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 public:
     typedef Ewoms::Linear::VertexBorderListFromGrid<GridView, VertexMapper> type;
 };
@@ -130,10 +130,10 @@ template<class TypeTag>
 class VcfvDiscretization : public FvBaseDiscretization<TypeTag>
 {
     typedef FvBaseDiscretization<TypeTag> ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef typename GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
     enum { dim = GridView::dimension };
 

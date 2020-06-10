@@ -99,8 +99,8 @@ SET_BOOL_PROP(ImmiscibleModel, EnableEnergy, false);
 //! The fluid system to use by default
 SET_PROP(ImmiscibleSinglePhaseModel, FluidSystem)
 { private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Fluid) Fluid;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Fluid) Fluid;
 public:
     typedef Ewoms::SinglePhaseFluidSystem<Scalar , Fluid> type;
 };
@@ -108,7 +108,7 @@ public:
 SET_PROP(ImmiscibleSinglePhaseModel, Fluid)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
@@ -126,7 +126,7 @@ SET_BOOL_PROP(ImmiscibleSinglePhaseModel, VtkWriteRelativePermeabilities, false)
 SET_PROP(ImmiscibleTwoPhaseModel, WettingPhase)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
@@ -135,7 +135,7 @@ public:
 SET_PROP(ImmiscibleTwoPhaseModel, NonwettingPhase)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
@@ -144,9 +144,9 @@ public:
 SET_PROP(ImmiscibleTwoPhaseModel, FluidSystem)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
-    typedef typename GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
+    typedef GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
 
 public:
     typedef Ewoms::TwoPhaseImmiscibleFluidSystem<Scalar, WettingPhase, NonwettingPhase> type;
@@ -197,12 +197,12 @@ class ImmiscibleModel
     : public Ewoms::MultiPhaseBaseModel<TypeTag>
 {
     typedef Ewoms::MultiPhaseBaseModel<TypeTag> ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
     enum { numComponents = FluidSystem::numComponents };
 

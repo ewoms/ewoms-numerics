@@ -43,10 +43,10 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsBoundaryRateVector : public GET_PROP_TYPE(TypeTag, RateVector)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { contiEqIdx = Indices::contiEqIdx };

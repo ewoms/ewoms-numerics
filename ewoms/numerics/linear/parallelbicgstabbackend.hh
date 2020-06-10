@@ -88,9 +88,9 @@ class ParallelBiCGStabSolverBackend : public ParallelBaseBackend<TypeTag>
     typedef ParallelBaseBackend<TypeTag> ParentType;
 
 protected:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
 
     typedef typename ParentType::ParallelOperator ParallelOperator;
     typedef typename ParentType::OverlappingVector OverlappingVector;

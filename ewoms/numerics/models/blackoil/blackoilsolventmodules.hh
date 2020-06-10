@@ -65,18 +65,18 @@ namespace Ewoms {
 template <class TypeTag, bool enableSolventV = GET_PROP_VALUE(TypeTag, EnableSolvent)>
 class BlackOilSolventModule
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
 
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
     typedef Ewoms::SolventPvt<Scalar> SolventPvt;
@@ -863,15 +863,15 @@ BlackOilSolventModule<TypeTag, enableSolventV>::isMiscible_;
 template <class TypeTag, bool enableSolventV = GET_PROP_VALUE(TypeTag, EnableSolvent)>
 class BlackOilSolventIntensiveQuantities
 {
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     typedef BlackOilSolventModule<TypeTag> SolventModule;
 
@@ -1254,9 +1254,9 @@ protected:
 template <class TypeTag>
 class BlackOilSolventIntensiveQuantities<TypeTag, false>
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     void solventPreSatFuncUpdate_(const ElementContext& elemCtx EWOMS_UNUSED,
@@ -1303,15 +1303,15 @@ public:
 template <class TypeTag, bool enableSolventV = GET_PROP_VALUE(TypeTag, EnableSolvent)>
 class BlackOilSolventExtensiveQuantities
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 
     typedef Ewoms::MathToolbox<Evaluation> Toolbox;
 
@@ -1529,8 +1529,8 @@ private:
 template <class TypeTag>
 class BlackOilSolventExtensiveQuantities<TypeTag, false>
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
 
 public:
     void updateVolumeFluxPerm(const ElementContext& elemCtx EWOMS_UNUSED,

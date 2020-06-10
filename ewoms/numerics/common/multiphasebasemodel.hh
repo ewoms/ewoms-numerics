@@ -80,8 +80,8 @@ SET_TYPE_PROP(MultiPhaseBaseModel, FluxModule, Ewoms::DarcyFluxModule<TypeTag>);
 SET_PROP(MultiPhaseBaseModel, MaterialLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     typedef Ewoms::NullMaterialTraits<Scalar, FluidSystem::numPhases> Traits;
 
 public:
@@ -100,7 +100,7 @@ SET_TYPE_PROP(MultiPhaseBaseModel,
 //! by default
 SET_TYPE_PROP(MultiPhaseBaseModel,
               SolidEnergyLaw,
-              Ewoms::NullSolidEnergyLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::NullSolidEnergyLaw<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 //! extract the type of the parameter objects for the solid energy storage law from the
 //! law itself
@@ -111,7 +111,7 @@ SET_TYPE_PROP(MultiPhaseBaseModel,
 //! set the thermal conduction law to a dummy one by default
 SET_TYPE_PROP(MultiPhaseBaseModel,
               ThermalConductionLaw,
-              Ewoms::NullThermalConductionLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::NullThermalConductionLaw<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 //! extract the type of the parameter objects for the thermal conduction law from the law
 //! itself
@@ -134,15 +134,15 @@ namespace Ewoms {
 template <class TypeTag>
 class MultiPhaseBaseModel : public GET_PROP_TYPE(TypeTag, Discretization)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Discretization) ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Discretization) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 
     typedef typename GridView::template Codim<0>::Iterator ElementIterator;
     typedef typename GridView::template Codim<0>::Entity Element;

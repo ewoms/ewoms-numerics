@@ -119,7 +119,7 @@ NEW_PROP_TAG(PreconditionerRelaxation);
 SET_PROP(ParallelBaseLinearSolver, SparseMatrixAdapter)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     typedef Dune::FieldMatrix<Scalar, numEq, numEq> Block;
 
@@ -161,21 +161,21 @@ template <class TypeTag>
 class ParallelBaseBackend
 {
 protected:
-    typedef typename GET_PROP_TYPE(TypeTag, LinearSolverBackend) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, LinearSolverBackend) Implementation;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
-    typedef typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
-    typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) Vector;
-    typedef typename GET_PROP_TYPE(TypeTag, BorderListCreator) BorderListCreator;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
+    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
+    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) Vector;
+    typedef GET_PROP_TYPE(TypeTag, BorderListCreator) BorderListCreator;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Overlap) Overlap;
-    typedef typename GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
-    typedef typename GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix;
+    typedef GET_PROP_TYPE(TypeTag, Overlap) Overlap;
+    typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
+    typedef GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix;
 
-    typedef typename GET_PROP_TYPE(TypeTag, PreconditionerWrapper) PreconditionerWrapper;
+    typedef GET_PROP_TYPE(TypeTag, PreconditionerWrapper) PreconditionerWrapper;
     typedef typename PreconditionerWrapper::SequentialPreconditioner SequentialPreconditioner;
 
     typedef Ewoms::Linear::OverlappingPreconditioner<SequentialPreconditioner, Overlap> ParallelPreconditioner;
@@ -459,13 +459,13 @@ SET_INT_PROP(ParallelBaseLinearSolver, PreconditionerOrder, 0);
 //! the linear solve
 SET_TYPE_PROP(ParallelBaseLinearSolver,
               LinearSolverScalar,
-              typename GET_PROP_TYPE(TypeTag, Scalar));
+              GET_PROP_TYPE(TypeTag, Scalar));
 
 SET_PROP(ParallelBaseLinearSolver, OverlappingMatrix)
 {
 private:
     static constexpr int numEq = GET_PROP_VALUE(TypeTag, NumEq);
-    typedef typename GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
+    typedef GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
     typedef Dune::FieldMatrix<LinearSolverScalar, numEq, numEq> MatrixBlock;
     typedef Dune::BCRSMatrix<MatrixBlock> NonOverlappingMatrix;
 
@@ -480,23 +480,23 @@ SET_TYPE_PROP(ParallelBaseLinearSolver,
 SET_PROP(ParallelBaseLinearSolver, OverlappingVector)
 {
     static constexpr int numEq = GET_PROP_VALUE(TypeTag, NumEq);
-    typedef typename GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
+    typedef GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
     typedef Dune::FieldVector<LinearSolverScalar, numEq> VectorBlock;
-    typedef typename GET_PROP_TYPE(TypeTag, Overlap) Overlap;
+    typedef GET_PROP_TYPE(TypeTag, Overlap) Overlap;
     typedef Ewoms::Linear::OverlappingBlockVector<VectorBlock, Overlap> type;
 };
 
 SET_PROP(ParallelBaseLinearSolver, OverlappingScalarProduct)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
-    typedef typename GET_PROP_TYPE(TypeTag, Overlap) Overlap;
+    typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
+    typedef GET_PROP_TYPE(TypeTag, Overlap) Overlap;
     typedef Ewoms::Linear::OverlappingScalarProduct<OverlappingVector, Overlap> type;
 };
 
 SET_PROP(ParallelBaseLinearSolver, OverlappingLinearOperator)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix;
-    typedef typename GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
+    typedef GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix;
+    typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
     typedef Ewoms::Linear::OverlappingOperator<OverlappingMatrix, OverlappingVector,
                                              OverlappingVector> type;
 };

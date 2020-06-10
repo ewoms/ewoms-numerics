@@ -85,7 +85,7 @@ SET_TYPE_PROP(FractureProblem, Problem, Ewoms::FractureProblem<TypeTag>);
 SET_PROP(FractureProblem, WettingPhase)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
@@ -95,7 +95,7 @@ public:
 SET_PROP(FractureProblem, NonwettingPhase)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> > type;
@@ -105,11 +105,11 @@ public:
 SET_PROP(FractureProblem, MaterialLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
@@ -131,8 +131,8 @@ SET_BOOL_PROP(FractureProblem, EnableEnergy, true);
 SET_PROP(FractureProblem, ThermalConductionLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
 public:
     // define the material law parameterized by absolute saturations
@@ -141,7 +141,7 @@ public:
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(FractureProblem, SolidEnergyLaw,
-              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Disable gravity
 SET_BOOL_PROP(FractureProblem, EnableGravity, false);
@@ -176,23 +176,23 @@ namespace Ewoms {
 template <class TypeTag>
 class FractureProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
-    typedef typename GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
-    typedef typename GET_PROP_TYPE(TypeTag, Constraints) Constraints;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
+    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
+    typedef GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
+    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
+    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
+    typedef GET_PROP_TYPE(TypeTag, Model) Model;
 
     enum {
         // phase indices

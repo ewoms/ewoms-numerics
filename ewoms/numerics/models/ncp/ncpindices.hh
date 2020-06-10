@@ -47,7 +47,7 @@ struct NcpIndices
                            GET_PROP_VALUE(TypeTag, EnableEnergy)>
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     enum { numPhases = FluidSystem::numPhases };
     enum { numComponents = FluidSystem::numComponents };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };

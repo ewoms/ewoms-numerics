@@ -76,7 +76,7 @@ SET_TYPE_PROP(PowerInjectionBaseProblem, Problem,
 SET_PROP(PowerInjectionBaseProblem, WettingPhase)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
@@ -86,7 +86,7 @@ public:
 SET_PROP(PowerInjectionBaseProblem, NonwettingPhase)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::GasPhase<Scalar, Ewoms::Air<Scalar> > type;
@@ -96,11 +96,11 @@ public:
 SET_PROP(PowerInjectionBaseProblem, MaterialLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
@@ -154,19 +154,19 @@ namespace Ewoms {
 template <class TypeTag>
 class PowerInjectionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
-    typedef typename GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
+    typedef GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
     enum {
         // number of phases
@@ -184,8 +184,8 @@ class PowerInjectionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
 
     typedef typename GridView::ctype CoordScalar;
     typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
@@ -235,13 +235,13 @@ public:
     {
         std::ostringstream oss;
         oss << "powerinjection_";
-        if (std::is_same<typename GET_PROP_TYPE(TypeTag, FluxModule),
+        if (std::is_same<GET_PROP_TYPE(TypeTag, FluxModule),
                          Ewoms::DarcyFluxModule<TypeTag> >::value)
             oss << "darcy";
         else
             oss << "forchheimer";
 
-        if (std::is_same<typename GET_PROP_TYPE(TypeTag, LocalLinearizerSplice),
+        if (std::is_same<GET_PROP_TYPE(TypeTag, LocalLinearizerSplice),
                          TTAG(AutoDiffLocalLinearizer)>::value)
             oss << "_" << "ad";
         else

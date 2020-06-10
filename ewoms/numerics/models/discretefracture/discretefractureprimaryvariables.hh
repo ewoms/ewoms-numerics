@@ -45,9 +45,9 @@ class DiscreteFracturePrimaryVariables
 {
     typedef ImmisciblePrimaryVariables<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 

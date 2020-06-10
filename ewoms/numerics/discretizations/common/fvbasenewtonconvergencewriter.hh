@@ -56,11 +56,11 @@ namespace Ewoms {
 template <class TypeTag>
 class FvBaseNewtonConvergenceWriter
 {
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 
-    typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
+    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
+    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
+    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
     typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;

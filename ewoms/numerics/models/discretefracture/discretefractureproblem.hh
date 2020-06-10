@@ -60,10 +60,10 @@ class DiscreteFractureProblem
 {
     typedef Ewoms::MultiPhaseBaseProblem<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Problem) Implementation;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Problem) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
     enum { dimWorld = GridView::dimensionworld };
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;

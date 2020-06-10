@@ -121,7 +121,7 @@ SET_TYPE_PROP(BlackOilModel, Indices,
 SET_PROP(BlackOilModel, FluidSystem)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::BlackOilFluidSystem<Scalar> type;
@@ -147,7 +147,7 @@ SET_BOOL_PROP(BlackOilModel, EnableEnergy, false);
 SET_PROP(BlackOilModel, BlackOilEnergyScalingFactor)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
     static constexpr Scalar alpha = GET_PROP_VALUE(TypeTag, BlackoilConserveSurfaceVolume) ? 1000.0 : 1.0;
 
 public:
@@ -232,15 +232,15 @@ template<class TypeTag >
 class BlackOilModel
     : public MultiPhaseBaseModel<TypeTag>
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
     typedef MultiPhaseBaseModel<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
 
     enum { numComponents = FluidSystem::numComponents };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };

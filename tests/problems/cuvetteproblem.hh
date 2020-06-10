@@ -70,7 +70,7 @@ SET_TYPE_PROP(CuvetteBaseProblem, Problem, Ewoms::CuvetteProblem<TypeTag>);
 // Set the fluid system
 SET_TYPE_PROP(
     CuvetteBaseProblem, FluidSystem,
-    Ewoms::H2OAirMesityleneFluidSystem<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+    Ewoms::H2OAirMesityleneFluidSystem<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Enable gravity
 SET_BOOL_PROP(CuvetteBaseProblem, EnableGravity, true);
@@ -82,8 +82,8 @@ SET_SCALAR_PROP(CuvetteBaseProblem, MaxTimeStepSize, 600.);
 SET_PROP(CuvetteBaseProblem, MaterialLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
     typedef Ewoms::ThreePhaseMaterialTraits<
         Scalar,
@@ -97,14 +97,14 @@ public:
 
 // set the energy storage law for the solid phase
 SET_TYPE_PROP(CuvetteBaseProblem, SolidEnergyLaw,
-              Ewoms::ConstantSolidHeatCapLaw<typename GET_PROP_TYPE(TypeTag, Scalar)>);
+              Ewoms::ConstantSolidHeatCapLaw<GET_PROP_TYPE(TypeTag, Scalar)>);
 
 // Set the thermal conduction law
 SET_PROP(CuvetteBaseProblem, ThermalConductionLaw)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
 public:
     // define the material law parameterized by absolute saturations
@@ -153,24 +153,24 @@ namespace Ewoms {
 template <class TypeTag>
 class CuvetteProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
+    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
 
     // copy some indices for convenience
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
     enum { numPhases = FluidSystem::numPhases };
     enum { numComponents = FluidSystem::numComponents };
     enum { waterPhaseIdx = FluidSystem::waterPhaseIdx };

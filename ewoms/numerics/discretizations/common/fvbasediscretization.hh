@@ -95,26 +95,26 @@ SET_TYPE_PROP(FvBaseDiscretization, Simulator, Ewoms::Simulator<TypeTag>);
 //! Mapper for the grid view's vertices.
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
 SET_TYPE_PROP(FvBaseDiscretization, VertexMapper,
-              Dune::MultipleCodimMultipleGeomTypeMapper<typename GET_PROP_TYPE(TypeTag, GridView)>);
+              Dune::MultipleCodimMultipleGeomTypeMapper<GET_PROP_TYPE(TypeTag, GridView)>);
 #else
 SET_TYPE_PROP(FvBaseDiscretization, VertexMapper,
-              Dune::MultipleCodimMultipleGeomTypeMapper<typename GET_PROP_TYPE(TypeTag, GridView), Dune::MCMGVertexLayout>);
+              Dune::MultipleCodimMultipleGeomTypeMapper<GET_PROP_TYPE(TypeTag, GridView), Dune::MCMGVertexLayout>);
 #endif
 
 //! Mapper for the grid view's elements.
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
 SET_TYPE_PROP(FvBaseDiscretization, ElementMapper,
-              Dune::MultipleCodimMultipleGeomTypeMapper<typename GET_PROP_TYPE(TypeTag, GridView)>);
+              Dune::MultipleCodimMultipleGeomTypeMapper<GET_PROP_TYPE(TypeTag, GridView)>);
 #else
 SET_TYPE_PROP(FvBaseDiscretization, ElementMapper,
-              Dune::MultipleCodimMultipleGeomTypeMapper<typename GET_PROP_TYPE(TypeTag, GridView), Dune::MCMGElementLayout>);
+              Dune::MultipleCodimMultipleGeomTypeMapper<GET_PROP_TYPE(TypeTag, GridView), Dune::MCMGElementLayout>);
 #endif
 
 //! marks the border indices (required for the algebraic overlap stuff)
 SET_PROP(FvBaseDiscretization, BorderListCreator)
 {
-    typedef typename GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 public:
     typedef Ewoms::Linear::NullBorderListCreator<GridView, DofMapper> type;
 };
@@ -140,7 +140,7 @@ SET_BOOL_PROP(FvBaseDiscretization, ContinueOnConvergenceError, false);
  * \brief A vector of quanties, each for one equation.
  */
 SET_TYPE_PROP(FvBaseDiscretization, EqVector,
-              Dune::FieldVector<typename GET_PROP_TYPE(TypeTag, Scalar),
+              Dune::FieldVector<GET_PROP_TYPE(TypeTag, Scalar),
                                 GET_PROP_VALUE(TypeTag, NumEq)>);
 
 /*!
@@ -149,13 +149,13 @@ SET_TYPE_PROP(FvBaseDiscretization, EqVector,
  * E.g. Neumann fluxes or source terms
  */
 SET_TYPE_PROP(FvBaseDiscretization, RateVector,
-              typename GET_PROP_TYPE(TypeTag, EqVector));
+              GET_PROP_TYPE(TypeTag, EqVector));
 
 /*!
  * \brief Type of object for specifying boundary conditions.
  */
 SET_TYPE_PROP(FvBaseDiscretization, BoundaryRateVector,
-              typename GET_PROP_TYPE(TypeTag, RateVector));
+              GET_PROP_TYPE(TypeTag, RateVector));
 
 /*!
  * \brief The class which represents constraints.
@@ -166,13 +166,13 @@ SET_TYPE_PROP(FvBaseDiscretization, Constraints, Ewoms::FvBaseConstraints<TypeTa
  * \brief The type for storing a residual for an element.
  */
 SET_TYPE_PROP(FvBaseDiscretization, ElementEqVector,
-              Dune::BlockVector<typename GET_PROP_TYPE(TypeTag, EqVector)>);
+              Dune::BlockVector<GET_PROP_TYPE(TypeTag, EqVector)>);
 
 /*!
  * \brief The type for storing a residual for the whole grid.
  */
 SET_TYPE_PROP(FvBaseDiscretization, GlobalEqVector,
-              Dune::BlockVector<typename GET_PROP_TYPE(TypeTag, EqVector)>);
+              Dune::BlockVector<GET_PROP_TYPE(TypeTag, EqVector)>);
 
 /*!
  * \brief An object representing a local set of primary variables.
@@ -183,7 +183,7 @@ SET_TYPE_PROP(FvBaseDiscretization, PrimaryVariables, Ewoms::FvBasePrimaryVariab
  * \brief The type of a solution for the whole grid at a fixed time.
  */
 SET_TYPE_PROP(FvBaseDiscretization, SolutionVector,
-              Dune::BlockVector<typename GET_PROP_TYPE(TypeTag, PrimaryVariables)>);
+              Dune::BlockVector<GET_PROP_TYPE(TypeTag, PrimaryVariables)>);
 
 /*!
  * \brief The class representing intensive quantities.
@@ -281,33 +281,33 @@ namespace Ewoms {
 template<class TypeTag>
 class FvBaseDiscretization
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef typename GET_PROP_TYPE(TypeTag, Discretization) Discretization;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Grid) Grid;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
-    typedef typename GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
-    typedef typename GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, Linearizer) Linearizer;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryContext) BoundaryContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef typename GET_PROP_TYPE(TypeTag, GradientCalculator) GradientCalculator;
-    typedef typename GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
-    typedef typename GET_PROP_TYPE(TypeTag, GridCommHandleFactory) GridCommHandleFactory;
-    typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
-    typedef typename GET_PROP_TYPE(TypeTag, LocalLinearizer) LocalLinearizer;
-    typedef typename GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
+    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, Discretization) Discretization;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
+    typedef GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
+    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
+    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
+    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, Linearizer) Linearizer;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryContext) BoundaryContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, GradientCalculator) GradientCalculator;
+    typedef GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
+    typedef GET_PROP_TYPE(TypeTag, GridCommHandleFactory) GridCommHandleFactory;
+    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
+    typedef GET_PROP_TYPE(TypeTag, LocalLinearizer) LocalLinearizer;
+    typedef GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
 
     enum {
         numEq = GET_PROP_VALUE(TypeTag, NumEq),
@@ -340,13 +340,13 @@ class FvBaseDiscretization
     };
 
 #if HAVE_DUNE_FEM
-    typedef typename GET_PROP_TYPE(TypeTag, DiscreteFunctionSpace)    DiscreteFunctionSpace;
+    typedef GET_PROP_TYPE(TypeTag, DiscreteFunctionSpace)    DiscreteFunctionSpace;
 
     // discrete function storing solution data
     typedef Dune::Fem::ISTLBlockVectorDiscreteFunction<DiscreteFunctionSpace, PrimaryVariables> DiscreteFunction;
 
     // problem restriction and prolongation operator for adaptation
-    typedef typename GET_PROP_TYPE(TypeTag, Problem)   Problem;
+    typedef GET_PROP_TYPE(TypeTag, Problem)   Problem;
     typedef typename Problem :: RestrictProlongOperator  ProblemRestrictProlongOperator;
 
     // discrete function restriction and prolongation operator for adaptation

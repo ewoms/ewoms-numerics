@@ -115,7 +115,7 @@ template <class TypeTag>
 class DiscreteFractureModel : public ImmiscibleModel<TypeTag>
 {
     typedef ImmiscibleModel<TypeTag> ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
 public:
     DiscreteFractureModel(Simulator& simulator)

@@ -60,13 +60,13 @@ namespace Ewoms {
 template <class TypeTag>
 class BaseVanguard
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Grid) Grid;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Vanguard) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Vanguard) Implementation;
 
 #if HAVE_DUNE_FEM
-    typedef typename GET_PROP_TYPE(TypeTag, GridPart) GridPart;
+    typedef GET_PROP_TYPE(TypeTag, GridPart) GridPart;
 #endif
 
 public:

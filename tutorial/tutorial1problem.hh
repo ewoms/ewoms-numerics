@@ -77,14 +77,14 @@ SET_TYPE_PROP(Tutorial1Problem, Vanguard, Ewoms::CubeGridVanguard<TypeTag>); /*@
 // Set the wetting phase /*@\label{tutorial1:2p-system-start}@*/
 SET_TYPE_PROP(Tutorial1Problem,
               WettingPhase, /*@\label{tutorial1:wettingPhase}@*/
-              Ewoms::LiquidPhase<typename GET_PROP_TYPE(TypeTag, Scalar),
-                               Ewoms::SimpleH2O<typename GET_PROP_TYPE(TypeTag, Scalar)> >);
+              Ewoms::LiquidPhase<GET_PROP_TYPE(TypeTag, Scalar),
+                               Ewoms::SimpleH2O<GET_PROP_TYPE(TypeTag, Scalar)> >);
 
 // Set the non-wetting phase
 SET_TYPE_PROP(Tutorial1Problem,
               NonwettingPhase, /*@\label{tutorial1:nonwettingPhase}@*/
-              Ewoms::LiquidPhase<typename GET_PROP_TYPE(TypeTag, Scalar),
-                               Ewoms::LNAPL<typename GET_PROP_TYPE(TypeTag, Scalar)> >); /*@\label{tutorial1:2p-system-end}@*/
+              Ewoms::LiquidPhase<GET_PROP_TYPE(TypeTag, Scalar),
+                               Ewoms::LNAPL<GET_PROP_TYPE(TypeTag, Scalar)> >); /*@\label{tutorial1:2p-system-end}@*/
 
 // Set the material law
 SET_PROP(Tutorial1Problem, MaterialLaw)
@@ -92,8 +92,8 @@ SET_PROP(Tutorial1Problem, MaterialLaw)
 private:
     // create a class holding the necessary information for a
     // two-phase capillary pressure law
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar, wettingPhaseIdx, nonWettingPhaseIdx> Traits;
@@ -135,9 +135,9 @@ template <class TypeTag>
 class Tutorial1Problem
     : public GET_PROP_TYPE(TypeTag, BaseProblem) /*@\label{tutorial1:def-problem}@*/
 {
-    typedef typename GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
 
     // Grid dimension
     enum { dimWorld = GridView::dimensionworld };
@@ -146,14 +146,14 @@ class Tutorial1Problem
     typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
 
     // eWoms specific types are specified via the property system
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams; /*@\label{tutorial1:matLawObjectType}@*/
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams; /*@\label{tutorial1:matLawObjectType}@*/
 
     // phase indices
     enum { numPhases = FluidSystem::numPhases };

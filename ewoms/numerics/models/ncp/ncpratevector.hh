@@ -46,14 +46,14 @@ namespace Ewoms {
  */
 template <class TypeTag>
 class NcpRateVector
-    : public Dune::FieldVector<typename GET_PROP_TYPE(TypeTag, Evaluation),
+    : public Dune::FieldVector<GET_PROP_TYPE(TypeTag, Evaluation),
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
     typedef Dune::FieldVector<Evaluation, numEq> ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
 
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };

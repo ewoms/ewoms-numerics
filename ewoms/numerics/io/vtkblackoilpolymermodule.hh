@@ -76,10 +76,10 @@ class VtkBlackOilPolymerModule : public BaseOutputModule<TypeTag>
 {
     typedef BaseOutputModule<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
     typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;

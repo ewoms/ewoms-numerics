@@ -54,7 +54,7 @@ class PvsExtensiveQuantities
 {
     typedef MultiPhaseBaseExtensiveQuantities<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
 
     enum { enableDiffusion = GET_PROP_VALUE(TypeTag, EnableDiffusion) };
     typedef Ewoms::DiffusionExtensiveQuantities<TypeTag, enableDiffusion> DiffusionExtensiveQuantities;

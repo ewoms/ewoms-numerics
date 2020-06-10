@@ -45,8 +45,8 @@ SET_BOOL_PROP(Co2InjectionFlashNiVcfvProblem, EnableEnergy, true);
 // use the CO2 injection problem adapted flash solver
 SET_TYPE_PROP(
     Co2InjectionFlashNiVcfvProblem, FlashSolver,
-    Ewoms::Co2InjectionFlash<typename GET_PROP_TYPE(TypeTag, Scalar),
-                           typename GET_PROP_TYPE(TypeTag, FluidSystem)>);
+    Ewoms::Co2InjectionFlash<GET_PROP_TYPE(TypeTag, Scalar),
+                           GET_PROP_TYPE(TypeTag, FluidSystem)>);
 
 // the flash model has serious problems with the numerical
 // precision. if quadruple precision math is available, we use it,

@@ -47,11 +47,11 @@ namespace Ewoms {
  */
 template <class TypeTag>
 class FvBasePrimaryVariables
-    : public Dune::FieldVector<typename GET_PROP_TYPE(TypeTag, Scalar),
+    : public Dune::FieldVector<GET_PROP_TYPE(TypeTag, Scalar),
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
 
@@ -139,7 +139,7 @@ namespace Dune {
    * Ewoms::FvBasePrimaryVariables: use FieldVector's FieldTraits implementation) */
   template<class TypeTag>
   struct FieldTraitsImpl< TypeTag, true >
-      : public FieldTraits<FieldVector<typename GET_PROP_TYPE(TypeTag, Scalar),
+      : public FieldTraits<FieldVector<GET_PROP_TYPE(TypeTag, Scalar),
                                        GET_PROP_VALUE(TypeTag, NumEq)> >
   {
   };

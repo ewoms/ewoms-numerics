@@ -49,8 +49,8 @@ SET_TAG_PROP(Co2InjectionFlashEcfvProblem, LocalLinearizerSplice, AutoDiffLocalL
 // use the flash solver adapted to the CO2 injection problem
 SET_TYPE_PROP(
     Co2InjectionFlashEcfvProblem, FlashSolver,
-    Ewoms::Co2InjectionFlash<typename GET_PROP_TYPE(TypeTag, Scalar),
-                           typename GET_PROP_TYPE(TypeTag, FluidSystem)>);
+    Ewoms::Co2InjectionFlash<GET_PROP_TYPE(TypeTag, Scalar),
+                           GET_PROP_TYPE(TypeTag, FluidSystem)>);
 
 // the flash model has serious problems with the numerical
 // precision. if quadruple precision math is available, we use it,

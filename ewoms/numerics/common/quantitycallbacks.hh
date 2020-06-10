@@ -46,8 +46,8 @@ namespace Ewoms {
 template <class TypeTag>
 class TemperatureCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
     typedef decltype(std::declval<IQFluidState>().temperature(0)) ResultRawType;
@@ -82,8 +82,8 @@ private:
 template <class TypeTag>
 class PressureCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
     typedef decltype(std::declval<IQFluidState>().pressure(0)) ResultRawType;
@@ -131,9 +131,9 @@ private:
 template <class TypeTag, class FluidState>
 class BoundaryPressureCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQRawFluidState;
     typedef typename std::remove_const<typename std::remove_reference<IQRawFluidState>::type>::type IQFluidState;
@@ -192,8 +192,8 @@ private:
 template <class TypeTag>
 class DensityCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
     typedef decltype(std::declval<IQFluidState>().density(0)) ResultRawType;
@@ -241,8 +241,8 @@ private:
 template <class TypeTag>
 class MolarDensityCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
 
@@ -289,8 +289,8 @@ private:
 template <class TypeTag>
 class ViscosityCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
     typedef decltype(std::declval<IQFluidState>().viscosity(0)) ResultRawType;
@@ -338,8 +338,8 @@ private:
 template <class TypeTag>
 class VelocityCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(IntensiveQuantities().velocityCenter()) ResultRawType;
 
@@ -372,8 +372,8 @@ private:
 template <class TypeTag>
 class VelocityComponentCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(IntensiveQuantities().velocityCenter()[0]) ResultRawType;
 
@@ -420,8 +420,8 @@ private:
 template <class TypeTag>
 class MoleFractionCallback
 {
-    typedef typename GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef typename GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
 
     typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
     typedef decltype(std::declval<IQFluidState>().moleFraction(0, 0)) ResultRawType;

@@ -70,8 +70,8 @@ SET_TYPE_PROP(FlashModel, LocalResidual,
 
 //! Use the NCP flash solver by default
 SET_TYPE_PROP(FlashModel, FlashSolver,
-              Ewoms::NcpFlash<typename GET_PROP_TYPE(TypeTag, Scalar),
-                            typename GET_PROP_TYPE(TypeTag, FluidSystem)>);
+              Ewoms::NcpFlash<GET_PROP_TYPE(TypeTag, Scalar),
+                            GET_PROP_TYPE(TypeTag, FluidSystem)>);
 
 //! Let the flash solver choose its tolerance by default
 SET_SCALAR_PROP(FlashModel, FlashTolerance, -1.0);
@@ -180,11 +180,11 @@ class FlashModel
 {
     typedef MultiPhaseBaseModel<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
 
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { enableDiffusion = GET_PROP_VALUE(TypeTag, EnableDiffusion) };

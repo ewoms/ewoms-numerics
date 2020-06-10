@@ -70,7 +70,7 @@ NEW_PROP_TAG(NewtonMethod);
 SET_TYPE_PROP(FvBaseNewtonMethod, DiscNewtonMethod,
               Ewoms::FvBaseNewtonMethod<TypeTag>);
 SET_TYPE_PROP(FvBaseNewtonMethod, NewtonMethod,
-              typename GET_PROP_TYPE(TypeTag, DiscNewtonMethod));
+              GET_PROP_TYPE(TypeTag, DiscNewtonMethod));
 SET_TYPE_PROP(FvBaseNewtonMethod, NewtonConvergenceWriter,
               Ewoms::FvBaseNewtonConvergenceWriter<TypeTag>);
 
@@ -90,15 +90,15 @@ template <class TypeTag>
 class FvBaseNewtonMethod : public NewtonMethod<TypeTag>
 {
     typedef Ewoms::NewtonMethod<TypeTag> ParentType;
-    typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) Implementation;
+    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) Implementation;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef typename GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
-    typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef typename GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef typename GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
+    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
+    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
+    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
 
 public:
     FvBaseNewtonMethod(Simulator& simulator)

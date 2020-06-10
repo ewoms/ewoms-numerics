@@ -123,7 +123,7 @@ SET_TYPE_PROP(Richards, Indices, Ewoms::RichardsIndices);
 SET_PROP(Richards, WettingFluid)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::LiquidPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
@@ -140,7 +140,7 @@ public:
 SET_PROP(Richards, NonWettingFluid)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
 
 public:
     typedef Ewoms::GasPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
@@ -158,9 +158,9 @@ public:
 SET_PROP(Richards, FluidSystem)
 {
 private:
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, WettingFluid) WettingFluid;
-    typedef typename GET_PROP_TYPE(TypeTag, NonWettingFluid) NonWettingFluid;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, WettingFluid) WettingFluid;
+    typedef GET_PROP_TYPE(TypeTag, NonWettingFluid) NonWettingFluid;
 
 public:
     typedef Ewoms::TwoPhaseImmiscibleFluidSystem<Scalar, WettingFluid, NonWettingFluid> type;
@@ -233,11 +233,11 @@ class RichardsModel
 {
     typedef MultiPhaseBaseModel<TypeTag> ParentType;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
 
-    typedef typename GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef typename GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef typename GET_PROP_TYPE(TypeTag, Indices) Indices;
+    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
 
      static const unsigned numPhases = FluidSystem::numPhases;
      static const unsigned numComponents = FluidSystem::numComponents;

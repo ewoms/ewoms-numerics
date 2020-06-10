@@ -50,10 +50,10 @@ namespace Ewoms {
 template <class TypeTag>
 class NullConvergenceWriter
 {
-    typedef typename GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
+    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
 
-    typedef typename GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef typename GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
+    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
+    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
 
 public:
     NullConvergenceWriter(NewtonMethod& method  EWOMS_UNUSED)
