@@ -405,7 +405,7 @@ static inline int start(int argc, char **argv,  bool registerParams=true)
         int printProps = EWOMS_GET_PARAM(TypeTag, int, PrintProperties);
         if (printProps && myRank == 0) {
             if (printProps == 1 || !isatty(fileno(stdout)))
-                Ewoms::Properties::printValues<TypeTag>();
+                EWOMS_PRINT_PROPERTIES(TypeTag);
         }
 
         // instantiate and run the concrete problem. make sure to
