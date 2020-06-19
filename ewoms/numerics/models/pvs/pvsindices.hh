@@ -48,7 +48,7 @@ class PvsIndices
 {
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
-    typedef Ewoms::EnergyIndices<PVOffset + numComponents, enableEnergy> EnergyIndices;
+    using EnergyIndices = Ewoms::EnergyIndices<PVOffset + numComponents, enableEnergy>;
 
 public:
     //! Number of partial differential equations or primary variables, respectively

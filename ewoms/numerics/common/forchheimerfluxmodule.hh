@@ -66,9 +66,9 @@ class ForchheimerBaseProblem;
 template <class TypeTag>
 struct ForchheimerFluxModule
 {
-    typedef ForchheimerIntensiveQuantities<TypeTag> FluxIntensiveQuantities;
-    typedef ForchheimerExtensiveQuantities<TypeTag> FluxExtensiveQuantities;
-    typedef ForchheimerBaseProblem<TypeTag> FluxBaseProblem;
+    using FluxIntensiveQuantities = ForchheimerIntensiveQuantities<TypeTag>;
+    using FluxExtensiveQuantities = ForchheimerExtensiveQuantities<TypeTag>;
+    using FluxBaseProblem = ForchheimerBaseProblem<TypeTag>;
 
     /*!
      * \brief Register all run-time parameters for the flux module.
@@ -85,8 +85,8 @@ struct ForchheimerFluxModule
 template <class TypeTag>
 class ForchheimerBaseProblem
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
 
 public:
     /*!
@@ -134,9 +134,9 @@ public:
 template <class TypeTag>
 class ForchheimerIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
@@ -219,23 +219,23 @@ template <class TypeTag>
 class ForchheimerExtensiveQuantities
     : public DarcyExtensiveQuantities<TypeTag>
 {
-    typedef DarcyExtensiveQuantities<TypeTag> DarcyExtQuants;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
+    using DarcyExtQuants = DarcyExtensiveQuantities<TypeTag>;
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Implementation = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
 
     enum { dimWorld = GridView::dimensionworld };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
-    typedef Dune::FieldVector<Evaluation, dimWorld> DimEvalVector;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Dune::FieldMatrix<Evaluation, dimWorld, dimWorld> DimEvalMatrix;
+    using DimVector = Dune::FieldVector<Scalar, dimWorld>;
+    using DimEvalVector = Dune::FieldVector<Evaluation, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using DimEvalMatrix = Dune::FieldMatrix<Evaluation, dimWorld, dimWorld>;
 
 public:
     /*!

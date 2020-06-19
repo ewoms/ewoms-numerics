@@ -47,12 +47,12 @@ namespace Ewoms {
 template <class TypeTag>
 class DiscreteFractureIntensiveQuantities : public ImmiscibleIntensiveQuantities<TypeTag>
 {
-    typedef ImmiscibleIntensiveQuantities<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using ParentType = ImmiscibleIntensiveQuantities<TypeTag>;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     enum { numPhases = FluidSystem::numPhases };
     enum { dimWorld = GridView::dimensionworld };
@@ -65,7 +65,7 @@ class DiscreteFractureIntensiveQuantities : public ImmiscibleIntensiveQuantities
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { wettingPhaseIdx = MaterialLaw::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = MaterialLaw::nonWettingPhaseIdx };
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
     typedef Ewoms::ImmiscibleFluidState<Scalar, FluidSystem,
                                       /*storeEnthalpy=*/enableEnergy> FluidState;
 

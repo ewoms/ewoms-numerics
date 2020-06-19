@@ -85,28 +85,28 @@ namespace Ewoms {
 template <class TypeTag>
 class VtkDiscreteFractureModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef GET_PROP_TYPE(TypeTag, Vanguard) Vanguard;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Vanguard = GET_PROP_TYPE(TypeTag, Vanguard);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
-    typedef GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
+    using DiscBaseOutputModule = GET_PROP_TYPE(TypeTag, DiscBaseOutputModule);
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
     enum { dim = GridView::dimension };
     enum { dimWorld = GridView::dimensionworld };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
-    typedef typename ParentType::ScalarBuffer ScalarBuffer;
-    typedef typename ParentType::PhaseBuffer PhaseBuffer;
-    typedef typename ParentType::PhaseVectorBuffer PhaseVectorBuffer;
+    using ScalarBuffer = typename ParentType::ScalarBuffer;
+    using PhaseBuffer = typename ParentType::PhaseBuffer;
+    using PhaseVectorBuffer = typename ParentType::PhaseVectorBuffer;
 
 public:
     VtkDiscreteFractureModule(const Simulator& simulator)

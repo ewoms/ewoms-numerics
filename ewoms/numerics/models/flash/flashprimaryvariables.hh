@@ -57,12 +57,12 @@ namespace Ewoms {
 template <class TypeTag>
 class FlashPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
-    typedef FvBasePrimaryVariables<TypeTag> ParentType;
+    using ParentType = FvBasePrimaryVariables<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     // primary variable indices
     enum { cTot0Idx = Indices::cTot0Idx };
@@ -70,7 +70,7 @@ class FlashPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
 
-    typedef Ewoms::EnergyModule<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)> EnergyModule;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)>;
 
 public:
     FlashPrimaryVariables() : ParentType()

@@ -44,14 +44,14 @@ namespace Ewoms {
 template <class TypeTag>
 class BlackOilBoundaryRateVector : public GET_PROP_TYPE(TypeTag, RateVector)
 {
-    typedef GET_PROP_TYPE(TypeTag, RateVector) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using ParentType = GET_PROP_TYPE(TypeTag, RateVector);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using LocalResidual = GET_PROP_TYPE(TypeTag, LocalResidual);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
@@ -62,7 +62,7 @@ class BlackOilBoundaryRateVector : public GET_PROP_TYPE(TypeTag, RateVector)
 
     static constexpr bool blackoilConserveSurfaceVolume = GET_PROP_VALUE(TypeTag, BlackoilConserveSurfaceVolume);
 
-    typedef Ewoms::BlackOilEnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using EnergyModule = Ewoms::BlackOilEnergyModule<TypeTag, enableEnergy>;
 
 public:
     /*!

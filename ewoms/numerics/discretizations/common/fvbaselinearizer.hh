@@ -67,27 +67,27 @@ template<class TypeTag>
 class FvBaseLinearizer
 {
 //! \cond SKIP_THIS
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using DofMapper = GET_PROP_TYPE(TypeTag, DofMapper);
+    using ElementMapper = GET_PROP_TYPE(TypeTag, ElementMapper);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
-    typedef GET_PROP_TYPE(TypeTag, Stencil) Stencil;
+    using GlobalEqVector = GET_PROP_TYPE(TypeTag, GlobalEqVector);
+    using SparseMatrixAdapter = GET_PROP_TYPE(TypeTag, SparseMatrixAdapter);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using Constraints = GET_PROP_TYPE(TypeTag, Constraints);
+    using Stencil = GET_PROP_TYPE(TypeTag, Stencil);
 
 
 
-    typedef typename GridView::template Codim<0>::Entity Element;
-    typedef typename GridView::template Codim<0>::Iterator ElementIterator;
+    using Element = typename GridView::template Codim<0>::Entity;
+    using ElementIterator = typename GridView::template Codim<0>::Iterator;
 
-    typedef GlobalEqVector Vector;
+    using Vector = GlobalEqVector;
 
 
 
@@ -311,7 +311,7 @@ protected:
 
         // for the main model, find out the global indices of the neighboring degrees of
         // freedom of each primary degree of freedom
-        typedef std::set< unsigned > NeighborSet;
+        using NeighborSet = std::set< unsigned >;
         std::vector<NeighborSet> sparsityPattern(model.numTotalDof());
 
         ElementIterator elemIt = gridView_().template begin<0>();

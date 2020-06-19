@@ -76,36 +76,36 @@ namespace Linear {
 template <class TypeTag>
 class ParallelAmgBackend : public ParallelBaseBackend<TypeTag>
 {
-    typedef ParallelBaseBackend<TypeTag> ParentType;
+    using ParentType = ParallelBaseBackend<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, LinearSolverScalar) LinearSolverScalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Overlap) Overlap;
-    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using LinearSolverScalar = GET_PROP_TYPE(TypeTag, LinearSolverScalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Overlap = GET_PROP_TYPE(TypeTag, Overlap);
+    using SparseMatrixAdapter = GET_PROP_TYPE(TypeTag, SparseMatrixAdapter);
 
-    typedef typename ParentType::ParallelOperator ParallelOperator;
-    typedef typename ParentType::OverlappingVector OverlappingVector;
-    typedef typename ParentType::ParallelScalarProduct ParallelScalarProduct;
+    using ParallelOperator = typename ParentType::ParallelOperator;
+    using OverlappingVector = typename ParentType::OverlappingVector;
+    using ParallelScalarProduct = typename ParentType::ParallelScalarProduct;
 
     static constexpr int numEq = GET_PROP_VALUE(TypeTag, NumEq);
-    typedef Dune::FieldVector<LinearSolverScalar, numEq> VectorBlock;
-    typedef typename SparseMatrixAdapter::MatrixBlock MatrixBlock;
-    typedef typename SparseMatrixAdapter::IstlMatrix IstlMatrix;
+    using VectorBlock = Dune::FieldVector<LinearSolverScalar, numEq>;
+    using MatrixBlock = typename SparseMatrixAdapter::MatrixBlock;
+    using IstlMatrix = typename SparseMatrixAdapter::IstlMatrix;
 
-    typedef Dune::BlockVector<VectorBlock> Vector;
+    using Vector = Dune::BlockVector<VectorBlock>;
 
     // define the smoother used for the AMG and specify its
     // arguments
-    typedef Dune::SeqSOR<IstlMatrix, Vector, Vector> SequentialSmoother;
-// typedef Dune::SeqSSOR<IstlMatrix,Vector,Vector> SequentialSmoother;
-// typedef Dune::SeqJac<IstlMatrix,Vector,Vector> SequentialSmoother;
+    using SequentialSmoother = Dune::SeqSOR<IstlMatrix, Vector, Vector>;
+// using SequentialSmoother = Dune::SeqSSOR<IstlMatrix,Vector,Vector>;
+// using SequentialSmoother = Dune::SeqJac<IstlMatrix,Vector,Vector>;
 #if DUNE_VERSION_NEWER(DUNE_ISTL, 2,7)
-// typedef Dune::SeqILU<IstlMatrix,Vector,Vector> SequentialSmoother;
+// using SequentialSmoother = Dune::SeqILU<IstlMatrix,Vector,Vector>;
 #else
-// typedef Dune::SeqILU0<IstlMatrix,Vector,Vector> SequentialSmoother;
-// typedef Dune::SeqILUn<IstlMatrix,Vector,Vector> SequentialSmoother;
+// using SequentialSmoother = Dune::SeqILU0<IstlMatrix,Vector,Vector>;
+// using SequentialSmoother = Dune::SeqILUn<IstlMatrix,Vector,Vector>;
 #endif
 
 #if HAVE_MPI
@@ -126,10 +126,10 @@ class ParallelAmgBackend : public ParallelBaseBackend<TypeTag>
                            ParallelSmoother,
                            OwnerOverlapCopyCommunication> AMG;
 #else
-    typedef Dune::MatrixAdapter<IstlMatrix, Vector, Vector> FineOperator;
-    typedef Dune::SeqScalarProduct<Vector> FineScalarProduct;
-    typedef SequentialSmoother ParallelSmoother;
-    typedef Dune::Amg::AMG<FineOperator, Vector, ParallelSmoother> AMG;
+    using FineOperator = Dune::MatrixAdapter<IstlMatrix, Vector, Vector>;
+    using FineScalarProduct = Dune::SeqScalarProduct<Vector>;
+    using ParallelSmoother = SequentialSmoother;
+    using AMG = Dune::Amg::AMG<FineOperator, Vector, ParallelSmoother>;
 #endif
 
     typedef BiCGStabSolver<ParallelOperator,
@@ -189,7 +189,7 @@ protected:
                                                     AMG& parPreCond)
     {
         const auto& gridView = this->simulator_.gridView();
-        typedef CombinedCriterion<OverlappingVector, decltype(gridView.comm())> CCC;
+        using CCC = CombinedCriterion<OverlappingVector, decltype(gridView.comm())>;
 
         Scalar linearSolverTolerance = EWOMS_GET_PARAM(TypeTag, Scalar, LinearSolverTolerance);
         Scalar linearSolverAbsTolerance = EWOMS_GET_PARAM(TypeTag, Scalar, LinearSolverAbsTolerance);
@@ -228,8 +228,8 @@ protected:
     template <class ParallelIndexSet>
     void setupAmgIndexSet_(const Overlap& overlap, ParallelIndexSet& istlIndices)
     {
-        typedef Dune::OwnerOverlapCopyAttributeSet GridAttributes;
-        typedef Dune::OwnerOverlapCopyAttributeSet::AttributeSet GridAttributeSet;
+        using GridAttributes = Dune::OwnerOverlapCopyAttributeSet;
+        using GridAttributeSet = Dune::OwnerOverlapCopyAttributeSet::AttributeSet;
 
         // create DUNE's ParallelIndexSet from a domestic overlap
         istlIndices.beginResize();
@@ -262,7 +262,7 @@ protected:
         if (this->simulator_.vanguard().gridView().comm().rank() == 0)
             verbosity = EWOMS_GET_PARAM(TypeTag, int, LinearSolverVerbosity);
 
-        typedef typename Dune::Amg::SmootherTraits<ParallelSmoother>::Arguments SmootherArgs;
+        using SmootherArgs = typename Dune::Amg::SmootherTraits<ParallelSmoother>::Arguments;
 
         SmootherArgs smootherArgs;
         smootherArgs.iterations = 1;

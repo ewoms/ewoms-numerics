@@ -45,15 +45,15 @@ namespace Ewoms {
 template <class TypeTag>
 class NcpNewtonMethod : public GET_PROP_TYPE(TypeTag, DiscNewtonMethod)
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscNewtonMethod) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscNewtonMethod);
 
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using GlobalEqVector = GET_PROP_TYPE(TypeTag, GlobalEqVector);
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };

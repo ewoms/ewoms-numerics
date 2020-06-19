@@ -50,12 +50,12 @@ class ImmiscibleExtensiveQuantities
     : public MultiPhaseBaseExtensiveQuantities<TypeTag>
     , public EnergyExtensiveQuantities<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)>
 {
-    typedef MultiPhaseBaseExtensiveQuantities<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using ParentType = MultiPhaseBaseExtensiveQuantities<TypeTag>;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Ewoms::EnergyExtensiveQuantities<TypeTag, enableEnergy> EnergyExtensiveQuantities;
+    using EnergyExtensiveQuantities = Ewoms::EnergyExtensiveQuantities<TypeTag, enableEnergy>;
 
 public:
     /*!

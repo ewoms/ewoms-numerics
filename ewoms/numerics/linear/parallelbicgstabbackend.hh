@@ -85,19 +85,19 @@ namespace Linear {
 template <class TypeTag>
 class ParallelBiCGStabSolverBackend : public ParallelBaseBackend<TypeTag>
 {
-    typedef ParallelBaseBackend<TypeTag> ParentType;
+    using ParentType = ParallelBaseBackend<TypeTag>;
 
 protected:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using SparseMatrixAdapter = GET_PROP_TYPE(TypeTag, SparseMatrixAdapter);
 
-    typedef typename ParentType::ParallelOperator ParallelOperator;
-    typedef typename ParentType::OverlappingVector OverlappingVector;
-    typedef typename ParentType::ParallelPreconditioner ParallelPreconditioner;
-    typedef typename ParentType::ParallelScalarProduct ParallelScalarProduct;
+    using ParallelOperator = typename ParentType::ParallelOperator;
+    using OverlappingVector = typename ParentType::OverlappingVector;
+    using ParallelPreconditioner = typename ParentType::ParallelPreconditioner;
+    using ParallelScalarProduct = typename ParentType::ParallelScalarProduct;
 
-    typedef typename SparseMatrixAdapter::MatrixBlock MatrixBlock;
+    using MatrixBlock = typename SparseMatrixAdapter::MatrixBlock;
 
     typedef BiCGStabSolver<ParallelOperator,
                            OverlappingVector,
@@ -128,7 +128,7 @@ protected:
                                                     ParallelPreconditioner& parPreCond)
     {
         const auto& gridView = this->simulator_.gridView();
-        typedef CombinedCriterion<OverlappingVector, decltype(gridView.comm())> CCC;
+        using CCC = CombinedCriterion<OverlappingVector, decltype(gridView.comm())>;
 
         Scalar linearSolverTolerance = EWOMS_GET_PARAM(TypeTag, Scalar, LinearSolverTolerance);
         Scalar linearSolverAbsTolerance = EWOMS_GET_PARAM(TypeTag, Scalar, LinearSolverAbsTolerance);

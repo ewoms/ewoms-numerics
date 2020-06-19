@@ -100,30 +100,30 @@ namespace Ewoms {
 template<class TypeTag>
 class VtkMultiPhaseModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using DiscBaseOutputModule = GET_PROP_TYPE(TypeTag, DiscBaseOutputModule);
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
     enum { dimWorld = GridView::dimensionworld };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
-    typedef typename ParentType::ScalarBuffer ScalarBuffer;
-    typedef typename ParentType::VectorBuffer VectorBuffer;
-    typedef typename ParentType::TensorBuffer TensorBuffer;
-    typedef typename ParentType::PhaseBuffer PhaseBuffer;
+    using ScalarBuffer = typename ParentType::ScalarBuffer;
+    using VectorBuffer = typename ParentType::VectorBuffer;
+    using TensorBuffer = typename ParentType::TensorBuffer;
+    using PhaseBuffer = typename ParentType::PhaseBuffer;
 
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
+    using DimVector = Dune::FieldVector<Scalar, dimWorld>;
 
-    typedef std::array<VectorBuffer, numPhases> PhaseVectorBuffer;
+    using PhaseVectorBuffer = std::array<VectorBuffer, numPhases>;
 
 public:
     VtkMultiPhaseModule(const Simulator& simulator)

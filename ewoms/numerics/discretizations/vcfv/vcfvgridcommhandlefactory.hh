@@ -44,8 +44,8 @@ namespace Ewoms {
 template<class TypeTag>
 class VcfvGridCommHandleFactory
 {
-    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using DofMapper = GET_PROP_TYPE(TypeTag, DofMapper);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     static const int dim = GridView::dimension;
 
@@ -58,7 +58,7 @@ public:
     static std::shared_ptr<GridCommHandleMin<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim> >
     minHandle(ArrayType& array, const DofMapper& dofMapper)
     {
-        typedef GridCommHandleMin<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim> Handle;
+        using Handle = GridCommHandleMin<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim>;
         return  std::shared_ptr<Handle>(new Handle(array, dofMapper));
     }
 
@@ -70,7 +70,7 @@ public:
     static std::shared_ptr<GridCommHandleMax<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim> >
     maxHandle(ArrayType& array, const DofMapper& dofMapper)
     {
-        typedef GridCommHandleMax<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim> Handle;
+        using Handle = GridCommHandleMax<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim>;
         return  std::shared_ptr<Handle>(new Handle(array, dofMapper));
     }
 
@@ -82,7 +82,7 @@ public:
     static std::shared_ptr<GridCommHandleSum<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim> >
     sumHandle(ArrayType& array, const DofMapper& dofMapper)
     {
-        typedef GridCommHandleSum<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim> Handle;
+        using Handle = GridCommHandleSum<ValueType, ArrayType,  DofMapper, /*commCodim=*/dim>;
         return  std::shared_ptr<Handle>(new Handle(array, dofMapper));
     }
 };

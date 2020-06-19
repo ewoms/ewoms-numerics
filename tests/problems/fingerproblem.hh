@@ -86,34 +86,34 @@ SET_TYPE_PROP(FingerBaseProblem, Problem, Ewoms::FingerProblem<TypeTag>);
 SET_PROP(FingerBaseProblem, WettingPhase)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> >;
 };
 
 // Set the non-wetting phase
 SET_PROP(FingerBaseProblem, NonwettingPhase)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::GasPhase<Scalar, Ewoms::Air<Scalar> > type;
+    using type = Ewoms::GasPhase<Scalar, Ewoms::Air<Scalar> >;
 };
 
 // Set the material Law
 SET_PROP(FingerBaseProblem, MaterialLaw)
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx> Traits;
 
     // use the parker-lenhard hysteresis law
-    typedef Ewoms::ParkerLenhard<Traits> ParkerLenhard;
-    typedef ParkerLenhard type;
+    using ParkerLenhard = Ewoms::ParkerLenhard<Traits>;
+    using type = ParkerLenhard;
 };
 
 // Write the solutions of individual newton iterations?
@@ -168,18 +168,18 @@ template <class TypeTag>
 class FingerProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
     //!\cond SKIP_THIS
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
-    typedef GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using WettingPhase = GET_PROP_TYPE(TypeTag, WettingPhase);
+    using NonwettingPhase = GET_PROP_TYPE(TypeTag, NonwettingPhase);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Constraints = GET_PROP_TYPE(TypeTag, Constraints);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
 
     enum {
         // number of phases
@@ -197,28 +197,28 @@ class FingerProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Stencil)  Stencil;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Stencil = GET_PROP_TYPE(TypeTag, Stencil) ;
     enum { codim = Stencil::Entity::codimension };
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
 
-    typedef GET_PROP(TypeTag, MaterialLaw)::ParkerLenhard ParkerLenhard;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using ParkerLenhard = GET_PROP(TypeTag, MaterialLaw)::ParkerLenhard;
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
-    typedef typename GridView :: Grid Grid;
+    using Grid = typename GridView :: Grid;
 
-    typedef Dune::PersistentContainer< Grid, std::shared_ptr< MaterialLawParams > >   MaterialLawParamsContainer;
+    using MaterialLawParamsContainer = Dune::PersistentContainer< Grid, std::shared_ptr< MaterialLawParams > >  ;
     //!\endcond
 
 public:
-    typedef CopyRestrictProlong< Grid, MaterialLawParamsContainer > RestrictProlongOperator;
+    using RestrictProlongOperator = CopyRestrictProlong< Grid, MaterialLawParamsContainer >;
 
     /*!
      * \copydoc Doxygen::defaultProblemConstructor

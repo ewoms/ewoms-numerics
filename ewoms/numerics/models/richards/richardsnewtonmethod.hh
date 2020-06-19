@@ -45,23 +45,23 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsNewtonMethod : public GET_PROP_TYPE(TypeTag, DiscNewtonMethod)
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscNewtonMethod) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscNewtonMethod);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum { pressureWIdx = Indices::pressureWIdx };
     enum { numPhases = FluidSystem::numPhases };
     enum { liquidPhaseIdx = GET_PROP_VALUE(TypeTag, LiquidPhaseIndex) };
     enum { gasPhaseIdx = GET_PROP_VALUE(TypeTag, GasPhaseIndex) };
 
-    typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
+    using PhaseVector = Dune::FieldVector<Scalar, numPhases>;
 
 public:
     RichardsNewtonMethod(Simulator& simulator) : ParentType(simulator)

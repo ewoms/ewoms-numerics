@@ -50,16 +50,16 @@ class RichardsRateVector
     : public Dune::FieldVector<GET_PROP_TYPE(TypeTag, Evaluation),
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) EnergyModule;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using EnergyModule = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { contiEqIdx = Indices::contiEqIdx };
     enum { liquidCompIdx = GET_PROP_VALUE(TypeTag, LiquidComponentIndex) };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
 
-    typedef Dune::FieldVector<Evaluation, numEq> ParentType;
+    using ParentType = Dune::FieldVector<Evaluation, numEq>;
 
 public:
     RichardsRateVector() : ParentType()

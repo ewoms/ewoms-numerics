@@ -43,12 +43,12 @@ SET_PROP(LensProblemEcfvAd, Grid )
     : public Dune::AnalyticalCoordFunction
       < ctype, dim, dimworld, IdentityCoordFct< ctype, dim, dimworld > >
   {
-    typedef IdentityCoordFct< ctype, dim, dimworld > This;
-    typedef Dune::AnalyticalCoordFunction< ctype, dim, dimworld, This > Base;
+    using This = IdentityCoordFct< ctype, dim, dimworld >;
+    using Base = Dune::AnalyticalCoordFunction< ctype, dim, dimworld, This >;
 
   public:
-    typedef typename Base :: DomainVector DomainVector;
-    typedef typename Base :: RangeVector  RangeVector;
+    using DomainVector = typename Base :: DomainVector;
+    using RangeVector = typename Base :: RangeVector ;
 
     template< typename... Args >
     IdentityCoordFct( Args&... )
@@ -70,10 +70,10 @@ SET_PROP(LensProblemEcfvAd, Grid )
 
   };
 
-  typedef Dune::YaspGrid< 2 > MyYaspGrid;
+  using MyYaspGrid = Dune::YaspGrid< 2 >;
 
 public:
-  //typedef MyYaspGrid type;
+  //using type = MyYaspGrid;
   typedef Dune::GeometryGrid< MyYaspGrid,
                               IdentityCoordFct< typename MyYaspGrid::ctype,
                                                 MyYaspGrid::dimension,
@@ -86,6 +86,6 @@ END_PROPERTIES
 
 int main(int argc, char **argv)
 {
-    typedef TTAG(LensProblemEcfvAd) ProblemTypeTag;
+    using ProblemTypeTag = TTAG(LensProblemEcfvAd);
     return Ewoms::start<ProblemTypeTag>(argc, argv);
 }

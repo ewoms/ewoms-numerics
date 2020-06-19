@@ -135,26 +135,26 @@ template<class TypeTag>
 class FvBaseFdLocalLinearizer
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, LocalLinearizer) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GridView::template Codim<0>::Entity Element;
+    using Implementation = GET_PROP_TYPE(TypeTag, LocalLinearizer);
+    using LocalResidual = GET_PROP_TYPE(TypeTag, LocalResidual);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Element = typename GridView::template Codim<0>::Entity;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
 
     // extract local matrices from jacobian matrix for consistency
-    typedef typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter)::MatrixBlock ScalarMatrixBlock;
-    typedef Dune::FieldVector<Scalar, numEq> ScalarVectorBlock;
+    using ScalarMatrixBlock = typename GET_PROP_TYPE(TypeTag, SparseMatrixAdapter)::MatrixBlock;
+    using ScalarVectorBlock = Dune::FieldVector<Scalar, numEq>;
 
-    typedef Dune::Matrix<ScalarMatrixBlock> ScalarLocalBlockMatrix;
+    using ScalarLocalBlockMatrix = Dune::Matrix<ScalarMatrixBlock>;
 
-    typedef typename LocalResidual::LocalEvalBlockVector LocalEvalBlockVector;
+    using LocalEvalBlockVector = typename LocalResidual::LocalEvalBlockVector;
 
 #if __GNUC__ == 4 && __GNUC_MINOR__ <= 6
 public:

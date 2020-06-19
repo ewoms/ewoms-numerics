@@ -48,31 +48,31 @@ class RichardsIntensiveQuantities
     : public GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities)
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluxModule) FluxModule;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluxModule = GET_PROP_TYPE(TypeTag, FluxModule);
 
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum { pressureWIdx = Indices::pressureWIdx };
     enum { numPhases = FluidSystem::numPhases };
     enum { liquidPhaseIdx = GET_PROP_VALUE(TypeTag, LiquidPhaseIndex) };
     enum { gasPhaseIdx = GET_PROP_VALUE(TypeTag, GasPhaseIndex) };
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Dune::FieldVector<Scalar, numPhases> ScalarPhaseVector;
-    typedef Dune::FieldVector<Evaluation, numPhases> PhaseVector;
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using FluxIntensiveQuantities = typename FluxModule::FluxIntensiveQuantities;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using ScalarPhaseVector = Dune::FieldVector<Scalar, numPhases>;
+    using PhaseVector = Dune::FieldVector<Evaluation, numPhases>;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     //! The type returned by the fluidState() method
-    typedef Ewoms::ImmiscibleFluidState<Evaluation, FluidSystem> FluidState;
+    using FluidState = Ewoms::ImmiscibleFluidState<Evaluation, FluidSystem>;
 
     RichardsIntensiveQuantities()
     {}

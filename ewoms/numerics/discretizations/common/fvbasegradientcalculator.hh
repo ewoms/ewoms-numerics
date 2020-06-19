@@ -47,17 +47,17 @@ class EcfvDiscretization;
 template<class TypeTag>
 class FvBaseGradientCalculator
 {
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
     enum { dimWorld = GridView::dimensionworld };
 
     // maximum number of flux approximation points. to calculate this,
     // we assume that the geometry with the most pointsq is a cube.
 
-    typedef Dune::FieldVector<Evaluation, dimWorld> EvalDimVector;
+    using EvalDimVector = Dune::FieldVector<Evaluation, dimWorld>;
 
 public:
     /*!
@@ -95,8 +95,8 @@ public:
                               const QuantityCallback& quantityCallback) const
         -> typename std::remove_reference<decltype(quantityCallback.operator()(0))>::type
     {
-        typedef decltype(quantityCallback.operator()(0)) RawReturnType;
-        typedef typename std::remove_const<typename std::remove_reference<RawReturnType>::type>::type ReturnType;
+        using RawReturnType = decltype(quantityCallback.operator()(0));
+        using ReturnType = typename std::remove_const<typename std::remove_reference<RawReturnType>::type>::type;
 
         Scalar interiorDistance;
         Scalar exteriorDistance;
@@ -141,8 +141,8 @@ public:
                               const QuantityCallback& quantityCallback) const
         -> typename std::remove_reference<decltype(quantityCallback.operator()(0))>::type
     {
-        typedef decltype(quantityCallback.operator()(0)) RawReturnType;
-        typedef typename std::remove_const<typename std::remove_reference<RawReturnType>::type>::type ReturnType;
+        using RawReturnType = decltype(quantityCallback.operator()(0));
+        using ReturnType = typename std::remove_const<typename std::remove_reference<RawReturnType>::type>::type;
 
         Scalar interiorDistance;
         Scalar exteriorDistance;

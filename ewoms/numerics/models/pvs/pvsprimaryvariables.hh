@@ -57,16 +57,16 @@ namespace Ewoms {
 template <class TypeTag>
 class PvsPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
-    typedef FvBasePrimaryVariables<TypeTag> ParentType;
-    typedef PvsPrimaryVariables<TypeTag> ThisType;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) Implementation;
+    using ParentType = FvBasePrimaryVariables<TypeTag>;
+    using ThisType = PvsPrimaryVariables<TypeTag>;
+    using Implementation = GET_PROP_TYPE(TypeTag, PrimaryVariables);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     // primary variable indices
     enum { pressure0Idx = Indices::pressure0Idx };
@@ -76,10 +76,10 @@ class PvsPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
-    typedef Ewoms::NcpFlash<Scalar, FluidSystem> NcpFlash;
+    using Toolbox = typename Ewoms::MathToolbox<Evaluation>;
+    using ComponentVector = Dune::FieldVector<Scalar, numComponents>;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
+    using NcpFlash = Ewoms::NcpFlash<Scalar, FluidSystem>;
 
 public:
     PvsPrimaryVariables() : ParentType()
@@ -276,7 +276,7 @@ public:
     template <class FluidState>
     void assignNaive(const FluidState& fluidState)
     {
-        typedef Ewoms::MathToolbox<typename FluidState::Scalar> FsToolbox;
+        using FsToolbox = Ewoms::MathToolbox<typename FluidState::Scalar>;
 
         // assign the phase temperatures. this is out-sourced to
         // the energy module

@@ -60,17 +60,17 @@ class BlackOilIntensiveQuantities
     , public BlackOilBrineIntensiveQuantities<TypeTag>
     , public BlackOilEnergyIntensiveQuantities<TypeTag>
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities);
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluxModule) FluxModule;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluxModule = GET_PROP_TYPE(TypeTag, FluxModule);
 
     enum { enableSolvent = GET_PROP_VALUE(TypeTag, EnableSolvent) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
@@ -85,8 +85,8 @@ class BlackOilIntensiveQuantities
     static const bool compositionSwitchEnabled = Indices::gasEnabled;
     static const bool waterEnabled = Indices::waterEnabled;
 
-    typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;
-    typedef Ewoms::BlackOilFluidState<Evaluation, FluidSystem, enableTemperature, enableEnergy, compositionSwitchEnabled,  enableBrine, Indices::numPhases > FluidState;
+    using FluxIntensiveQuantities = typename FluxModule::FluxIntensiveQuantities;
+    using FluidState = Ewoms::BlackOilFluidState<Evaluation, FluidSystem, enableTemperature, enableEnergy, compositionSwitchEnabled,  enableBrine, Indices::numPhases >;
 
 public:
     BlackOilIntensiveQuantities()

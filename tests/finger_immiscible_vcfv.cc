@@ -41,6 +41,6 @@ END_PROPERTIES
 
 int main(int argc, char **argv)
 {
-    typedef TTAG(FingerProblemVcfv) ProblemTypeTag;
+    using ProblemTypeTag = TTAG(FingerProblemVcfv);
     return Ewoms::start<ProblemTypeTag>(argc, argv);
 }

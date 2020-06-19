@@ -66,9 +66,9 @@ class DarcyBaseProblem;
 template <class TypeTag>
 struct DarcyFluxModule
 {
-    typedef DarcyIntensiveQuantities<TypeTag> FluxIntensiveQuantities;
-    typedef DarcyExtensiveQuantities<TypeTag> FluxExtensiveQuantities;
-    typedef DarcyBaseProblem<TypeTag> FluxBaseProblem;
+    using FluxIntensiveQuantities = DarcyIntensiveQuantities<TypeTag>;
+    using FluxExtensiveQuantities = DarcyExtensiveQuantities<TypeTag>;
+    using FluxBaseProblem = DarcyBaseProblem<TypeTag>;
 
     /*!
      * \brief Register all run-time parameters for the flux module.
@@ -93,7 +93,7 @@ class DarcyBaseProblem
 template <class TypeTag>
 class DarcyIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 protected:
     void update_(const ElementContext& elemCtx EWOMS_UNUSED,
                  unsigned dofIdx EWOMS_UNUSED,
@@ -120,21 +120,21 @@ protected:
 template <class TypeTag>
 class DarcyExtensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Implementation = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
 
     enum { dimWorld = GridView::dimensionworld };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
-    typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldVector<Evaluation, dimWorld> EvalDimVector;
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using Toolbox = typename Ewoms::MathToolbox<Evaluation>;
+    using EvalDimVector = Dune::FieldVector<Evaluation, dimWorld>;
+    using DimVector = Dune::FieldVector<Scalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!

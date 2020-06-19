@@ -46,11 +46,11 @@ namespace Ewoms {
 template <class TypeTag>
 class PvsLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
@@ -58,12 +58,12 @@ class PvsLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
     enum { conti0EqIdx = Indices::conti0EqIdx };
 
     enum { enableDiffusion = GET_PROP_VALUE(TypeTag, EnableDiffusion) };
-    typedef Ewoms::DiffusionModule<TypeTag, enableDiffusion> DiffusionModule;
+    using DiffusionModule = Ewoms::DiffusionModule<TypeTag, enableDiffusion>;
 
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     /*!

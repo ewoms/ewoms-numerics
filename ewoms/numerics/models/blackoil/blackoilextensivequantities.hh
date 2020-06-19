@@ -55,10 +55,10 @@ class BlackOilExtensiveQuantities
     , public BlackOilPolymerExtensiveQuantities<TypeTag>
     , public BlackOilEnergyExtensiveQuantities<TypeTag>
 {
-    typedef MultiPhaseBaseExtensiveQuantities<TypeTag> MultiPhaseParent;
+    using MultiPhaseParent = MultiPhaseBaseExtensiveQuantities<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Implementation = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
 public:
     /*!

@@ -59,34 +59,34 @@ template<class TypeTag>
 class FvBaseLocalResidual
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, LocalResidual) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, LocalResidual);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GridView::template Codim<0>::Entity Element;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Element = typename GridView::template Codim<0>::Entity;
 
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryContext) BoundaryContext;
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using BoundaryContext = GET_PROP_TYPE(TypeTag, BoundaryContext);
 
     static constexpr bool useVolumetricResidual = GET_PROP_VALUE(TypeTag, UseVolumetricResidual);
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { extensiveStorageTerm = GET_PROP_VALUE(TypeTag, ExtensiveStorageTerm) };
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldVector<Evaluation, numEq> EvalVector;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using EvalVector = Dune::FieldVector<Evaluation, numEq>;
 
     // copying the local residual class is not a good idea
     FvBaseLocalResidual(const FvBaseLocalResidual& )
     {}
 
 public:
-    typedef Dune::BlockVector<EvalVector, Ewoms::aligned_allocator<EvalVector, alignof(EvalVector)> > LocalEvalBlockVector;
+    using LocalEvalBlockVector = Dune::BlockVector<EvalVector, Ewoms::aligned_allocator<EvalVector, alignof(EvalVector)> >;
 
     FvBaseLocalResidual()
     { }

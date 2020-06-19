@@ -85,31 +85,31 @@ SET_TYPE_PROP(FractureProblem, Problem, Ewoms::FractureProblem<TypeTag>);
 SET_PROP(FractureProblem, WettingPhase)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> >;
 };
 
 // Set the non-wetting phase
 SET_PROP(FractureProblem, NonwettingPhase)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> >;
 };
 
 // Set the material Law
 SET_PROP(FractureProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
@@ -117,11 +117,11 @@ private:
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Ewoms::RegularizedBrooksCorey<Traits> EffectiveLaw;
-    // typedef RegularizedVanGenuchten<Traits> EffectiveLaw;
-    // typedef LinearMaterial<Traits> EffectiveLaw;
+    using EffectiveLaw = Ewoms::RegularizedBrooksCorey<Traits>;
+    // using EffectiveLaw = RegularizedVanGenuchten<Traits>;
+    // using EffectiveLaw = LinearMaterial<Traits>;
 public:
-    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
+    using type = Ewoms::EffToAbsLaw<EffectiveLaw>;
 };
 
 // Enable the energy equation
@@ -131,12 +131,12 @@ SET_BOOL_PROP(FractureProblem, EnableEnergy, true);
 SET_PROP(FractureProblem, ThermalConductionLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    using type = Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar>;
 };
 
 // set the energy storage law for the solid phase
@@ -176,23 +176,23 @@ namespace Ewoms {
 template <class TypeTag>
 class FractureProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
-    typedef GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
-    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using WettingPhase = GET_PROP_TYPE(TypeTag, WettingPhase);
+    using NonwettingPhase = GET_PROP_TYPE(TypeTag, NonwettingPhase);
+    using Constraints = GET_PROP_TYPE(TypeTag, Constraints);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using ThermalConductionLawParams = GET_PROP_TYPE(TypeTag, ThermalConductionLawParams);
+    using SolidEnergyLawParams = GET_PROP_TYPE(TypeTag, SolidEnergyLawParams);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
 
     enum {
         // phase indices
@@ -207,11 +207,11 @@ class FractureProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> FluidState;
+    using FluidState = Ewoms::ImmiscibleFluidState<Scalar, FluidSystem>;
 
-    typedef Dune::FieldVector<Scalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Ewoms::FractureMapper<TypeTag> FractureMapper;
+    using GlobalPosition = Dune::FieldVector<Scalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using FractureMapper = Ewoms::FractureMapper<TypeTag>;
 
 public:
     /*!

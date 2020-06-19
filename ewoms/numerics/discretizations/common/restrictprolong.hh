@@ -37,8 +37,8 @@ namespace Ewoms
     template < class Grid, class Container >
     struct CopyRestrictProlongTraits
     {
-      typedef typename Grid::ctype DomainFieldType;
-      typedef CopyRestrictProlong< Grid, Container >  RestProlImp;
+      using DomainFieldType = typename Grid::ctype;
+      using RestProlImp = CopyRestrictProlong< Grid, Container > ;
     };
 
     template< class Grid, class Container >
@@ -50,7 +50,7 @@ namespace Ewoms
 
       Container& container_;
     public:
-      typedef typename Grid::ctype DomainFieldType;
+      using DomainFieldType = typename Grid::ctype;
 
       explicit CopyRestrictProlong( Container& container )
         : container_( container )
@@ -131,8 +131,8 @@ namespace Ewoms
 
     struct EmptyRestrictProlongTraits
     {
-      typedef double                DomainFieldType;
-      typedef EmptyRestrictProlong  RestProlImp;
+      using DomainFieldType = double               ;
+      using RestProlImp = EmptyRestrictProlong ;
     };
 
     class EmptyRestrictProlong

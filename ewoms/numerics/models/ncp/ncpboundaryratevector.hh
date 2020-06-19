@@ -44,10 +44,10 @@ namespace Ewoms {
 template <class TypeTag>
 class NcpBoundaryRateVector : public GET_PROP_TYPE(TypeTag, RateVector)
 {
-    typedef GET_PROP_TYPE(TypeTag, RateVector) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using ParentType = GET_PROP_TYPE(TypeTag, RateVector);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
@@ -55,9 +55,9 @@ class NcpBoundaryRateVector : public GET_PROP_TYPE(TypeTag, RateVector)
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     NcpBoundaryRateVector() : ParentType()

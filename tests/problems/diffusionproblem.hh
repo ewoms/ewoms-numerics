@@ -69,18 +69,18 @@ SET_TYPE_PROP(DiffusionBaseProblem, Problem, Ewoms::DiffusionProblem<TypeTag>);
 SET_PROP(DiffusionBaseProblem, FluidSystem)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::H2ON2FluidSystem<Scalar> type;
+    using type = Ewoms::H2ON2FluidSystem<Scalar>;
 };
 
 // Set the material Law
 SET_PROP(DiffusionBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     static_assert(FluidSystem::numPhases == 2,
                   "A fluid system with two phases is required "
@@ -91,7 +91,7 @@ private:
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Ewoms::LinearMaterial<Traits> type;
+    using type = Ewoms::LinearMaterial<Traits>;
 };
 
 // Enable molecular diffusion for this problem
@@ -131,14 +131,14 @@ namespace Ewoms {
 template <class TypeTag>
 class DiffusionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
 
     enum {
         // number of phases
@@ -157,17 +157,17 @@ class DiffusionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
 
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!
@@ -347,7 +347,7 @@ private:
         leftInitialFluidState_.setMoleFraction(gasPhaseIdx, H2OIdx, xH2O);
         leftInitialFluidState_.setMoleFraction(gasPhaseIdx, N2Idx, 1 - xH2O);
 
-        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        using CFRP = Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem>;
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         CFRP::solve(leftInitialFluidState_, paramCache, gasPhaseIdx,
                     /*setViscosity=*/false, /*setEnthalpy=*/false);

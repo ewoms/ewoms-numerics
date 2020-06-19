@@ -46,14 +46,14 @@ namespace Ewoms {
 template <class TypeTag>
 class BlackOilLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
@@ -76,12 +76,12 @@ class BlackOilLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
     static constexpr bool blackoilConserveSurfaceVolume = GET_PROP_VALUE(TypeTag, BlackoilConserveSurfaceVolume);
     static constexpr bool enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy);
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef BlackOilSolventModule<TypeTag> SolventModule;
-    typedef BlackOilPolymerModule<TypeTag> PolymerModule;
-    typedef BlackOilEnergyModule<TypeTag> EnergyModule;
-    typedef BlackOilFoamModule<TypeTag> FoamModule;
-    typedef BlackOilBrineModule<TypeTag> BrineModule;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using SolventModule = BlackOilSolventModule<TypeTag>;
+    using PolymerModule = BlackOilPolymerModule<TypeTag>;
+    using EnergyModule = BlackOilEnergyModule<TypeTag>;
+    using FoamModule = BlackOilFoamModule<TypeTag>;
+    using BrineModule = BlackOilBrineModule<TypeTag>;
 
 public:
     /*!

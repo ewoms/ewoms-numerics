@@ -53,15 +53,15 @@ namespace Ewoms {
 template <class TypeTag>
 class ImmisciblePrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
-    typedef FvBasePrimaryVariables<TypeTag> ParentType;
+    using ParentType = FvBasePrimaryVariables<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Implementation = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     // primary variable indices
     enum { pressure0Idx = Indices::pressure0Idx };
@@ -70,9 +70,9 @@ class ImmisciblePrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
 
-    typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
-    typedef Ewoms::ImmiscibleFlash<Scalar, FluidSystem> ImmiscibleFlash;
-    typedef Ewoms::EnergyModule<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)> EnergyModule;
+    using ComponentVector = Dune::FieldVector<Scalar, numComponents>;
+    using ImmiscibleFlash = Ewoms::ImmiscibleFlash<Scalar, FluidSystem>;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)>;
 
 public:
     /*!

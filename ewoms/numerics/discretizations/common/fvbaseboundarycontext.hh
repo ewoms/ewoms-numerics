@@ -44,25 +44,25 @@ namespace Ewoms {
 template<class TypeTag>
 class FvBaseBoundaryContext
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Stencil) Stencil;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, GradientCalculator) GradientCalculator;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Stencil = GET_PROP_TYPE(TypeTag, Stencil);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using GradientCalculator = GET_PROP_TYPE(TypeTag, GradientCalculator);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GridView::template Codim<0>::Entity Element;
-    typedef typename GridView::IntersectionIterator IntersectionIterator;
-    typedef typename GridView::Intersection Intersection;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Element = typename GridView::template Codim<0>::Entity;
+    using IntersectionIterator = typename GridView::IntersectionIterator;
+    using Intersection = typename GridView::Intersection;
 
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldVector<Scalar, dimWorld> Vector;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using Vector = Dune::FieldVector<Scalar, dimWorld>;
 
 public:
     /*!

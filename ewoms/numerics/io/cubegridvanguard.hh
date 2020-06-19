@@ -67,20 +67,20 @@ namespace Ewoms {
 template <class TypeTag>
 class CubeGridVanguard : public BaseVanguard<TypeTag>
 {
-    typedef BaseVanguard<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
+    using ParentType = BaseVanguard<TypeTag>;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
 
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
-    typedef std::unique_ptr<Grid> GridPointer;
+    using GridPointer = std::unique_ptr<Grid>;
 #else
-    typedef std::shared_ptr<Grid> GridPointer;
+    using GridPointer = std::shared_ptr<Grid>;
 #endif
 
-    typedef typename Grid::ctype CoordScalar;
+    using CoordScalar = typename Grid::ctype;
     enum { dimWorld = Grid::dimensionworld };
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
 public:
     /*!

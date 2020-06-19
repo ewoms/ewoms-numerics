@@ -64,22 +64,22 @@ class MultiPhaseBaseProblem
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxBaseProblem
 {
 //! \cond SKIP_THIS
-    typedef Ewoms::FvBaseProblem<TypeTag> ParentType;
+    using ParentType = Ewoms::FvBaseProblem<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Problem) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
-    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef typename GET_PROP_TYPE(TypeTag, MaterialLaw)::Params MaterialLawParams;
+    using Implementation = GET_PROP_TYPE(TypeTag, Problem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using SolidEnergyLawParams = GET_PROP_TYPE(TypeTag, SolidEnergyLawParams);
+    using ThermalConductionLawParams = GET_PROP_TYPE(TypeTag, ThermalConductionLawParams);
+    using MaterialLawParams = typename GET_PROP_TYPE(TypeTag, MaterialLaw)::Params;
 
     enum { dimWorld = GridView::dimensionworld };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimVector = Dune::FieldVector<Scalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 //! \endcond
 
 public:
@@ -314,7 +314,7 @@ public:
      */
     unsigned markForGridAdaptation()
     {
-        typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+        using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
         unsigned numMarked = 0;
         ElementContext elemCtx( this->simulator() );

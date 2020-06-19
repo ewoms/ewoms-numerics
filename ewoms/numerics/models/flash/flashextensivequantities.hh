@@ -54,15 +54,15 @@ class FlashExtensiveQuantities
     , public EnergyExtensiveQuantities<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)>
     , public DiffusionExtensiveQuantities<TypeTag, GET_PROP_VALUE(TypeTag, EnableDiffusion)>
 {
-    typedef MultiPhaseBaseExtensiveQuantities<TypeTag> ParentType;
+    using ParentType = MultiPhaseBaseExtensiveQuantities<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
     enum { enableDiffusion = GET_PROP_VALUE(TypeTag, EnableDiffusion) };
-    typedef Ewoms::DiffusionExtensiveQuantities<TypeTag, enableDiffusion> DiffusionExtensiveQuantities;
+    using DiffusionExtensiveQuantities = Ewoms::DiffusionExtensiveQuantities<TypeTag, enableDiffusion>;
 
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
-    typedef Ewoms::EnergyExtensiveQuantities<TypeTag, enableEnergy> EnergyExtensiveQuantities;
+    using EnergyExtensiveQuantities = Ewoms::EnergyExtensiveQuantities<TypeTag, enableEnergy>;
 
 public:
     /*!

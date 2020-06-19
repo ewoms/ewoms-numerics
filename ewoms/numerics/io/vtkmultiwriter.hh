@@ -102,23 +102,23 @@ class VtkMultiWriter : public BaseOutputWriter
     enum { dim = GridView::dimension };
 
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView> VertexMapper;
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView> ElementMapper;
+    using VertexMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView>;
+    using ElementMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView>;
 #else
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGElementLayout> ElementMapper;
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGVertexLayout> VertexMapper;
+    using ElementMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGElementLayout>;
+    using VertexMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGVertexLayout>;
 #endif
 
 public:
-    typedef BaseOutputWriter::Scalar Scalar;
-    typedef BaseOutputWriter::Vector Vector;
-    typedef BaseOutputWriter::Tensor Tensor;
-    typedef BaseOutputWriter::ScalarBuffer ScalarBuffer;
-    typedef BaseOutputWriter::VectorBuffer VectorBuffer;
-    typedef BaseOutputWriter::TensorBuffer TensorBuffer;
+    using Scalar = BaseOutputWriter::Scalar;
+    using Vector = BaseOutputWriter::Vector;
+    using Tensor = BaseOutputWriter::Tensor;
+    using ScalarBuffer = BaseOutputWriter::ScalarBuffer;
+    using VectorBuffer = BaseOutputWriter::VectorBuffer;
+    using TensorBuffer = BaseOutputWriter::TensorBuffer;
 
-    typedef Dune::VTKWriter<GridView> VtkWriter;
-    typedef std::shared_ptr< Dune::VTKFunction< GridView > > FunctionPtr;
+    using VtkWriter = Dune::VTKWriter<GridView>;
+    using FunctionPtr = std::shared_ptr< Dune::VTKFunction< GridView > >;
 
     VtkMultiWriter(bool asyncWriting,
                    const GridView& gridView,
@@ -249,7 +249,7 @@ public:
     {
         sanitizeScalarBuffer_(buf);
 
-        typedef Ewoms::VtkScalarFunction<GridView, VertexMapper> VtkFn;
+        using VtkFn = Ewoms::VtkScalarFunction<GridView, VertexMapper>;
         FunctionPtr fnPtr(new VtkFn(name,
                                     gridView_,
                                     vertexMapper_,
@@ -277,7 +277,7 @@ public:
     {
         sanitizeScalarBuffer_(buf);
 
-        typedef Ewoms::VtkScalarFunction<GridView, ElementMapper> VtkFn;
+        using VtkFn = Ewoms::VtkScalarFunction<GridView, ElementMapper>;
         FunctionPtr fnPtr(new VtkFn(name,
                                     gridView_,
                                     elementMapper_,
@@ -306,7 +306,7 @@ public:
     {
         sanitizeVectorBuffer_(buf);
 
-        typedef Ewoms::VtkVectorFunction<GridView, VertexMapper> VtkFn;
+        using VtkFn = Ewoms::VtkVectorFunction<GridView, VertexMapper>;
         FunctionPtr fnPtr(new VtkFn(name,
                                     gridView_,
                                     vertexMapper_,
@@ -320,7 +320,7 @@ public:
      */
     void attachTensorVertexData(TensorBuffer& buf, std::string name)
     {
-        typedef Ewoms::VtkTensorFunction<GridView, VertexMapper> VtkFn;
+        using VtkFn = Ewoms::VtkTensorFunction<GridView, VertexMapper>;
 
         for (unsigned colIdx = 0; colIdx < buf[0].N(); ++colIdx) {
             std::ostringstream oss;
@@ -355,7 +355,7 @@ public:
     {
         sanitizeVectorBuffer_(buf);
 
-        typedef Ewoms::VtkVectorFunction<GridView, ElementMapper> VtkFn;
+        using VtkFn = Ewoms::VtkVectorFunction<GridView, ElementMapper>;
         FunctionPtr fnPtr(new VtkFn(name,
                                     gridView_,
                                     elementMapper_,
@@ -369,7 +369,7 @@ public:
      */
     void attachTensorElementData(TensorBuffer& buf, std::string name)
     {
-        typedef Ewoms::VtkTensorFunction<GridView, ElementMapper> VtkFn;
+        using VtkFn = Ewoms::VtkTensorFunction<GridView, ElementMapper>;
 
         for (unsigned colIdx = 0; colIdx < buf[0].N(); ++colIdx) {
             std::ostringstream oss;

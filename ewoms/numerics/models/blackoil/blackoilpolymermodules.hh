@@ -61,23 +61,23 @@ namespace Ewoms {
 template <class TypeTag, bool enablePolymerV = GET_PROP_VALUE(TypeTag, EnablePolymer)>
 class BlackOilPolymerModule
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
-    typedef typename Ewoms::Tabulated1DFunction<Scalar> TabulatedFunction;
-    typedef typename Ewoms::IntervalTabulated2DFunction<Scalar> TabulatedTwoDFunction;
+    using TabulatedFunction = typename Ewoms::Tabulated1DFunction<Scalar>;
+    using TabulatedTwoDFunction = typename Ewoms::IntervalTabulated2DFunction<Scalar>;
 
     static constexpr unsigned polymerConcentrationIdx = Indices::polymerConcentrationIdx;
     static constexpr unsigned polymerMoleWeightIdx = Indices::polymerMoleWeightIdx;
@@ -830,7 +830,7 @@ public:
                                          unsigned pvtnumRegionIdx,
                                          const Evaluation& v0)
     {
-        typedef Ewoms::MathToolbox<Evaluation> ToolboxLocal;
+        using ToolboxLocal = Ewoms::MathToolbox<Evaluation>;
 
         const auto& viscosityMultiplierTable = plyviscViscosityMultiplierTable_[pvtnumRegionIdx];
         Scalar viscosityMultiplier = viscosityMultiplierTable.eval(Ewoms::scalarValue(polymerConcentration), /*extrapolate=*/true);
@@ -1008,16 +1008,16 @@ BlackOilPolymerModule<TypeTag, enablePolymerV>::skprpolyTables_;
 template <class TypeTag, bool enablePolymerV = GET_PROP_VALUE(TypeTag, EnablePolymer)>
 class BlackOilPolymerIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef BlackOilPolymerModule<TypeTag> PolymerModule;
+    using PolymerModule = BlackOilPolymerModule<TypeTag>;
 
     static constexpr int polymerConcentrationIdx = Indices::polymerConcentrationIdx;
     static constexpr int waterPhaseIdx = FluidSystem::waterPhaseIdx;
@@ -1143,9 +1143,9 @@ protected:
 template <class TypeTag>
 class BlackOilPolymerIntensiveQuantities<TypeTag, false>
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
     void polymerPropertiesUpdate_(const ElementContext& elemCtx EWOMS_UNUSED,
@@ -1185,19 +1185,19 @@ public:
 template <class TypeTag, bool enablePolymerV = GET_PROP_VALUE(TypeTag, EnablePolymer)>
 class BlackOilPolymerExtensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     static constexpr unsigned waterPhaseIdx =  FluidSystem::waterPhaseIdx;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef BlackOilPolymerModule<TypeTag> PolymerModule;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using PolymerModule = BlackOilPolymerModule<TypeTag>;
 
 public:
     /*!
@@ -1302,8 +1302,8 @@ private:
 template <class TypeTag>
 class BlackOilPolymerExtensiveQuantities<TypeTag, false>
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
 
 public:
     void updateShearMultipliers(const ElementContext& elemCtx EWOMS_UNUSED,

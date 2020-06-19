@@ -60,40 +60,40 @@ template<class TypeTag>
 class FvBaseProblem
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Problem) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using Implementation = GET_PROP_TYPE(TypeTag, Problem);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     static const int vtkOutputFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkOutputFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkOutputFormat>;
 
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using NewtonMethod = GET_PROP_TYPE(TypeTag, NewtonMethod);
 
-    typedef GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
-    typedef GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
+    using VertexMapper = GET_PROP_TYPE(TypeTag, VertexMapper);
+    using ElementMapper = GET_PROP_TYPE(TypeTag, ElementMapper);
 
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Constraints = GET_PROP_TYPE(TypeTag, Constraints);
 
     enum {
         dim = GridView::dimension,
         dimWorld = GridView::dimensionworld
     };
 
-    typedef typename GridView::template Codim<0>::Entity Element;
-    typedef typename GridView::template Codim<dim>::Entity Vertex;
-    typedef typename GridView::template Codim<dim>::Iterator VertexIterator;
+    using Element = typename GridView::template Codim<0>::Entity;
+    using Vertex = typename GridView::template Codim<dim>::Entity;
+    using VertexIterator = typename GridView::template Codim<dim>::Iterator;
 
-    typedef typename GridView::Grid::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using CoordScalar = typename GridView::Grid::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
 public:
     // the default restriction and prolongation for adaptation is simply an empty one
-    typedef EmptyRestrictProlong  RestrictProlongOperator;
+    using RestrictProlongOperator = EmptyRestrictProlong ;
 
 private:
     // copying a problem is not a good idea

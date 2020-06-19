@@ -44,18 +44,18 @@ namespace Ewoms {
 template <class TypeTag>
 class DiscreteFractureExtensiveQuantities : public ImmiscibleExtensiveQuantities<TypeTag>
 {
-    typedef ImmiscibleExtensiveQuantities<TypeTag> ParentType;
+    using ParentType = ImmiscibleExtensiveQuantities<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     enum { dimWorld = GridView::dimensionworld };
     enum { numPhases = FluidSystem::numPhases };
 
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Dune::FieldVector<Scalar, dimWorld> DimVector;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using DimVector = Dune::FieldVector<Scalar, dimWorld>;
 
 public:
     /*!

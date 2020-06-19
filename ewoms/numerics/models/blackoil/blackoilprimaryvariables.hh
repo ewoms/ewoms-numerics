@@ -63,15 +63,15 @@ class BlackOilBrineModule;
 template <class TypeTag>
 class BlackOilPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
-    typedef FvBasePrimaryVariables<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) Implementation;
+    using ParentType = FvBasePrimaryVariables<TypeTag>;
+    using Implementation = GET_PROP_TYPE(TypeTag, PrimaryVariables);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
     // number of equations
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
@@ -98,8 +98,8 @@ class BlackOilPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
-    typedef BlackOilEnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using ComponentVector = Dune::FieldVector<Scalar, numComponents>;
+    using EnergyModule = BlackOilEnergyModule<TypeTag, enableEnergy>;
 
     static_assert(numPhases == 3, "The black-oil model assumes three phases!");
     static_assert(numComponents == 3, "The black-oil model assumes three components!");
@@ -173,9 +173,9 @@ public:
                                 const MaterialLawParams& matParams,
                                 bool isInEquilibrium = false)
     {
-        typedef typename std::remove_reference<typename FluidState::Scalar>::type ConstEvaluation;
-        typedef typename std::remove_const<ConstEvaluation>::type FsEvaluation;
-        typedef typename Ewoms::MathToolbox<FsEvaluation> FsToolbox;
+        using ConstEvaluation = typename std::remove_reference<typename FluidState::Scalar>::type;
+        using FsEvaluation = typename std::remove_const<ConstEvaluation>::type;
+        using FsToolbox = typename Ewoms::MathToolbox<FsEvaluation>;
 
 #ifndef NDEBUG
         // make sure the temperature is the same in all fluid phases
@@ -201,8 +201,8 @@ public:
         paramCache.setMaxOilSat(FsToolbox::value(fluidState.saturation(oilPhaseIdx)));
 
         // create a mutable fluid state with well defined densities based on the input
-        typedef Ewoms::NcpFlash<Scalar, FluidSystem> NcpFlash;
-        typedef Ewoms::CompositionalFluidState<Scalar, FluidSystem> FlashFluidState;
+        using NcpFlash = Ewoms::NcpFlash<Scalar, FluidSystem>;
+        using FlashFluidState = Ewoms::CompositionalFluidState<Scalar, FluidSystem>;
         FlashFluidState fsFlash;
         fsFlash.setTemperature(FsToolbox::value(fluidState.temperature(/*phaseIdx=*/0)));
         for (unsigned phaseIdx = 0; phaseIdx < numPhases; ++phaseIdx) {
@@ -249,9 +249,9 @@ public:
     template <class FluidState>
     void assignNaive(const FluidState& fluidState)
     {
-        typedef typename std::remove_reference<typename FluidState::Scalar>::type ConstEvaluation;
-        typedef typename std::remove_const<ConstEvaluation>::type FsEvaluation;
-        typedef typename Ewoms::MathToolbox<FsEvaluation> FsToolbox;
+        using ConstEvaluation = typename std::remove_reference<typename FluidState::Scalar>::type;
+        using FsEvaluation = typename std::remove_const<ConstEvaluation>::type;
+        using FsToolbox = typename Ewoms::MathToolbox<FsEvaluation>;
 
         bool gasPresent = FluidSystem::phaseIsActive(gasPhaseIdx)?(fluidState.saturation(gasPhaseIdx) > 0.0):false;
         bool oilPresent = FluidSystem::phaseIsActive(oilPhaseIdx)?(fluidState.saturation(oilPhaseIdx) > 0.0):false;

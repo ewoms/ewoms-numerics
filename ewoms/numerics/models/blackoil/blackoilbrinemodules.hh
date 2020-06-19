@@ -58,20 +58,20 @@ namespace Ewoms {
 template <class TypeTag, bool enableBrineV = GET_PROP_VALUE(TypeTag, EnableBrine)>
 class BlackOilBrineModule
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
-    typedef typename Ewoms::Tabulated1DFunction<Scalar> TabulatedFunction;
+    using TabulatedFunction = typename Ewoms::Tabulated1DFunction<Scalar>;
 
     static constexpr unsigned saltConcentrationIdx = Indices::saltConcentrationIdx;
     static constexpr unsigned contiBrineEqIdx = Indices::contiBrineEqIdx;
@@ -332,16 +332,16 @@ BlackOilBrineModule<TypeTag, enableBrineV>::referencePressure_;
 template <class TypeTag, bool enableBrineV = GET_PROP_VALUE(TypeTag, EnableBrine)>
 class BlackOilBrineIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef BlackOilBrineModule<TypeTag> BrineModule;
+    using BrineModule = BlackOilBrineModule<TypeTag>;
 
     static constexpr int saltConcentrationIdx = Indices::saltConcentrationIdx;
     static constexpr int waterPhaseIdx = FluidSystem::waterPhaseIdx;
@@ -385,9 +385,9 @@ protected:
 template <class TypeTag>
 class BlackOilBrineIntensiveQuantities<TypeTag, false>
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
     void updateSaltConcentration_(const ElementContext& elemCtx EWOMS_UNUSED,

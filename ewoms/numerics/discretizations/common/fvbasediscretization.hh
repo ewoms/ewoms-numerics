@@ -113,10 +113,10 @@ SET_TYPE_PROP(FvBaseDiscretization, ElementMapper,
 //! marks the border indices (required for the algebraic overlap stuff)
 SET_PROP(FvBaseDiscretization, BorderListCreator)
 {
-    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using DofMapper = GET_PROP_TYPE(TypeTag, DofMapper);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 public:
-    typedef Ewoms::Linear::NullBorderListCreator<GridView, DofMapper> type;
+    using type = Ewoms::Linear::NullBorderListCreator<GridView, DofMapper>;
 };
 
 SET_TYPE_PROP(FvBaseDiscretization, DiscLocalResidual, Ewoms::FvBaseLocalResidual<TypeTag>);
@@ -281,48 +281,48 @@ namespace Ewoms {
 template<class TypeTag>
 class FvBaseDiscretization
 {
-    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Discretization) Discretization;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
-    typedef GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
-    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Linearizer) Linearizer;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryContext) BoundaryContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, GradientCalculator) GradientCalculator;
-    typedef GET_PROP_TYPE(TypeTag, DiscBaseOutputModule) DiscBaseOutputModule;
-    typedef GET_PROP_TYPE(TypeTag, GridCommHandleFactory) GridCommHandleFactory;
-    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
-    typedef GET_PROP_TYPE(TypeTag, LocalLinearizer) LocalLinearizer;
-    typedef GET_PROP_TYPE(TypeTag, LocalResidual) LocalResidual;
+    using Implementation = GET_PROP_TYPE(TypeTag, Model);
+    using Discretization = GET_PROP_TYPE(TypeTag, Discretization);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementMapper = GET_PROP_TYPE(TypeTag, ElementMapper);
+    using VertexMapper = GET_PROP_TYPE(TypeTag, VertexMapper);
+    using DofMapper = GET_PROP_TYPE(TypeTag, DofMapper);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using GlobalEqVector = GET_PROP_TYPE(TypeTag, GlobalEqVector);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Linearizer = GET_PROP_TYPE(TypeTag, Linearizer);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using BoundaryContext = GET_PROP_TYPE(TypeTag, BoundaryContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using GradientCalculator = GET_PROP_TYPE(TypeTag, GradientCalculator);
+    using DiscBaseOutputModule = GET_PROP_TYPE(TypeTag, DiscBaseOutputModule);
+    using GridCommHandleFactory = GET_PROP_TYPE(TypeTag, GridCommHandleFactory);
+    using NewtonMethod = GET_PROP_TYPE(TypeTag, NewtonMethod);
+    using LocalLinearizer = GET_PROP_TYPE(TypeTag, LocalLinearizer);
+    using LocalResidual = GET_PROP_TYPE(TypeTag, LocalResidual);
 
     enum {
         numEq = GET_PROP_VALUE(TypeTag, NumEq),
         historySize = GET_PROP_VALUE(TypeTag, TimeDiscHistorySize),
     };
 
-    typedef std::vector<IntensiveQuantities, Ewoms::aligned_allocator<IntensiveQuantities, alignof(IntensiveQuantities)> > IntensiveQuantitiesVector;
+    using IntensiveQuantitiesVector = std::vector<IntensiveQuantities, Ewoms::aligned_allocator<IntensiveQuantities, alignof(IntensiveQuantities)> >;
 
-    typedef typename GridView::template Codim<0>::Entity Element;
-    typedef typename GridView::template Codim<0>::Iterator ElementIterator;
+    using Element = typename GridView::template Codim<0>::Entity;
+    using ElementIterator = typename GridView::template Codim<0>::Iterator;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldVector<Evaluation, numEq> EvalEqVector;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using EvalEqVector = Dune::FieldVector<Evaluation, numEq>;
 
-    typedef typename LocalResidual::LocalEvalBlockVector LocalEvalBlockVector;
+    using LocalEvalBlockVector = typename LocalResidual::LocalEvalBlockVector;
 
     class BlockVectorWrapper
     {
@@ -340,23 +340,23 @@ class FvBaseDiscretization
     };
 
 #if HAVE_DUNE_FEM
-    typedef GET_PROP_TYPE(TypeTag, DiscreteFunctionSpace)    DiscreteFunctionSpace;
+    using DiscreteFunctionSpace = GET_PROP_TYPE(TypeTag, DiscreteFunctionSpace)   ;
 
     // discrete function storing solution data
-    typedef Dune::Fem::ISTLBlockVectorDiscreteFunction<DiscreteFunctionSpace, PrimaryVariables> DiscreteFunction;
+    using DiscreteFunction = Dune::Fem::ISTLBlockVectorDiscreteFunction<DiscreteFunctionSpace, PrimaryVariables>;
 
     // problem restriction and prolongation operator for adaptation
-    typedef GET_PROP_TYPE(TypeTag, Problem)   Problem;
-    typedef typename Problem :: RestrictProlongOperator  ProblemRestrictProlongOperator;
+    using Problem = GET_PROP_TYPE(TypeTag, Problem)  ;
+    using ProblemRestrictProlongOperator = typename Problem :: RestrictProlongOperator ;
 
     // discrete function restriction and prolongation operator for adaptation
-    typedef Dune::Fem::RestrictProlongDefault< DiscreteFunction > DiscreteFunctionRestrictProlong;
-    typedef Dune::Fem::RestrictProlongTuple< DiscreteFunctionRestrictProlong,  ProblemRestrictProlongOperator > RestrictProlong;
+    using DiscreteFunctionRestrictProlong = Dune::Fem::RestrictProlongDefault< DiscreteFunction >;
+    using RestrictProlong = Dune::Fem::RestrictProlongTuple< DiscreteFunctionRestrictProlong,  ProblemRestrictProlongOperator >;
     // adaptation classes
-    typedef Dune::Fem::AdaptationManager<Grid, RestrictProlong  > AdaptationManager;
+    using AdaptationManager = Dune::Fem::AdaptationManager<Grid, RestrictProlong  >;
 #else
-    typedef BlockVectorWrapper  DiscreteFunction;
-    typedef size_t              DiscreteFunctionSpace;
+    using DiscreteFunction = BlockVectorWrapper ;
+    using DiscreteFunctionSpace = size_t             ;
 #endif
 
     // copying a discretization object is not a good idea
@@ -1561,7 +1561,7 @@ public:
                                  const SolutionVector& u,
                                  const GlobalEqVector& deltaU) const
     {
-        typedef std::vector<double> ScalarBuffer;
+        using ScalarBuffer = std::vector<double>;
 
         GlobalEqVector globalResid(u.size());
         asImp_().globalResidual(globalResid, u);

@@ -34,6 +34,6 @@
 
 int main(int argc, char **argv)
 {
-    typedef TTAG(LensProblemEcfvAd) ProblemTypeTag;
+    using ProblemTypeTag = TTAG(LensProblemEcfvAd);
     return Ewoms::start<ProblemTypeTag>(argc, argv);
 }

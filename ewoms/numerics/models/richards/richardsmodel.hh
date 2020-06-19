@@ -123,10 +123,10 @@ SET_TYPE_PROP(Richards, Indices, Ewoms::RichardsIndices);
 SET_PROP(Richards, WettingFluid)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::NullComponent<Scalar> >;
 };
 
 /*!
@@ -140,10 +140,10 @@ public:
 SET_PROP(Richards, NonWettingFluid)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::GasPhase<Scalar, Ewoms::NullComponent<Scalar> > type;
+    using type = Ewoms::GasPhase<Scalar, Ewoms::NullComponent<Scalar> >;
 };
 
 /*!
@@ -158,12 +158,12 @@ public:
 SET_PROP(Richards, FluidSystem)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, WettingFluid) WettingFluid;
-    typedef GET_PROP_TYPE(TypeTag, NonWettingFluid) NonWettingFluid;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using WettingFluid = GET_PROP_TYPE(TypeTag, WettingFluid);
+    using NonWettingFluid = GET_PROP_TYPE(TypeTag, NonWettingFluid);
 
 public:
-    typedef Ewoms::TwoPhaseImmiscibleFluidSystem<Scalar, WettingFluid, NonWettingFluid> type;
+    using type = Ewoms::TwoPhaseImmiscibleFluidSystem<Scalar, WettingFluid, NonWettingFluid>;
 };
 
 END_PROPERTIES
@@ -231,13 +231,13 @@ template <class TypeTag>
 class RichardsModel
     : public MultiPhaseBaseModel<TypeTag>
 {
-    typedef MultiPhaseBaseModel<TypeTag> ParentType;
+    using ParentType = MultiPhaseBaseModel<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
      static const unsigned numPhases = FluidSystem::numPhases;
      static const unsigned numComponents = FluidSystem::numComponents;

@@ -62,21 +62,21 @@ namespace Ewoms {
 template <class TypeTag, bool enableFoamV = GET_PROP_VALUE(TypeTag, EnableFoam)>
 class BlackOilFoamModule
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
-    typedef typename Ewoms::Tabulated1DFunction<Scalar> TabulatedFunction;
+    using TabulatedFunction = typename Ewoms::Tabulated1DFunction<Scalar>;
 
     static constexpr unsigned foamConcentrationIdx = Indices::foamConcentrationIdx;
     static constexpr unsigned contiFoamEqIdx = Indices::contiFoamEqIdx;
@@ -478,16 +478,16 @@ BlackOilFoamModule<TypeTag, enableFoam>::gasMobilityMultiplierTable_;
 template <class TypeTag, bool enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam)>
 class BlackOilFoamIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef BlackOilFoamModule<TypeTag> FoamModule;
+    using FoamModule = BlackOilFoamModule<TypeTag>;
 
     static constexpr int foamConcentrationIdx = Indices::foamConcentrationIdx;
     static constexpr unsigned waterPhaseIdx = FluidSystem::waterPhaseIdx;
@@ -584,9 +584,9 @@ protected:
 template <class TypeTag>
 class BlackOilFoamIntensiveQuantities<TypeTag, false>
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
     void foamPropertiesUpdate_(const ElementContext& elemCtx EWOMS_UNUSED,

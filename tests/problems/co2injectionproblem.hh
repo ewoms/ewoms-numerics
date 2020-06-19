@@ -95,46 +95,46 @@ SET_TYPE_PROP(Co2InjectionBaseProblem, Problem,
 SET_PROP(Co2InjectionBaseProblem, FluidSystem)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef Ewoms::Co2Injection::CO2Tables CO2Tables;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using CO2Tables = Ewoms::Co2Injection::CO2Tables;
 
 public:
-    typedef Ewoms::BrineCO2FluidSystem<Scalar, CO2Tables> type;
-    //typedef Ewoms::H2ON2FluidSystem<Scalar, /*useComplexRelations=*/false> type;
+    using type = Ewoms::BrineCO2FluidSystem<Scalar, CO2Tables>;
+    //using type = Ewoms::H2ON2FluidSystem<Scalar, /*useComplexRelations=*/false>;
 };
 
 // Set the material Law
 SET_PROP(Co2InjectionBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     enum { liquidPhaseIdx = FluidSystem::liquidPhaseIdx };
     enum { gasPhaseIdx = FluidSystem::gasPhaseIdx };
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Ewoms::RegularizedBrooksCorey<Traits> EffMaterialLaw;
+    using EffMaterialLaw = Ewoms::RegularizedBrooksCorey<Traits>;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::EffToAbsLaw<EffMaterialLaw> type;
+    using type = Ewoms::EffToAbsLaw<EffMaterialLaw>;
 };
 
 // Set the thermal conduction law
 SET_PROP(Co2InjectionBaseProblem, ThermalConductionLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    using type = Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar>;
 };
 
 // set the energy storage law for the solid phase
@@ -199,18 +199,18 @@ namespace Ewoms {
 template <class TypeTag>
 class Co2InjectionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     enum { dim = GridView::dimension };
     enum { dimWorld = GridView::dimensionworld };
 
     // copy some indices for convenience
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum { numPhases = FluidSystem::numPhases };
     enum { gasPhaseIdx = FluidSystem::gasPhaseIdx };
     enum { liquidPhaseIdx = FluidSystem::liquidPhaseIdx };
@@ -219,21 +219,21 @@ class Co2InjectionProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { contiCO2EqIdx = conti0EqIdx + CO2Idx };
 
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLaw) ThermalConductionLaw;
-    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
-    typedef typename ThermalConductionLaw::Params ThermalConductionLawParams;
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using ThermalConductionLaw = GET_PROP_TYPE(TypeTag, ThermalConductionLaw);
+    using SolidEnergyLawParams = GET_PROP_TYPE(TypeTag, SolidEnergyLawParams);
+    using ThermalConductionLawParams = typename ThermalConductionLaw::Params;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!
@@ -488,7 +488,7 @@ public:
             RateVector massRate(0.0);
             massRate[contiCO2EqIdx] = -1e-3; // [kg/(m^3 s)]
 
-            typedef Ewoms::ImmiscibleFluidState<Scalar, FluidSystem> FluidState;
+            using FluidState = Ewoms::ImmiscibleFluidState<Scalar, FluidSystem>;
             FluidState fs;
             fs.setSaturation(gasPhaseIdx, 1.0);
             const auto& pg =
@@ -589,7 +589,7 @@ private:
                            1.0 - fs.moleFraction(liquidPhaseIdx, CO2Idx));
 
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
-        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        using CFRP = Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem>;
         CFRP::solve(fs, paramCache,
                     /*refPhaseIdx=*/liquidPhaseIdx,
                     /*setViscosity=*/true,

@@ -41,16 +41,16 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { contiEqIdx = Indices::contiEqIdx };
     enum { liquidPhaseIdx = GET_PROP_VALUE(TypeTag, LiquidPhaseIndex) };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     /*!

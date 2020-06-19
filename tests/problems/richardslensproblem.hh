@@ -65,21 +65,21 @@ SET_TYPE_PROP(RichardsLensProblem, Problem, Ewoms::RichardsLensProblem<TypeTag>)
 SET_PROP(RichardsLensProblem, WettingFluid)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> >;
 };
 
 // Set the material Law
 SET_PROP(RichardsLensProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx>
@@ -87,11 +87,11 @@ private:
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Ewoms::RegularizedVanGenuchten<Traits> EffectiveLaw;
+    using EffectiveLaw = Ewoms::RegularizedVanGenuchten<Traits>;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
+    using type = Ewoms::EffToAbsLaw<EffectiveLaw>;
 };
 
 // Enable gravitational acceleration
@@ -141,20 +141,20 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsLensProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Stencil) Stencil;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Stencil = GET_PROP_TYPE(TypeTag, Stencil);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum {
         // copy some indices for convenience
         pressureWIdx = Indices::pressureWIdx,
@@ -168,14 +168,14 @@ class RichardsLensProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     };
 
     // get the material law from the property system
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
     //! The parameters of the material law to be used
-    typedef typename MaterialLaw::Params MaterialLawParams;
+    using MaterialLawParams = typename MaterialLaw::Params;
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using PhaseVector = Dune::FieldVector<Scalar, numPhases>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!

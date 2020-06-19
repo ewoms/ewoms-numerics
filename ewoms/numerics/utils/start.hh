@@ -87,7 +87,7 @@ namespace Ewoms {
 template <class TypeTag>
 static inline void registerAllParameters_(bool finalizeRegistration = true)
 {
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
     EWOMS_REGISTER_PARAM(TypeTag, std::string, ParameterFile,
                          "An .ini file which contains a set of run-time "
@@ -119,7 +119,7 @@ static inline int setupParameters_(int argc,
                                    bool allowUnused=false,
                                    bool handleHelp = true)
 {
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
 
     // first, get the MPI rank of the current process
     int myRank = 0;
@@ -171,8 +171,8 @@ static inline int setupParameters_(int argc,
     }
 
     // make sure that no unknown parameters are encountered
-    typedef std::pair<std::string, std::string> KeyValuePair;
-    typedef std::list<KeyValuePair> ParamList;
+    using KeyValuePair = std::pair<std::string, std::string>;
+    using ParamList = std::list<KeyValuePair>;
 
     ParamList usedParams;
     ParamList unusedParams;
@@ -276,10 +276,10 @@ static inline void resetTerminal_(int signum)
 template <class TypeTag>
 static inline int start(int argc, char **argv,  bool registerParams=true)
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Vanguard) Vanguard;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Vanguard = GET_PROP_TYPE(TypeTag, Vanguard);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
 
     // set the signal handlers to reset the TTY to a well defined state on unexpected
     // program aborts

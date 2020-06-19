@@ -48,6 +48,6 @@ END_PROPERTIES
 
 int main(int argc, char **argv)
 {
-    typedef TTAG(LensProblemVcfvAd) ProblemTypeTag;
+    using ProblemTypeTag = TTAG(LensProblemVcfvAd);
     return Ewoms::start<ProblemTypeTag>(argc, argv);
 }

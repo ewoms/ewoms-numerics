@@ -98,12 +98,12 @@ namespace Ewoms {
 template <class TypeTag>
 class StructuredGridVanguard : public BaseVanguard<TypeTag>
 {
-    typedef BaseVanguard<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
+    using ParentType = BaseVanguard<TypeTag>;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
 
-    typedef std::unique_ptr<Grid> GridPointer;
+    using GridPointer = std::unique_ptr<Grid>;
 
     static const int dim = Grid::dimension;
 
@@ -142,7 +142,7 @@ public:
     {
         Dune::FieldVector<int, dim> cellRes;
 
-        typedef double GridScalar;
+        using GridScalar = double;
         Dune::FieldVector<GridScalar, dim> upperRight;
         Dune::FieldVector<GridScalar, dim> lowerLeft( 0 );
 

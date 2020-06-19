@@ -56,11 +56,11 @@ BEGIN_PROPERTIES
 SET_PROP(VcfvDiscretization, Stencil)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GridView::ctype CoordScalar;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using CoordScalar = typename GridView::ctype;
 
 public:
-    typedef Ewoms::VcfvStencil<CoordScalar, GridView> type;
+    using type = Ewoms::VcfvStencil<CoordScalar, GridView>;
 };
 
 //! Mapper for the degrees of freedoms.
@@ -90,8 +90,8 @@ SET_BOOL_PROP(VcfvDiscretization, UseP1FiniteElementGradients, false);
 SET_PROP(VcfvDiscretization, DiscreteFunctionSpace)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar)   Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridPart) GridPart;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar)  ;
+    using GridPart = GET_PROP_TYPE(TypeTag, GridPart);
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     typedef Dune::Fem::FunctionSpace<typename GridPart::GridType::ctype,
                                      Scalar,
@@ -99,17 +99,17 @@ private:
                                      numEq> FunctionSpace;
 public:
     // Lagrange discrete function space with unknowns at the cell vertices
-    typedef Dune::Fem::LagrangeDiscreteFunctionSpace< FunctionSpace, GridPart, 1 > type;
+    using type = Dune::Fem::LagrangeDiscreteFunctionSpace< FunctionSpace, GridPart, 1 >;
 };
 #endif
 
 //! Set the border list creator for vertices
 SET_PROP(VcfvDiscretization, BorderListCreator)
 { private:
-    typedef GET_PROP_TYPE(TypeTag, VertexMapper) VertexMapper;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using VertexMapper = GET_PROP_TYPE(TypeTag, VertexMapper);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 public:
-    typedef Ewoms::Linear::VertexBorderListFromGrid<GridView, VertexMapper> type;
+    using type = Ewoms::Linear::VertexBorderListFromGrid<GridView, VertexMapper>;
 };
 
 //! For the vertex centered finite volume method, ghost and overlap elements must _not_
@@ -129,11 +129,11 @@ namespace Ewoms {
 template<class TypeTag>
 class VcfvDiscretization : public FvBaseDiscretization<TypeTag>
 {
-    typedef FvBaseDiscretization<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using ParentType = FvBaseDiscretization<TypeTag>;
+    using Implementation = GET_PROP_TYPE(TypeTag, Model);
+    using DofMapper = GET_PROP_TYPE(TypeTag, DofMapper);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
     enum { dim = GridView::dimension };
 

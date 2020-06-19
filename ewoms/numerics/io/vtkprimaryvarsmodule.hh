@@ -62,17 +62,17 @@ namespace Ewoms {
 template<class TypeTag>
 class VtkPrimaryVarsModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
-    typedef typename ParentType::ScalarBuffer ScalarBuffer;
-    typedef typename ParentType::EqBuffer EqBuffer;
+    using ScalarBuffer = typename ParentType::ScalarBuffer;
+    using EqBuffer = typename ParentType::EqBuffer;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
 

@@ -109,11 +109,11 @@ namespace Ewoms {
 template <class TypeTag>
 class Simulator
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Vanguard) Vanguard;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Vanguard = GET_PROP_TYPE(TypeTag, Vanguard);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
 
 public:
     // do not allow to copy simulators around
@@ -926,7 +926,7 @@ public:
      */
     void serialize()
     {
-        typedef Ewoms::Restart Restarter;
+        using Restarter = Ewoms::Restart;
         Restarter res;
         res.serializeBegin(*this);
         if (gridView().comm().rank() == 0)

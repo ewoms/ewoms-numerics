@@ -50,12 +50,12 @@ namespace Ewoms {
 template<class TypeTag>
 class FvBaseElementContext
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
 
     // the history size of the time discretization in number of steps
     enum { timeDiscHistorySize = GET_PROP_VALUE(TypeTag, TimeDiscHistorySize) };
@@ -65,24 +65,24 @@ class FvBaseElementContext
         PrimaryVariables priVars[timeDiscHistorySize];
         const IntensiveQuantities *thermodynamicHint[timeDiscHistorySize];
     };
-    typedef std::vector<DofStore_> DofVarsVector;
-    typedef std::vector<ExtensiveQuantities> ExtensiveQuantitiesVector;
+    using DofVarsVector = std::vector<DofStore_>;
+    using ExtensiveQuantitiesVector = std::vector<ExtensiveQuantities>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Stencil) Stencil;
-    typedef GET_PROP_TYPE(TypeTag, GradientCalculator) GradientCalculator;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Stencil = GET_PROP_TYPE(TypeTag, Stencil);
+    using GradientCalculator = GET_PROP_TYPE(TypeTag, GradientCalculator);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef typename GridView::template Codim<0>::Entity Element;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Element = typename GridView::template Codim<0>::Entity;
 
     static const unsigned dimWorld = GridView::dimensionworld;
     static const unsigned numEq = GET_PROP_VALUE(TypeTag, NumEq);
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
     // we don't allow copies of element contexts!
     FvBaseElementContext(const FvBaseElementContext& ) = delete;

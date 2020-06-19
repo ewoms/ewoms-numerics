@@ -60,13 +60,13 @@ namespace Ewoms {
 template <class TypeTag>
 class BaseVanguard
 {
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Vanguard) Implementation;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Implementation = GET_PROP_TYPE(TypeTag, Vanguard);
 
 #if HAVE_DUNE_FEM
-    typedef GET_PROP_TYPE(TypeTag, GridPart) GridPart;
+    using GridPart = GET_PROP_TYPE(TypeTag, GridPart);
 #endif
 
 public:
@@ -118,7 +118,7 @@ public:
     int gridSequenceNumber () const
     {
 #if HAVE_DUNE_FEM
-        typedef Dune::Fem::DofManager< Grid > FemDofManager;
+        using FemDofManager = Dune::Fem::DofManager< Grid >;
         return FemDofManager::instance( asImp_().grid() ).sequence();
 #else
         return 0; // return the same sequence number >= 0 means the grid never changes

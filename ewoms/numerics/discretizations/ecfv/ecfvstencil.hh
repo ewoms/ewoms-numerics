@@ -59,25 +59,25 @@ class EcfvStencil
 {
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef typename GridView::Intersection Intersection;
-    typedef typename GridView::template Codim<0>::Entity Element;
+    using CoordScalar = typename GridView::ctype;
+    using Intersection = typename GridView::Intersection;
+    using Element = typename GridView::template Codim<0>::Entity;
 
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView> ElementMapper;
+    using ElementMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView>;
 #else
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGElementLayout> ElementMapper;
+    using ElementMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGElementLayout>;
 #endif
 
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
-    typedef Dune::FieldVector<Scalar, dimWorld> WorldVector;
+    using WorldVector = Dune::FieldVector<Scalar, dimWorld>;
 
 public:
-    typedef Element        Entity;
-    typedef ElementMapper  Mapper;
+    using Entity = Element       ;
+    using Mapper = ElementMapper ;
 
-    typedef typename Element::Geometry LocalGeometry;
+    using LocalGeometry = typename Element::Geometry;
 
     /*!
      * \brief Represents a sub-control volume.
@@ -217,8 +217,8 @@ public:
         unsigned short exteriorIdx_;
     };
 
-    typedef EcfvSubControlVolumeFace<needFaceIntegrationPos, needFaceNormal> SubControlVolumeFace;
-    typedef EcfvSubControlVolumeFace</*needFaceIntegrationPos=*/true, needFaceNormal> BoundaryFace;
+    using SubControlVolumeFace = EcfvSubControlVolumeFace<needFaceIntegrationPos, needFaceNormal>;
+    using BoundaryFace = EcfvSubControlVolumeFace</*needFaceIntegrationPos=*/true, needFaceNormal>;
 
     EcfvStencil(const GridView& gridView, const Mapper& mapper)
         : gridView_(gridView)

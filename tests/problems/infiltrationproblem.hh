@@ -81,8 +81,8 @@ SET_INT_PROP(InfiltrationBaseProblem, NumericDifferenceMethod, 1);
 SET_PROP(InfiltrationBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     typedef Ewoms::ThreePhaseMaterialTraits<
         Scalar,
@@ -91,7 +91,7 @@ private:
         /*gasPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Ewoms::ThreePhaseParkerVanGenuchten<Traits> type;
+    using type = Ewoms::ThreePhaseParkerVanGenuchten<Traits>;
 };
 
 // The default for the end time of the simulation
@@ -132,22 +132,22 @@ namespace Ewoms {
 template <class TypeTag>
 class InfiltrationProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
 
     // copy some indices for convenience
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum {
         // equation indices
         conti0EqIdx = Indices::conti0EqIdx,
@@ -170,9 +170,9 @@ class InfiltrationProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!
@@ -446,7 +446,7 @@ private:
                            1 - fs.moleFraction(gasPhaseIdx, H2OIdx));
         fs.setMoleFraction(gasPhaseIdx, NAPLIdx, 0);
 
-        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        using CFRP = Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem>;
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         CFRP::solve(fs, paramCache, gasPhaseIdx,
                     /*setViscosity=*/true,

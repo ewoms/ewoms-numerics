@@ -43,6 +43,6 @@ END_PROPERTIES
 
 int main(int argc, char **argv)
 {
-    typedef TTAG(Co2InjectionPvsVcfvProblem) VcfvProblemTypeTag;
+    using VcfvProblemTypeTag = TTAG(Co2InjectionPvsVcfvProblem);
     return Ewoms::start<VcfvProblemTypeTag>(argc, argv);
 }

@@ -56,18 +56,18 @@ class NcpIntensiveQuantities
     , public EnergyIntensiveQuantities<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy) >
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluxModule) FluxModule;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluxModule = GET_PROP_TYPE(TypeTag, FluxModule);
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
@@ -82,11 +82,11 @@ class NcpIntensiveQuantities
         CompositionFromFugacitiesSolver;
     typedef Ewoms::CompositionalFluidState<Evaluation, FluidSystem,
                                          /*storeEnthalpy=*/enableEnergy> FluidState;
-    typedef Dune::FieldVector<Evaluation, numComponents> ComponentVector;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Ewoms::DiffusionIntensiveQuantities<TypeTag, enableDiffusion> DiffusionIntensiveQuantities;
-    typedef Ewoms::EnergyIntensiveQuantities<TypeTag, enableEnergy> EnergyIntensiveQuantities;
-    typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;
+    using ComponentVector = Dune::FieldVector<Evaluation, numComponents>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using DiffusionIntensiveQuantities = Ewoms::DiffusionIntensiveQuantities<TypeTag, enableDiffusion>;
+    using EnergyIntensiveQuantities = Ewoms::EnergyIntensiveQuantities<TypeTag, enableEnergy>;
+    using FluxIntensiveQuantities = typename FluxModule::FluxIntensiveQuantities;
 
 public:
     NcpIntensiveQuantities()

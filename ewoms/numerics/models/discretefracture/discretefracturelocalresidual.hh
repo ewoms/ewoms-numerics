@@ -41,19 +41,19 @@ namespace Ewoms {
 template <class TypeTag>
 class DiscreteFractureLocalResidual : public ImmiscibleLocalResidual<TypeTag>
 {
-    typedef ImmiscibleLocalResidual<TypeTag> ParentType;
+    using ParentType = ImmiscibleLocalResidual<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
 
 public:
     /*!

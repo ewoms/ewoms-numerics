@@ -56,14 +56,14 @@ namespace Ewoms {
 template <class TypeTag>
 class BlackOilNewtonMethod : public GET_PROP_TYPE(TypeTag, DiscNewtonMethod)
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscNewtonMethod) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscNewtonMethod);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using GlobalEqVector = GET_PROP_TYPE(TypeTag, GlobalEqVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
     static const unsigned numEq = GET_PROP_VALUE(TypeTag, NumEq);
 

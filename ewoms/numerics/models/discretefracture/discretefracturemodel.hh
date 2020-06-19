@@ -114,8 +114,8 @@ namespace Ewoms {
 template <class TypeTag>
 class DiscreteFractureModel : public ImmiscibleModel<TypeTag>
 {
-    typedef ImmiscibleModel<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using ParentType = ImmiscibleModel<TypeTag>;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
 public:
     DiscreteFractureModel(Simulator& simulator)

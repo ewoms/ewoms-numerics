@@ -47,12 +47,12 @@ struct NcpIndices
                            GET_PROP_VALUE(TypeTag, EnableEnergy)>
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     enum { numPhases = FluidSystem::numPhases };
     enum { numComponents = FluidSystem::numComponents };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Ewoms::EnergyIndices<PVOffset + numComponents + numPhases, enableEnergy> EnergyIndices;
+    using EnergyIndices = Ewoms::EnergyIndices<PVOffset + numComponents + numPhases, enableEnergy>;
 
 public:
     /*!

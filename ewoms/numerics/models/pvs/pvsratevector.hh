@@ -51,17 +51,17 @@ class PvsRateVector
     : public Dune::FieldVector<GET_PROP_TYPE(TypeTag, Evaluation),
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Dune::FieldVector<Evaluation, numEq> ParentType;
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using ParentType = Dune::FieldVector<Evaluation, numEq>;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
 
 public:
     PvsRateVector() : ParentType()

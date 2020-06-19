@@ -55,14 +55,14 @@ class FlashIntensiveQuantities
     , public EnergyIntensiveQuantities<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy) >
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluxModule) FluxModule;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluxModule = GET_PROP_TYPE(TypeTag, FluxModule);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     // primary variable indices
     enum { cTot0Idx = Indices::cTot0Idx };
@@ -72,21 +72,21 @@ class FlashIntensiveQuantities
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, FlashSolver) FlashSolver;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using FlashSolver = GET_PROP_TYPE(TypeTag, FlashSolver);
 
-    typedef Dune::FieldVector<Evaluation, numComponents> ComponentVector;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using ComponentVector = Dune::FieldVector<Evaluation, numComponents>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
-    typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;
-    typedef Ewoms::DiffusionIntensiveQuantities<TypeTag, enableDiffusion> DiffusionIntensiveQuantities;
-    typedef Ewoms::EnergyIntensiveQuantities<TypeTag, enableEnergy> EnergyIntensiveQuantities;
+    using FluxIntensiveQuantities = typename FluxModule::FluxIntensiveQuantities;
+    using DiffusionIntensiveQuantities = Ewoms::DiffusionIntensiveQuantities<TypeTag, enableDiffusion>;
+    using EnergyIntensiveQuantities = Ewoms::EnergyIntensiveQuantities<TypeTag, enableEnergy>;
 
 public:
     //! The type of the object returned by the fluidState() method
-    typedef Ewoms::CompositionalFluidState<Evaluation, FluidSystem, enableEnergy> FluidState;
+    using FluidState = Ewoms::CompositionalFluidState<Evaluation, FluidSystem, enableEnergy>;
 
     FlashIntensiveQuantities()
     { }

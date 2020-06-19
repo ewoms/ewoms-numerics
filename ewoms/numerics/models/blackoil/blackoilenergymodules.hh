@@ -51,18 +51,18 @@ namespace Ewoms {
 template <class TypeTag, bool enableEnergyV = GET_PROP_VALUE(TypeTag, EnableEnergy)>
 class BlackOilEnergyModule
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     static constexpr unsigned temperatureIdx = Indices::temperatureIdx;
     static constexpr unsigned contiEnergyEqIdx = Indices::contiEnergyEqIdx;
@@ -327,18 +327,18 @@ public:
 template <class TypeTag, bool enableEnergyV = GET_PROP_VALUE(TypeTag, EnableEnergy)>
 class BlackOilEnergyIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLaw) SolidEnergyLaw;
-    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLaw) ThermalConductionLaw;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using SolidEnergyLaw = GET_PROP_TYPE(TypeTag, SolidEnergyLaw);
+    using ThermalConductionLaw = GET_PROP_TYPE(TypeTag, ThermalConductionLaw);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef BlackOilEnergyModule<TypeTag> EnergyModule;
+    using EnergyModule = BlackOilEnergyModule<TypeTag>;
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     static constexpr int temperatureIdx = Indices::temperatureIdx;
@@ -405,12 +405,12 @@ protected:
 template <class TypeTag>
 class BlackOilEnergyIntensiveQuantities<TypeTag, false>
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
     static constexpr bool enableTemperature = GET_PROP_VALUE(TypeTag, EnableTemperature);
 
@@ -457,17 +457,17 @@ protected:
 template <class TypeTag, bool enableEnergyV = GET_PROP_VALUE(TypeTag, EnableEnergy)>
 class BlackOilEnergyExtensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
 
-    typedef BlackOilEnergyModule<TypeTag> EnergyModule;
+    using EnergyModule = BlackOilEnergyModule<TypeTag>;
 
 
 public:
@@ -589,8 +589,8 @@ private:
 template <class TypeTag>
 class BlackOilEnergyExtensiveQuantities<TypeTag, false>
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
 
 public:
     void updateEnergy(const ElementContext& elemCtx EWOMS_UNUSED,

@@ -92,20 +92,20 @@ SET_PROP(Tutorial1Problem, MaterialLaw)
 private:
     // create a class holding the necessary information for a
     // two-phase capillary pressure law
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
-    typedef Ewoms::TwoPhaseMaterialTraits<Scalar, wettingPhaseIdx, nonWettingPhaseIdx> Traits;
+    using Traits = Ewoms::TwoPhaseMaterialTraits<Scalar, wettingPhaseIdx, nonWettingPhaseIdx>;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Ewoms::RegularizedBrooksCorey<Traits> RawMaterialLaw; /*@\label{tutorial1:rawlaw}@*/
+    using RawMaterialLaw = Ewoms::RegularizedBrooksCorey<Traits>; /*@\label{tutorial1:rawlaw}@*/
 
 public:
     // Convert absolute saturations into effective ones before passing
     // it to the base capillary pressure law
-    typedef Ewoms::EffToAbsLaw<RawMaterialLaw> type; /*@\label{tutorial1:eff2abs}@*/
+    using type = Ewoms::EffToAbsLaw<RawMaterialLaw>; /*@\label{tutorial1:eff2abs}@*/
 };
 
 // Disable gravity
@@ -135,25 +135,25 @@ template <class TypeTag>
 class Tutorial1Problem
     : public GET_PROP_TYPE(TypeTag, BaseProblem) /*@\label{tutorial1:def-problem}@*/
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     // Grid dimension
     enum { dimWorld = GridView::dimensionworld };
 
     // The type of the intrinsic permeability tensor
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
     // eWoms specific types are specified via the property system
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams; /*@\label{tutorial1:matLawObjectType}@*/
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams); /*@\label{tutorial1:matLawObjectType}@*/
 
     // phase indices
     enum { numPhases = FluidSystem::numPhases };

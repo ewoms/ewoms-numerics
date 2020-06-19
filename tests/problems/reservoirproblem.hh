@@ -77,8 +77,8 @@ SET_TYPE_PROP(ReservoirBaseProblem, Problem, Ewoms::ReservoirProblem<TypeTag>);
 SET_PROP(ReservoirBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     typedef Ewoms::
         ThreePhaseMaterialTraits<Scalar,
@@ -87,7 +87,7 @@ private:
                                  /*gasPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Ewoms::LinearMaterial<Traits> type;
+    using type = Ewoms::LinearMaterial<Traits>;
 };
 
 // Write the Newton convergence behavior to disk?
@@ -126,10 +126,10 @@ SET_SCALAR_PROP(ReservoirBaseProblem, WellWidth, 0.01);
 SET_PROP(ReservoirBaseProblem, FluidSystem)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::BlackOilFluidSystem<Scalar> type;
+    using type = Ewoms::BlackOilFluidSystem<Scalar>;
 };
 
 // The default DGF file to load
@@ -161,11 +161,11 @@ namespace Ewoms {
 template <class TypeTag>
 class ReservoirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     // Grid and world dimension
     enum { dim = GridView::dimension };
@@ -181,21 +181,21 @@ class ReservoirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     enum { oilCompIdx = FluidSystem::oilCompIdx };
     enum { waterCompIdx = FluidSystem::waterCompIdx };
 
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using Constraints = GET_PROP_TYPE(TypeTag, Constraints);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using PhaseVector = Dune::FieldVector<Scalar, numPhases>;
 
     typedef Ewoms::CompositionalFluidState<Scalar,
                                          FluidSystem,
@@ -315,13 +315,13 @@ public:
         oilPvt->initEnd();
         waterPvt->initEnd();
 
-        typedef std::shared_ptr<Ewoms::GasPvtMultiplexer<Scalar> > GasPvtSharedPtr;
+        using GasPvtSharedPtr = std::shared_ptr<Ewoms::GasPvtMultiplexer<Scalar> >;
         FluidSystem::setGasPvt(GasPvtSharedPtr(gasPvt));
 
-        typedef std::shared_ptr<Ewoms::OilPvtMultiplexer<Scalar> > OilPvtSharedPtr;
+        using OilPvtSharedPtr = std::shared_ptr<Ewoms::OilPvtMultiplexer<Scalar> >;
         FluidSystem::setOilPvt(OilPvtSharedPtr(oilPvt));
 
-        typedef std::shared_ptr<Ewoms::WaterPvtMultiplexer<Scalar> > WaterPvtSharedPtr;
+        using WaterPvtSharedPtr = std::shared_ptr<Ewoms::WaterPvtMultiplexer<Scalar> >;
         FluidSystem::setWaterPvt(WaterPvtSharedPtr(waterPvt));
 
         FluidSystem::initEnd();
@@ -636,7 +636,7 @@ private:
         fs.setMoleFraction(oilPhaseIdx, gasCompIdx, xoG);
         fs.setMoleFraction(oilPhaseIdx, oilCompIdx, xoO);
 
-        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        using CFRP = Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem>;
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
         CFRP::solve(fs,
                     paramCache,

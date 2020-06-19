@@ -91,42 +91,42 @@ SET_TYPE_PROP(LensBaseProblem, Grid, Dune::YaspGrid<2>);
 SET_PROP(LensBaseProblem, WettingPhase)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::SimpleH2O<Scalar> >;
 };
 
 // Set the non-wetting phase
 SET_PROP(LensBaseProblem, NonwettingPhase)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> > type;
+    using type = Ewoms::LiquidPhase<Scalar, Ewoms::DNAPL<Scalar> >;
 };
 
 // Set the material Law
 SET_PROP(LensBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     enum { wettingPhaseIdx = FluidSystem::wettingPhaseIdx };
     enum { nonWettingPhaseIdx = FluidSystem::nonWettingPhaseIdx };
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::wettingPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::nonWettingPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Ewoms::RegularizedVanGenuchten<Traits> EffectiveLaw;
+    using EffectiveLaw = Ewoms::RegularizedVanGenuchten<Traits>;
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::EffToAbsLaw<EffectiveLaw> type;
+    using type = Ewoms::EffToAbsLaw<EffectiveLaw>;
 };
 
 // Write the solutions of individual newton iterations?
@@ -199,17 +199,17 @@ namespace Ewoms {
 template <class TypeTag>
 class LensProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, WettingPhase) WettingPhase;
-    typedef GET_PROP_TYPE(TypeTag, NonwettingPhase) NonwettingPhase;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using WettingPhase = GET_PROP_TYPE(TypeTag, WettingPhase);
+    using NonwettingPhase = GET_PROP_TYPE(TypeTag, NonwettingPhase);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
 
     enum {
         // number of phases
@@ -227,16 +227,16 @@ class LensProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
         dimWorld = GridView::dimensionworld
     };
 
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!
@@ -332,13 +332,13 @@ public:
             thermal = "non-isothermal";
 
         std::string deriv = "finite difference";
-        typedef GET_PROP_TYPE(TypeTag, LocalLinearizerSplice) LLS;
+        using LLS = GET_PROP_TYPE(TypeTag, LocalLinearizerSplice);
         bool useAutoDiff = std::is_same<LLS, TTAG(AutoDiffLocalLinearizer)>::value;
         if (useAutoDiff)
             deriv = "automatic differentiation";
 
         std::string disc = "vertex centered finite volume";
-        typedef GET_PROP_TYPE(TypeTag, Discretization) D;
+        using D = GET_PROP_TYPE(TypeTag, Discretization);
         bool useEcfv = std::is_same<D, Ewoms::EcfvDiscretization<TypeTag>>::value;
         if (useEcfv)
             disc = "element centered finite volume";
@@ -413,7 +413,7 @@ public:
      */
     std::string name() const
     {
-        typedef GET_PROP_TYPE(TypeTag, LocalLinearizerSplice) LLS;
+        using LLS = GET_PROP_TYPE(TypeTag, LocalLinearizerSplice);
 
         bool useAutoDiff = std::is_same<LLS, TTAG(AutoDiffLocalLinearizer)>::value;
 

@@ -80,12 +80,12 @@ SET_TYPE_PROP(MultiPhaseBaseModel, FluxModule, Ewoms::DarcyFluxModule<TypeTag>);
 SET_PROP(MultiPhaseBaseModel, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef Ewoms::NullMaterialTraits<Scalar, FluidSystem::numPhases> Traits;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Traits = Ewoms::NullMaterialTraits<Scalar, FluidSystem::numPhases>;
 
 public:
-    typedef Ewoms::NullMaterial<Traits> type;
+    using type = Ewoms::NullMaterial<Traits>;
 };
 
 /*!
@@ -134,18 +134,18 @@ namespace Ewoms {
 template <class TypeTag>
 class MultiPhaseBaseModel : public GET_PROP_TYPE(TypeTag, Discretization)
 {
-    typedef GET_PROP_TYPE(TypeTag, Discretization) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using ParentType = GET_PROP_TYPE(TypeTag, Discretization);
+    using Implementation = GET_PROP_TYPE(TypeTag, Model);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
-    typedef typename GridView::template Codim<0>::Iterator ElementIterator;
-    typedef typename GridView::template Codim<0>::Entity Element;
+    using ElementIterator = typename GridView::template Codim<0>::Iterator;
+    using Element = typename GridView::template Codim<0>::Entity;
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = FluidSystem::numComponents };

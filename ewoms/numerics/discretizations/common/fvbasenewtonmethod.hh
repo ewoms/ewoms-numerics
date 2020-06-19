@@ -89,16 +89,16 @@ namespace Ewoms {
 template <class TypeTag>
 class FvBaseNewtonMethod : public NewtonMethod<TypeTag>
 {
-    typedef Ewoms::NewtonMethod<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) Implementation;
+    using ParentType = Ewoms::NewtonMethod<TypeTag>;
+    using Implementation = GET_PROP_TYPE(TypeTag, NewtonMethod);
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) NewtonMethod;
-    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using NewtonMethod = GET_PROP_TYPE(TypeTag, NewtonMethod);
+    using GlobalEqVector = GET_PROP_TYPE(TypeTag, GlobalEqVector);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
 
 public:
     FvBaseNewtonMethod(Simulator& simulator)

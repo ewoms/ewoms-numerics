@@ -58,13 +58,13 @@ namespace Ewoms {
 template <class TypeTag>
 class DgfVanguard : public BaseVanguard<TypeTag>
 {
-    typedef BaseVanguard<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
-    typedef Ewoms::FractureMapper<TypeTag> FractureMapper;
+    using ParentType = BaseVanguard<TypeTag>;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
+    using FractureMapper = Ewoms::FractureMapper<TypeTag>;
 
-    typedef std::unique_ptr< Grid > GridPointer;
+    using GridPointer = std::unique_ptr< Grid >;
 
 public:
     /*!
@@ -146,7 +146,7 @@ public:
 protected:
     void addFractures_(Dune::GridPtr<Grid>& dgfPointer)
     {
-        typedef typename Grid::LevelGridView LevelGridView;
+        using LevelGridView = typename Grid::LevelGridView;
 
         // check if fractures are available (only 2d currently)
         if (dgfPointer.nofParameters(static_cast<int>(Grid::dimension)) == 0)
@@ -156,10 +156,10 @@ protected:
         const unsigned edgeCodim = Grid::dimension - 1;
 
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
-        typedef Dune::MultipleCodimMultipleGeomTypeMapper<LevelGridView> VertexMapper;
+        using VertexMapper = Dune::MultipleCodimMultipleGeomTypeMapper<LevelGridView>;
         VertexMapper vertexMapper(gridView, Dune::mcmgVertexLayout());
 #else
-        typedef Dune::MultipleCodimMultipleGeomTypeMapper<LevelGridView, Dune::MCMGVertexLayout> VertexMapper;
+        using VertexMapper = Dune::MultipleCodimMultipleGeomTypeMapper<LevelGridView, Dune::MCMGVertexLayout>;
         VertexMapper vertexMapper(gridView);
 #endif
 

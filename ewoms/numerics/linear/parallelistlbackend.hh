@@ -83,18 +83,18 @@ namespace Linear {
 template <class TypeTag>
 class ParallelIstlSolverBackend : public ParallelBaseBackend<TypeTag>
 {
-    typedef ParallelBaseBackend<TypeTag> ParentType;
+    using ParentType = ParallelBaseBackend<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, LinearSolverWrapper) LinearSolverWrapper;
-    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using LinearSolverWrapper = GET_PROP_TYPE(TypeTag, LinearSolverWrapper);
+    using SparseMatrixAdapter = GET_PROP_TYPE(TypeTag, SparseMatrixAdapter);
 
-    typedef typename ParentType::ParallelOperator ParallelOperator;
-    typedef typename ParentType::ParallelPreconditioner ParallelPreconditioner;
-    typedef typename ParentType::ParallelScalarProduct ParallelScalarProduct;
+    using ParallelOperator = typename ParentType::ParallelOperator;
+    using ParallelPreconditioner = typename ParentType::ParallelPreconditioner;
+    using ParallelScalarProduct = typename ParentType::ParallelScalarProduct;
 
-    typedef typename SparseMatrixAdapter::MatrixBlock MatrixBlock;
-    typedef typename LinearSolverWrapper::RawSolver RawLinearSolver;
+    using MatrixBlock = typename SparseMatrixAdapter::MatrixBlock;
+    using RawLinearSolver = typename LinearSolverWrapper::RawSolver;
 
     static_assert(std::is_same<SparseMatrixAdapter, IstlSparseMatrixAdapter<MatrixBlock> >::value,
                   "The ParallelIstlSolverBackend linear solver backend requires the IstlSparseMatrixAdapter");

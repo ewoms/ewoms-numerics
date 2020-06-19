@@ -73,22 +73,22 @@ namespace Ewoms {
 template <class TypeTag>
 class VtkEnergyModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
-    typedef typename ParentType::ScalarBuffer ScalarBuffer;
-    typedef typename ParentType::PhaseBuffer PhaseBuffer;
+    using ScalarBuffer = typename ParentType::ScalarBuffer;
+    using PhaseBuffer = typename ParentType::PhaseBuffer;
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
 
-    typedef typename Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using Toolbox = typename Ewoms::MathToolbox<Evaluation>;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
 public:
     VtkEnergyModule(const Simulator& simulator)

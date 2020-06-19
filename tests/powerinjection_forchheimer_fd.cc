@@ -44,6 +44,6 @@ END_PROPERTIES
 
 int main(int argc, char **argv)
 {
-    typedef TTAG(PowerInjectionForchheimerFdProblem) ProblemTypeTag;
+    using ProblemTypeTag = TTAG(PowerInjectionForchheimerFdProblem);
     return Ewoms::start<ProblemTypeTag>(argc, argv);
 }

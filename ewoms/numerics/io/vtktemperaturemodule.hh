@@ -61,18 +61,18 @@ namespace Ewoms {
 template<class TypeTag>
 class VtkTemperatureModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
 
-    typedef typename ParentType::ScalarBuffer ScalarBuffer;
+    using ScalarBuffer = typename ParentType::ScalarBuffer;
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
 public:
     VtkTemperatureModule(const Simulator& simulator)
@@ -103,7 +103,7 @@ public:
      */
     void processElement(const ElementContext& elemCtx)
     {
-        typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+        using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
         if (!EWOMS_GET_PARAM(TypeTag, bool, EnableVtkOutput))
             return;

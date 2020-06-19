@@ -41,7 +41,7 @@ namespace Ewoms {
 template <class Scalar, class FluidSystem>
 class Co2InjectionFlash : public Ewoms::NcpFlash<Scalar, FluidSystem>
 {
-    typedef Ewoms::NcpFlash<Scalar, FluidSystem> ParentType;
+    using ParentType = Ewoms::NcpFlash<Scalar, FluidSystem>;
 
     enum { numPhases = FluidSystem::numPhases };
 

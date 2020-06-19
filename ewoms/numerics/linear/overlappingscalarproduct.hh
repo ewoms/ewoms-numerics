@@ -43,7 +43,7 @@ class OverlappingScalarProduct
 {
 public:
     typedef typename OverlappingBlockVector::field_type field_type;
-    typedef typename Dune::CollectiveCommunication<typename Dune::MPIHelper::MPICommunicator> CollectiveCommunication;
+    using CollectiveCommunication = typename Dune::CollectiveCommunication<typename Dune::MPIHelper::MPICommunicator>;
 
 #if DUNE_VERSION_NEWER(DUNE_ISTL, 2, 5)
     typedef typename Dune::ScalarProduct<OverlappingBlockVector>::real_type real_type;

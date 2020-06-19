@@ -72,20 +72,20 @@ namespace Ewoms {
 template <class TypeTag>
 class VtkDiffusionModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
-    typedef typename ParentType::PhaseComponentBuffer PhaseComponentBuffer;
-    typedef typename ParentType::PhaseBuffer PhaseBuffer;
+    using PhaseComponentBuffer = typename ParentType::PhaseComponentBuffer;
+    using PhaseBuffer = typename ParentType::PhaseBuffer;
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };

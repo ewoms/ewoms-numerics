@@ -121,10 +121,10 @@ SET_TYPE_PROP(BlackOilModel, Indices,
 SET_PROP(BlackOilModel, FluidSystem)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
 
 public:
-    typedef Ewoms::BlackOilFluidSystem<Scalar> type;
+    using type = Ewoms::BlackOilFluidSystem<Scalar>;
 };
 
 // by default, all ECL extension modules are disabled
@@ -147,11 +147,11 @@ SET_BOOL_PROP(BlackOilModel, EnableEnergy, false);
 SET_PROP(BlackOilModel, BlackOilEnergyScalingFactor)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
     static constexpr Scalar alpha = GET_PROP_VALUE(TypeTag, BlackoilConserveSurfaceVolume) ? 1000.0 : 1.0;
 
 public:
-    typedef Scalar type;
+    using type = Scalar;
     static const Scalar value;
 };
 
@@ -232,15 +232,15 @@ template<class TypeTag >
 class BlackOilModel
     : public MultiPhaseBaseModel<TypeTag>
 {
-    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef MultiPhaseBaseModel<TypeTag> ParentType;
+    using Implementation = GET_PROP_TYPE(TypeTag, Model);
+    using ParentType = MultiPhaseBaseModel<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
 
     enum { numComponents = FluidSystem::numComponents };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
@@ -254,9 +254,9 @@ class BlackOilModel
 
     static constexpr Scalar maxWaterPriority = 1.0;
 
-    typedef BlackOilSolventModule<TypeTag> SolventModule;
-    typedef BlackOilPolymerModule<TypeTag> PolymerModule;
-    typedef BlackOilEnergyModule<TypeTag> EnergyModule;
+    using SolventModule = BlackOilSolventModule<TypeTag>;
+    using PolymerModule = BlackOilPolymerModule<TypeTag>;
+    using EnergyModule = BlackOilEnergyModule<TypeTag>;
 public:
     BlackOilModel(Simulator& simulator)
         : ParentType(simulator)
@@ -486,7 +486,7 @@ public:
         PolymerModule::deserializeEntity(*this, instream, dof);
         EnergyModule::deserializeEntity(*this, instream, dof);
 
-        typedef typename PrimaryVariables::PrimaryVarsMeaning PVM;
+        using PVM = typename PrimaryVariables::PrimaryVarsMeaning;
         priVars.setPrimaryVarsMeaning(static_cast<PVM>(primaryVarsMeaning));
         priVars.setPvtRegionIndex(pvtRegionIdx);
     }

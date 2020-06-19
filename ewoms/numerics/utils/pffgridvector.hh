@@ -47,12 +47,12 @@ namespace Ewoms {
 template <class GridView, class Stencil, class Data, class DofMapper>
 class PffGridVector
 {
-    typedef typename GridView::template Codim<0>::Entity Element;
+    using Element = typename GridView::template Codim<0>::Entity;
 
 #if DUNE_VERSION_NEWER(DUNE_GRID, 2,6)
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView> ElementMapper;
+    using ElementMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView>;
 #else
-    typedef Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGElementLayout> ElementMapper;
+    using ElementMapper = Dune::MultipleCodimMultipleGeomTypeMapper<GridView, Dune::MCMGElementLayout>;
 #endif
 
 public:

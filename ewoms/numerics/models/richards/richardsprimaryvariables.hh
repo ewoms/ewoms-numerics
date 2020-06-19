@@ -52,13 +52,13 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
-    typedef FvBasePrimaryVariables<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) EnergyModule;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using ParentType = FvBasePrimaryVariables<TypeTag>;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using EnergyModule = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     // primary variable indices
     enum { pressureWIdx = Indices::pressureWIdx };
@@ -69,9 +69,9 @@ class RichardsPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
 
-    typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
-    typedef Dune::FieldVector<Scalar, numPhases> PhaseVector;
-    typedef Ewoms::ImmiscibleFlash<Scalar, FluidSystem> ImmiscibleFlash;
+    using ComponentVector = Dune::FieldVector<Scalar, numComponents>;
+    using PhaseVector = Dune::FieldVector<Scalar, numPhases>;
+    using ImmiscibleFlash = Ewoms::ImmiscibleFlash<Scalar, FluidSystem>;
 
 public:
     RichardsPrimaryVariables() : ParentType()

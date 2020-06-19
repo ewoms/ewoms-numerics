@@ -52,16 +52,16 @@ class ImmiscibleIntensiveQuantities
     , public EnergyIntensiveQuantities<TypeTag, GET_PROP_VALUE(TypeTag, EnableEnergy)>
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, FluxModule) FluxModule;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using FluxModule = GET_PROP_TYPE(TypeTag, FluxModule);
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { pressure0Idx = Indices::pressure0Idx };
@@ -69,11 +69,11 @@ class ImmiscibleIntensiveQuantities
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
-    typedef Dune::FieldVector<Evaluation, numPhases> EvalPhaseVector;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
+    using EvalPhaseVector = Dune::FieldVector<Evaluation, numPhases>;
 
-    typedef typename FluxModule::FluxIntensiveQuantities FluxIntensiveQuantities;
-    typedef Ewoms::EnergyIntensiveQuantities<TypeTag, enableEnergy> EnergyIntensiveQuantities;
+    using FluxIntensiveQuantities = typename FluxModule::FluxIntensiveQuantities;
+    using EnergyIntensiveQuantities = Ewoms::EnergyIntensiveQuantities<TypeTag, enableEnergy>;
     typedef Ewoms::ImmiscibleFluidState<Evaluation, FluidSystem,
                                       /*storeEnthalpy=*/enableEnergy> FluidState;
 

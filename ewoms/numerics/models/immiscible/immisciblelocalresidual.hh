@@ -44,22 +44,22 @@ namespace Ewoms {
 template <class TypeTag>
 class ImmiscibleLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef GET_PROP_TYPE(TypeTag, LocalResidual) Implementation;
+    using Implementation = GET_PROP_TYPE(TypeTag, LocalResidual);
 
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
 
     enum { conti0EqIdx = Indices::conti0EqIdx };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
 
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     /*!

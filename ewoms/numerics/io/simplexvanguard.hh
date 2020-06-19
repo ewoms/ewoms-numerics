@@ -60,15 +60,15 @@ namespace Ewoms {
 template <class TypeTag>
 class SimplexGridVanguard
 {
-    typedef BaseVanguard<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
+    using ParentType = BaseVanguard<TypeTag>;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
 
-    typedef std::unique_ptr<Grid> GridPointer;
-    typedef typename Grid::ctype CoordScalar;
+    using GridPointer = std::unique_ptr<Grid>;
+    using CoordScalar = typename Grid::ctype;
     enum { dimWorld = Grid::dimensionworld };
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
 public:
     /*!

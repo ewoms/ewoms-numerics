@@ -44,11 +44,11 @@ template<class TypeTag>
 class BlackOilProblem : public MultiPhaseBaseProblem<TypeTag>
 {
 private:
-    typedef MultiPhaseBaseProblem<TypeTag> ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using ParentType = MultiPhaseBaseProblem<TypeTag>;
+    using Implementation = GET_PROP_TYPE(TypeTag, Problem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
 public:
     /*!

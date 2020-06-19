@@ -79,23 +79,23 @@ namespace Ewoms {
 template <class TypeTag>
 class VtkCompositionModule : public BaseOutputModule<TypeTag>
 {
-    typedef BaseOutputModule<TypeTag> ParentType;
+    using ParentType = BaseOutputModule<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
 
     static const int vtkFormat = GET_PROP_VALUE(TypeTag, VtkOutputFormat);
-    typedef Ewoms::VtkMultiWriter<GridView, vtkFormat> VtkMultiWriter;
+    using VtkMultiWriter = Ewoms::VtkMultiWriter<GridView, vtkFormat>;
 
-    typedef typename ParentType::ComponentBuffer ComponentBuffer;
-    typedef typename ParentType::PhaseComponentBuffer PhaseComponentBuffer;
+    using ComponentBuffer = typename ParentType::ComponentBuffer;
+    using PhaseComponentBuffer = typename ParentType::PhaseComponentBuffer;
 
 public:
     VtkCompositionModule(const Simulator& simulator)
@@ -152,7 +152,7 @@ public:
      */
     void processElement(const ElementContext& elemCtx)
     {
-        typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+        using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
         if (!EWOMS_GET_PARAM(TypeTag, bool, EnableVtkOutput))
             return;

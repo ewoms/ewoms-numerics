@@ -72,14 +72,14 @@ namespace Linear {
     template <class TypeTag>                                                       \
     class SolverWrapper##SOLVER_NAME                                               \
     {                                                                              \
-        typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;                    \
+        using Scalar = GET_PROP_TYPE(TypeTag, Scalar);                    \
         typedef GET_PROP_TYPE(TypeTag,                                    \
                                        OverlappingMatrix) OverlappingMatrix;       \
         typedef GET_PROP_TYPE(TypeTag,                                    \
                                        OverlappingVector) OverlappingVector;       \
                                                                                    \
     public:                                                                        \
-        typedef ISTL_SOLVER_NAME<OverlappingVector> RawSolver;                     \
+        using RawSolver = ISTL_SOLVER_NAME<OverlappingVector>;                     \
                                                                                    \
         SolverWrapper##SOLVER_NAME()                                               \
         {}                                                                         \
@@ -127,12 +127,12 @@ EWOMS_WRAP_ISTL_SOLVER(MinRes, Dune::MINRESSolver)
 template <class TypeTag>
 class SolverWrapperRestartedGMRes
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix;
-    typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using OverlappingMatrix = GET_PROP_TYPE(TypeTag, OverlappingMatrix);
+    using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector);
 
 public:
-    typedef Dune::RestartedGMResSolver<OverlappingVector> RawSolver;
+    using RawSolver = Dune::RestartedGMResSolver<OverlappingVector>;
 
     SolverWrapperRestartedGMRes()
     {}

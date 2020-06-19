@@ -126,7 +126,7 @@ SET_TYPE_PROP(NumericModel, Scalar, double);
 //! Set the ParameterTree property
 SET_PROP(NumericModel, ParameterTree)
 {
-    typedef Dune::ParameterTree type;
+    using type = Dune::ParameterTree;
 
     static Dune::ParameterTree& tree()
     {
@@ -147,8 +147,8 @@ SET_STRING_PROP(NumericModel, GridFile, "");
 #if HAVE_DUNE_FEM
 SET_PROP(NumericModel, GridPart)
 {
-    typedef GET_PROP_TYPE(TypeTag, Grid) Grid;
-    typedef Dune::Fem::AdaptiveLeafGridPart<Grid> type;
+    using Grid = GET_PROP_TYPE(TypeTag, Grid);
+    using type = Dune::Fem::AdaptiveLeafGridPart<Grid>;
 };
 
 SET_TYPE_PROP(NumericModel, GridView, GET_PROP_TYPE(TypeTag, GridPart)::GridViewType);

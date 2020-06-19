@@ -72,32 +72,32 @@ SET_TYPE_PROP(WaterAirBaseProblem, Problem, Ewoms::WaterAirProblem<TypeTag>);
 SET_PROP(WaterAirBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     typedef Ewoms::TwoPhaseMaterialTraits<Scalar,
                                         /*wettingPhaseIdx=*/FluidSystem::liquidPhaseIdx,
                                         /*nonWettingPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
     // define the material law which is parameterized by effective
     // saturations
-    typedef Ewoms::RegularizedBrooksCorey<Traits> EffMaterialLaw;
+    using EffMaterialLaw = Ewoms::RegularizedBrooksCorey<Traits>;
 
 public:
     // define the material law parameterized by absolute saturations
     // which uses the two-phase API
-    typedef Ewoms::EffToAbsLaw<EffMaterialLaw> type;
+    using type = Ewoms::EffToAbsLaw<EffMaterialLaw>;
 };
 
 // Set the thermal conduction law
 SET_PROP(WaterAirBaseProblem, ThermalConductionLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    using type = Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar>;
 };
 
 // set the energy storage law for the solid phase
@@ -174,14 +174,14 @@ namespace Ewoms {
 template <class TypeTag >
 class WaterAirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
     // copy some indices for convenience
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum {
         numPhases = FluidSystem::numPhases,
 
@@ -205,21 +205,21 @@ class WaterAirProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 
     static const bool enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy);
 
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using ThermalConductionLawParams = GET_PROP_TYPE(TypeTag, ThermalConductionLawParams);
+    using SolidEnergyLawParams = GET_PROP_TYPE(TypeTag, SolidEnergyLawParams);
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
 
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!
@@ -528,7 +528,7 @@ private:
         fs.setPressure(gasPhaseIdx, fs.pressure(liquidPhaseIdx) + (pc[gasPhaseIdx] - pc[liquidPhaseIdx]));
 
         typename FluidSystem::template ParameterCache<Scalar> paramCache;
-        typedef Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem> CFRP;
+        using CFRP = Ewoms::ComputeFromReferencePhase<Scalar, FluidSystem>;
         CFRP::solve(fs, paramCache, liquidPhaseIdx, /*setViscosity=*/true,  /*setEnthalpy=*/true);
     }
 

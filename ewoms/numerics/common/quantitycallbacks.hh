@@ -46,15 +46,15 @@ namespace Ewoms {
 template <class TypeTag>
 class TemperatureCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
-    typedef decltype(std::declval<IQFluidState>().temperature(0)) ResultRawType;
+    using IQFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
+    using ResultRawType = decltype(std::declval<IQFluidState>().temperature(0));
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     TemperatureCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -82,15 +82,15 @@ private:
 template <class TypeTag>
 class PressureCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
-    typedef decltype(std::declval<IQFluidState>().pressure(0)) ResultRawType;
+    using IQFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
+    using ResultRawType = decltype(std::declval<IQFluidState>().pressure(0));
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     PressureCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -131,16 +131,16 @@ private:
 template <class TypeTag, class FluidState>
 class BoundaryPressureCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQRawFluidState;
-    typedef typename std::remove_const<typename std::remove_reference<IQRawFluidState>::type>::type IQFluidState;
-    typedef typename IQFluidState::Scalar IQScalar;
+    using IQRawFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
+    using IQFluidState = typename std::remove_const<typename std::remove_reference<IQRawFluidState>::type>::type;
+    using IQScalar = typename IQFluidState::Scalar;
 
 public:
-    typedef IQScalar ResultType;
+    using ResultType = IQScalar;
 
     BoundaryPressureCallback(const ElementContext& elemCtx, const FluidState& boundaryFs)
         : elemCtx_(elemCtx)
@@ -192,15 +192,15 @@ private:
 template <class TypeTag>
 class DensityCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
-    typedef decltype(std::declval<IQFluidState>().density(0)) ResultRawType;
+    using IQFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
+    using ResultRawType = decltype(std::declval<IQFluidState>().density(0));
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     DensityCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -241,14 +241,14 @@ private:
 template <class TypeTag>
 class MolarDensityCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
+    using IQFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
 
 public:
-    typedef decltype(std::declval<IQFluidState>().molarDensity(0)) ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = decltype(std::declval<IQFluidState>().molarDensity(0));
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     MolarDensityCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -289,15 +289,15 @@ private:
 template <class TypeTag>
 class ViscosityCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
-    typedef decltype(std::declval<IQFluidState>().viscosity(0)) ResultRawType;
+    using IQFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
+    using ResultRawType = decltype(std::declval<IQFluidState>().viscosity(0));
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     ViscosityCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -338,16 +338,16 @@ private:
 template <class TypeTag>
 class VelocityCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(IntensiveQuantities().velocityCenter()) ResultRawType;
+    using ResultRawType = decltype(IntensiveQuantities().velocityCenter());
 
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename ResultType::field_type ResultFieldType;
-    typedef typename Ewoms::MathToolbox<ResultFieldType>::ValueType ResultFieldValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultFieldType = typename ResultType::field_type;
+    using ResultFieldValueType = typename Ewoms::MathToolbox<ResultFieldType>::ValueType;
 
     VelocityCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -372,14 +372,14 @@ private:
 template <class TypeTag>
 class VelocityComponentCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(IntensiveQuantities().velocityCenter()[0]) ResultRawType;
+    using ResultRawType = decltype(IntensiveQuantities().velocityCenter()[0]);
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     VelocityComponentCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)
@@ -420,15 +420,15 @@ private:
 template <class TypeTag>
 class MoleFractionCallback
 {
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
-    typedef decltype(std::declval<IntensiveQuantities>().fluidState()) IQFluidState;
-    typedef decltype(std::declval<IQFluidState>().moleFraction(0, 0)) ResultRawType;
+    using IQFluidState = decltype(std::declval<IntensiveQuantities>().fluidState());
+    using ResultRawType = decltype(std::declval<IQFluidState>().moleFraction(0, 0));
 
 public:
-    typedef typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type ResultType;
-    typedef typename Ewoms::MathToolbox<ResultType>::ValueType ResultValueType;
+    using ResultType = typename std::remove_const<typename std::remove_reference<ResultRawType>::type>::type;
+    using ResultValueType = typename Ewoms::MathToolbox<ResultType>::ValueType;
 
     MoleFractionCallback(const ElementContext& elemCtx)
         : elemCtx_(elemCtx)

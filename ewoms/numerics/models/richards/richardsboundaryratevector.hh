@@ -43,16 +43,16 @@ namespace Ewoms {
 template <class TypeTag>
 class RichardsBoundaryRateVector : public GET_PROP_TYPE(TypeTag, RateVector)
 {
-    typedef GET_PROP_TYPE(TypeTag, RateVector) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, ExtensiveQuantities) ExtensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using ParentType = GET_PROP_TYPE(TypeTag, RateVector);
+    using ExtensiveQuantities = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { contiEqIdx = Indices::contiEqIdx };
     enum { liquidPhaseIdx = GET_PROP_VALUE(TypeTag, LiquidPhaseIndex) };
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     RichardsBoundaryRateVector() : ParentType()

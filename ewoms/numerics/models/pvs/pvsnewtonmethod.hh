@@ -41,14 +41,14 @@ namespace Ewoms {
 template <class TypeTag>
 class PvsNewtonMethod : public GET_PROP_TYPE(TypeTag, DiscNewtonMethod)
 {
-    typedef GET_PROP_TYPE(TypeTag, DiscNewtonMethod) ParentType;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using ParentType = GET_PROP_TYPE(TypeTag, DiscNewtonMethod);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     enum { numPhases = FluidSystem::numPhases };
 

@@ -58,15 +58,15 @@ template<class TypeTag>
 class DiscreteFractureProblem
     : public MultiPhaseBaseProblem<TypeTag>
 {
-    typedef Ewoms::MultiPhaseBaseProblem<TypeTag> ParentType;
+    using ParentType = Ewoms::MultiPhaseBaseProblem<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Problem) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using Implementation = GET_PROP_TYPE(TypeTag, Problem);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
     enum { dimWorld = GridView::dimensionworld };
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!

@@ -171,23 +171,23 @@ namespace Ewoms {
 template <class TypeTag>
 class NewtonMethod
 {
-    typedef GET_PROP_TYPE(TypeTag, NewtonMethod) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Problem) Problem;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
+    using Implementation = GET_PROP_TYPE(TypeTag, NewtonMethod);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Problem = GET_PROP_TYPE(TypeTag, Problem);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
 
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, GlobalEqVector) GlobalEqVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, Constraints) Constraints;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, Linearizer) Linearizer;
-    typedef GET_PROP_TYPE(TypeTag, LinearSolverBackend) LinearSolverBackend;
-    typedef GET_PROP_TYPE(TypeTag, NewtonConvergenceWriter) ConvergenceWriter;
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using GlobalEqVector = GET_PROP_TYPE(TypeTag, GlobalEqVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using Constraints = GET_PROP_TYPE(TypeTag, Constraints);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using Linearizer = GET_PROP_TYPE(TypeTag, Linearizer);
+    using LinearSolverBackend = GET_PROP_TYPE(TypeTag, LinearSolverBackend);
+    using ConvergenceWriter = GET_PROP_TYPE(TypeTag, NewtonConvergenceWriter);
 
-    typedef typename Dune::MPIHelper::MPICommunicator Communicator;
-    typedef Dune::CollectiveCommunication<Communicator> CollectiveCommunication;
+    using Communicator = typename Dune::MPIHelper::MPICommunicator;
+    using CollectiveCommunication = Dune::CollectiveCommunication<Communicator>;
 
 public:
     NewtonMethod(Simulator& simulator)

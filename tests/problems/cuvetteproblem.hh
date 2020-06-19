@@ -82,8 +82,8 @@ SET_SCALAR_PROP(CuvetteBaseProblem, MaxTimeStepSize, 600.);
 SET_PROP(CuvetteBaseProblem, MaterialLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     typedef Ewoms::ThreePhaseMaterialTraits<
         Scalar,
@@ -92,7 +92,7 @@ private:
         /*gasPhaseIdx=*/FluidSystem::gasPhaseIdx> Traits;
 
 public:
-    typedef Ewoms::ThreePhaseParkerVanGenuchten<Traits> type;
+    using type = Ewoms::ThreePhaseParkerVanGenuchten<Traits>;
 };
 
 // set the energy storage law for the solid phase
@@ -103,12 +103,12 @@ SET_TYPE_PROP(CuvetteBaseProblem, SolidEnergyLaw,
 SET_PROP(CuvetteBaseProblem, ThermalConductionLaw)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
 public:
     // define the material law parameterized by absolute saturations
-    typedef Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar> type;
+    using type = Ewoms::SomertonThermalConductionLaw<FluidSystem, Scalar>;
 };
 
 // The default for the end time of the simulation
@@ -153,24 +153,24 @@ namespace Ewoms {
 template <class TypeTag>
 class CuvetteProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
 {
-    typedef GET_PROP_TYPE(TypeTag, BaseProblem) ParentType;
+    using ParentType = GET_PROP_TYPE(TypeTag, BaseProblem);
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
-    typedef GET_PROP_TYPE(TypeTag, ThermalConductionLawParams) ThermalConductionLawParams;
-    typedef GET_PROP_TYPE(TypeTag, SolidEnergyLawParams) SolidEnergyLawParams;
-    typedef GET_PROP_TYPE(TypeTag, EqVector) EqVector;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, BoundaryRateVector) BoundaryRateVector;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, Model) Model;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
+    using ThermalConductionLawParams = GET_PROP_TYPE(TypeTag, ThermalConductionLawParams);
+    using SolidEnergyLawParams = GET_PROP_TYPE(TypeTag, SolidEnergyLawParams);
+    using EqVector = GET_PROP_TYPE(TypeTag, EqVector);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Model = GET_PROP_TYPE(TypeTag, Model);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
 
     // copy some indices for convenience
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum { numPhases = FluidSystem::numPhases };
     enum { numComponents = FluidSystem::numComponents };
     enum { waterPhaseIdx = FluidSystem::waterPhaseIdx };
@@ -184,9 +184,9 @@ class CuvetteProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     // Grid and world dimension
     enum { dimWorld = GridView::dimensionworld };
 
-    typedef typename GridView::ctype CoordScalar;
-    typedef Dune::FieldVector<CoordScalar, dimWorld> GlobalPosition;
-    typedef Dune::FieldMatrix<Scalar, dimWorld, dimWorld> DimMatrix;
+    using CoordScalar = typename GridView::ctype;
+    using GlobalPosition = Dune::FieldVector<CoordScalar, dimWorld>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
 
 public:
     /*!
@@ -521,7 +521,7 @@ private:
                 fs.setPressure(phaseIdx, pw + (pc[phaseIdx] - pc[waterPhaseIdx]));
 
             // compute the phase compositions
-            typedef Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem> MMPC;
+            using MMPC = Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem>;
             typename FluidSystem::template ParameterCache<Scalar> paramCache;
             MMPC::solve(fs, paramCache, /*setViscosity=*/true, /*setEnthalpy=*/true);
         }
@@ -538,7 +538,7 @@ private:
                 fs.setPressure(phaseIdx, pw + (pc[phaseIdx] - pc[waterPhaseIdx]));
 
             // compute the phase compositions
-            typedef Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem> MMPC;
+            using MMPC = Ewoms::MiscibleMultiPhaseComposition<Scalar, FluidSystem>;
             typename FluidSystem::template ParameterCache<Scalar> paramCache;
             MMPC::solve(fs, paramCache, /*setViscosity=*/true, /*setEnthalpy=*/true);
 

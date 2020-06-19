@@ -51,13 +51,13 @@ class BlackOilRateVector
     : public Dune::FieldVector<GET_PROP_TYPE(TypeTag, Evaluation),
                                GET_PROP_VALUE(TypeTag, NumEq)>
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
-    typedef BlackOilSolventModule<TypeTag> SolventModule;
-    typedef BlackOilPolymerModule<TypeTag> PolymerModule;
+    using SolventModule = BlackOilSolventModule<TypeTag>;
+    using PolymerModule = BlackOilPolymerModule<TypeTag>;
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
@@ -68,8 +68,8 @@ class BlackOilRateVector
     enum { enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
-    typedef Dune::FieldVector<Evaluation, numEq> ParentType;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using ParentType = Dune::FieldVector<Evaluation, numEq>;
 
 public:
     BlackOilRateVector() : ParentType()

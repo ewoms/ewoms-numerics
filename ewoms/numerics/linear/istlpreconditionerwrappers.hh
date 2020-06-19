@@ -65,10 +65,10 @@ namespace Linear {
     template <class TypeTag>                                                    \
     class PreconditionerWrapper##PREC_NAME                                      \
     {                                                                           \
-        typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;                 \
-        typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter; \
-        typedef typename SparseMatrixAdapter::IstlMatrix IstlMatrix;            \
-        typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector; \
+        using Scalar = GET_PROP_TYPE(TypeTag, Scalar);                 \
+        using SparseMatrixAdapter = GET_PROP_TYPE(TypeTag, SparseMatrixAdapter); \
+        using IstlMatrix = typename SparseMatrixAdapter::IstlMatrix;            \
+        using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector); \
                                                                                 \
     public:                                                                     \
         typedef ISTL_PREC_TYPE<IstlMatrix, OverlappingVector,                   \
@@ -109,9 +109,9 @@ namespace Linear {
     template <class TypeTag>                                                    \
     class PreconditionerWrapper##PREC_NAME                                      \
     {                                                                           \
-        typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;                 \
-        typedef GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix; \
-        typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector; \
+        using Scalar = GET_PROP_TYPE(TypeTag, Scalar);                 \
+        using OverlappingMatrix = GET_PROP_TYPE(TypeTag, OverlappingMatrix); \
+        using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector); \
                                                                                 \
     public:                                                                     \
         typedef ISTL_PREC_TYPE<OverlappingMatrix, OverlappingVector,            \
@@ -157,9 +157,9 @@ EWOMS_WRAP_ISTL_PRECONDITIONER(SSOR, Dune::SeqSSOR)
 template <class TypeTag>
 class PreconditionerWrapperILU
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, OverlappingMatrix) OverlappingMatrix;
-    typedef GET_PROP_TYPE(TypeTag, OverlappingVector) OverlappingVector;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using OverlappingMatrix = GET_PROP_TYPE(TypeTag, OverlappingMatrix);
+    using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector);
 
     static constexpr int order = GET_PROP_VALUE(TypeTag, PreconditionerOrder);
 

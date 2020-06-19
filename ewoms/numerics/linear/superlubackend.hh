@@ -64,10 +64,10 @@ class SuperLUSolve_;
 template <class TypeTag>
 class SuperLUBackend
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
-    typedef GET_PROP_TYPE(TypeTag, SparseMatrixAdapter) SparseMatrixAdapter;
-    typedef typename SparseMatrixAdapter::block_type Matrix;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using SparseMatrixAdapter = GET_PROP_TYPE(TypeTag, SparseMatrixAdapter);
+    using Matrix = typename SparseMatrixAdapter::block_type;
 
     static_assert(std::is_same<SparseMatrixAdapter, IstlSparseMatrixAdapter<MatrixBlock>::value,
                   "The SuperLU linear solver backend requires the IstlSparseMatrixAdapter");
@@ -153,10 +153,10 @@ public:
                        const Vector& b)
     {
         static const int numEq = GET_PROP_VALUE(TypeTag, NumEq);
-        typedef Dune::FieldVector<double, numEq> DoubleEqVector;
-        typedef Dune::FieldMatrix<double, numEq, numEq> DoubleEqMatrix;
-        typedef Dune::BlockVector<DoubleEqVector> DoubleVector;
-        typedef Dune::BCRSMatrix<DoubleEqMatrix> DoubleMatrix;
+        using DoubleEqVector = Dune::FieldVector<double, numEq>;
+        using DoubleEqMatrix = Dune::FieldMatrix<double, numEq, numEq>;
+        using DoubleVector = Dune::BlockVector<DoubleEqVector>;
+        using DoubleMatrix = Dune::BCRSMatrix<DoubleEqMatrix>;
 
         // copy the inputs into the double precision data structures
         DoubleVector bDouble(b);

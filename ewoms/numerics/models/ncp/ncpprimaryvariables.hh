@@ -53,26 +53,26 @@ namespace Ewoms {
 template <class TypeTag>
 class NcpPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 {
-    typedef FvBasePrimaryVariables<TypeTag> ParentType;
+    using ParentType = FvBasePrimaryVariables<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, FluidSystem) FluidSystem;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLaw) MaterialLaw;
-    typedef GET_PROP_TYPE(TypeTag, MaterialLawParams) MaterialLawParams;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
+    using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
+    using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
     enum { pressure0Idx = Indices::pressure0Idx };
     enum { saturation0Idx = Indices::saturation0Idx };
     enum { fugacity0Idx = Indices::fugacity0Idx };
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
-    typedef Dune::FieldVector<Scalar, numComponents> ComponentVector;
+    using ComponentVector = Dune::FieldVector<Scalar, numComponents>;
 
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
 
-    typedef Ewoms::NcpFlash<Scalar, FluidSystem> NcpFlash;
+    using NcpFlash = Ewoms::NcpFlash<Scalar, FluidSystem>;
 
 public:
     NcpPrimaryVariables() : ParentType()
@@ -99,7 +99,7 @@ public:
                                 const MaterialLawParams& matParams,
                                 bool isInEquilibrium = false)
     {
-        typedef Ewoms::MathToolbox<typename FluidState::Scalar> FsToolbox;
+        using FsToolbox = Ewoms::MathToolbox<typename FluidState::Scalar>;
 
 #ifndef NDEBUG
         // make sure the temperature is the same in all fluid phases
@@ -154,7 +154,7 @@ public:
     template <class FluidState>
     void assignNaive(const FluidState& fluidState, unsigned refPhaseIdx = 0)
     {
-        typedef Ewoms::MathToolbox<typename FluidState::Scalar> FsToolbox;
+        using FsToolbox = Ewoms::MathToolbox<typename FluidState::Scalar>;
 
         // assign the phase temperatures. this is out-sourced to
         // the energy module

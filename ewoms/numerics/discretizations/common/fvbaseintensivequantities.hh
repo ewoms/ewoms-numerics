@@ -44,9 +44,9 @@ namespace Ewoms {
 template <class TypeTag>
 class FvBaseIntensiveQuantities
 {
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
+    using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
 public:
     // default constructor

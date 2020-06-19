@@ -54,11 +54,11 @@ BEGIN_PROPERTIES
 SET_PROP(EcfvDiscretization, Stencil)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 
 public:
-    typedef Ewoms::EcfvStencil<Scalar, GridView> type;
+    using type = Ewoms::EcfvStencil<Scalar, GridView>;
 };
 
 //! Mapper for the degrees of freedoms.
@@ -81,15 +81,15 @@ SET_TYPE_PROP(EcfvDiscretization, GridCommHandleFactory,
 SET_PROP(EcfvDiscretization, DiscreteFunctionSpace)
 {
 private:
-    typedef GET_PROP_TYPE(TypeTag, Scalar)   Scalar;
-    typedef GET_PROP_TYPE(TypeTag, GridPart) GridPart;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar)  ;
+    using GridPart = GET_PROP_TYPE(TypeTag, GridPart);
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     typedef Dune::Fem::FunctionSpace<typename GridPart::GridType::ctype,
                                      Scalar,
                                      GridPart::GridType::dimensionworld,
                                      numEq> FunctionSpace;
 public:
-    typedef Dune::Fem::FiniteVolumeSpace< FunctionSpace, GridPart, 0 > type;
+    using type = Dune::Fem::FiniteVolumeSpace< FunctionSpace, GridPart, 0 >;
 };
 #endif
 
@@ -97,10 +97,10 @@ public:
 //! method
 SET_PROP(EcfvDiscretization, BorderListCreator)
 { private:
-    typedef GET_PROP_TYPE(TypeTag, ElementMapper) ElementMapper;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
+    using ElementMapper = GET_PROP_TYPE(TypeTag, ElementMapper);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
 public:
-    typedef Ewoms::Linear::ElementBorderListFromGrid<GridView, ElementMapper> type;
+    using type = Ewoms::Linear::ElementBorderListFromGrid<GridView, ElementMapper>;
 };
 
 //! For the element centered finite volume method, ghost and overlap elements must be
@@ -123,14 +123,14 @@ namespace Ewoms {
 template<class TypeTag>
 class EcfvDiscretization : public FvBaseDiscretization<TypeTag>
 {
-    typedef FvBaseDiscretization<TypeTag> ParentType;
+    using ParentType = FvBaseDiscretization<TypeTag>;
 
-    typedef GET_PROP_TYPE(TypeTag, Model) Implementation;
-    typedef GET_PROP_TYPE(TypeTag, DofMapper) DofMapper;
-    typedef GET_PROP_TYPE(TypeTag, PrimaryVariables) PrimaryVariables;
-    typedef GET_PROP_TYPE(TypeTag, SolutionVector) SolutionVector;
-    typedef GET_PROP_TYPE(TypeTag, GridView) GridView;
-    typedef GET_PROP_TYPE(TypeTag, Simulator) Simulator;
+    using Implementation = GET_PROP_TYPE(TypeTag, Model);
+    using DofMapper = GET_PROP_TYPE(TypeTag, DofMapper);
+    using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
+    using SolutionVector = GET_PROP_TYPE(TypeTag, SolutionVector);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
+    using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
 
 public:
     EcfvDiscretization(Simulator& simulator)

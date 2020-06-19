@@ -45,12 +45,12 @@ namespace Ewoms {
 template <class TypeTag>
 class NcpLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 {
-    typedef GET_PROP_TYPE(TypeTag, Scalar) Scalar;
-    typedef GET_PROP_TYPE(TypeTag, Evaluation) Evaluation;
-    typedef GET_PROP_TYPE(TypeTag, RateVector) RateVector;
-    typedef GET_PROP_TYPE(TypeTag, IntensiveQuantities) IntensiveQuantities;
-    typedef GET_PROP_TYPE(TypeTag, ElementContext) ElementContext;
-    typedef GET_PROP_TYPE(TypeTag, Indices) Indices;
+    using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
+    using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
+    using IntensiveQuantities = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
+    using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
+    using Indices = GET_PROP_TYPE(TypeTag, Indices);
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
@@ -59,12 +59,12 @@ class NcpLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
     enum { conti0EqIdx = Indices::conti0EqIdx };
 
     enum { enableDiffusion = GET_PROP_VALUE(TypeTag, EnableDiffusion) };
-    typedef Ewoms::DiffusionModule<TypeTag, enableDiffusion> DiffusionModule;
+    using DiffusionModule = Ewoms::DiffusionModule<TypeTag, enableDiffusion>;
 
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
-    typedef Ewoms::EnergyModule<TypeTag, enableEnergy> EnergyModule;
+    using EnergyModule = Ewoms::EnergyModule<TypeTag, enableEnergy>;
 
-    typedef Ewoms::MathToolbox<Evaluation> Toolbox;
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
 
 public:
     /*!
@@ -213,9 +213,9 @@ public:
                      unsigned phaseIdx) const
     {
         const auto& fluidState = elemCtx.intensiveQuantities(dofIdx, timeIdx).fluidState();
-        typedef typename std::remove_const<typename std::remove_reference<decltype(fluidState)>::type>::type FluidState;
+        using FluidState = typename std::remove_const<typename std::remove_reference<decltype(fluidState)>::type>::type;
 
-        typedef Ewoms::MathToolbox<LhsEval> LhsToolbox;
+        using LhsToolbox = Ewoms::MathToolbox<LhsEval>;
 
         const LhsEval& a = phaseNotPresentIneq_<FluidState, LhsEval>(fluidState, phaseIdx);
         const LhsEval& b = phasePresentIneq_<FluidState, LhsEval>(fluidState, phaseIdx);
@@ -230,7 +230,7 @@ private:
     template <class FluidState, class LhsEval>
     LhsEval phasePresentIneq_(const FluidState& fluidState, unsigned phaseIdx) const
     {
-        typedef Ewoms::MathToolbox<typename FluidState::Scalar> FsToolbox;
+        using FsToolbox = Ewoms::MathToolbox<typename FluidState::Scalar>;
 
         return FsToolbox::template decay<LhsEval>(fluidState.saturation(phaseIdx));
     }
@@ -242,7 +242,7 @@ private:
     template <class FluidState, class LhsEval>
     LhsEval phaseNotPresentIneq_(const FluidState& fluidState, unsigned phaseIdx) const
     {
-        typedef Ewoms::MathToolbox<typename FluidState::Scalar> FsToolbox;
+        using FsToolbox = Ewoms::MathToolbox<typename FluidState::Scalar>;
 
         // difference of sum of mole fractions in the phase from 100%
         LhsEval a = 1.0;
