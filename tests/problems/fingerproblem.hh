@@ -204,7 +204,7 @@ class FingerProblem : public GET_PROP_TYPE(TypeTag, BaseProblem)
     using RateVector = GET_PROP_TYPE(TypeTag, RateVector);
     using BoundaryRateVector = GET_PROP_TYPE(TypeTag, BoundaryRateVector);
 
-    using ParkerLenhard = GET_PROP(TypeTag, MaterialLaw)::ParkerLenhard;
+    using ParkerLenhard = typename GET_PROP(TypeTag, MaterialLaw)::ParkerLenhard;
     using MaterialLaw = GET_PROP_TYPE(TypeTag, MaterialLaw);
     using MaterialLawParams = GET_PROP_TYPE(TypeTag, MaterialLawParams);
 

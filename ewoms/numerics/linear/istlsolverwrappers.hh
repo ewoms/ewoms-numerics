@@ -73,10 +73,8 @@ namespace Linear {
     class SolverWrapper##SOLVER_NAME                                               \
     {                                                                              \
         using Scalar = GET_PROP_TYPE(TypeTag, Scalar);                    \
-        typedef GET_PROP_TYPE(TypeTag,                                    \
-                                       OverlappingMatrix) OverlappingMatrix;       \
-        typedef GET_PROP_TYPE(TypeTag,                                    \
-                                       OverlappingVector) OverlappingVector;       \
+        using OverlappingMatrix = GET_PROP_TYPE(TypeTag, OverlappingMatrix);       \
+        using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector);       \
                                                                                    \
     public:                                                                        \
         using RawSolver = ISTL_SOLVER_NAME<OverlappingVector>;                     \

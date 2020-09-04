@@ -71,8 +71,9 @@ namespace Linear {
         using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector); \
                                                                                 \
     public:                                                                     \
-        typedef ISTL_PREC_TYPE<IstlMatrix, OverlappingVector,                   \
-                               OverlappingVector> SequentialPreconditioner;     \
+        using SequentialPreconditioner = ISTL_PREC_TYPE<IstlMatrix,             \
+                                                        OverlappingVector,      \
+                                                        OverlappingVector>;     \
         PreconditionerWrapper##PREC_NAME()                                      \
         {}                                                                      \
                                                                                 \
@@ -114,8 +115,9 @@ namespace Linear {
         using OverlappingVector = GET_PROP_TYPE(TypeTag, OverlappingVector); \
                                                                                 \
     public:                                                                     \
-        typedef ISTL_PREC_TYPE<OverlappingMatrix, OverlappingVector,            \
-                               OverlappingVector> SequentialPreconditioner;     \
+        using SequentialPreconditioner = ISTL_PREC_TYPE<OverlappingMatrix,      \
+                                                        OverlappingVector,      \
+                                                        OverlappingVector>;     \
         PreconditionerWrapper##PREC_NAME()                                      \
         {}                                                                      \
                                                                                 \
