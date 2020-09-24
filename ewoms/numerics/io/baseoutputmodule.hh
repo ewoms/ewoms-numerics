@@ -32,8 +32,6 @@
 #include <ewoms/common/parametersystem.hh>
 #include <ewoms/common/propertysystem.hh>
 
-#include <ewoms/common/exceptions.hh>
-
 #include <dune/istl/bvector.hh>
 #include <dune/common/fvector.hh>
 

@@ -46,7 +46,6 @@
 
 #include <ewoms/common/valgrind.hh>
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
 
 #include <dune/common/fvector.hh>
 

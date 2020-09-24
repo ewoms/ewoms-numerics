@@ -30,7 +30,6 @@
 #include "overlaptypes.hh"
 
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
 
 #include <dune/grid/common/datahandleif.hh>
 #include <dune/grid/common/gridenums.hh>

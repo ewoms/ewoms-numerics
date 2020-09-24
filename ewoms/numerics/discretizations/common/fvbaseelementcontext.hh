@@ -33,7 +33,6 @@
 #include <ewoms/common/alignedallocator.hh>
 
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
 
 #include <dune/common/fvector.hh>
 

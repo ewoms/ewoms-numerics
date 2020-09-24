@@ -33,8 +33,6 @@
 #include <dune/common/fvector.hh>
 #include <dune/common/version.hh>
 
-#include <ewoms/common/exceptions.hh>
-
 #include <string>
 #include <limits>
 #include <vector>

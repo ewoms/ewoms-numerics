@@ -53,7 +53,6 @@
 
 #include <ewoms/material/fluidsystems/blackoilfluidsystem.hh>
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
 
 #include <sstream>
 #include <string>

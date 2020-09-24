@@ -35,7 +35,6 @@
 
 #include <ewoms/common/valgrind.hh>
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
 
 #include <dune/istl/bvector.hh>
 #include <dune/grid/common/geometry.hh>

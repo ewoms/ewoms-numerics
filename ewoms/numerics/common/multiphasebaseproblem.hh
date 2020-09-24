@@ -36,7 +36,6 @@
 #include <ewoms/material/fluidmatrixinteractions/nullmaterial.hh>
 #include <ewoms/common/means.hh>
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
 
 #include <dune/common/fvector.hh>
 #include <dune/common/fmatrix.hh>

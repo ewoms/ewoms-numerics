@@ -35,8 +35,6 @@
 #include <ewoms/numerics/discretizations/common/restrictprolong.hh>
 
 #include <ewoms/common/unused.hh>
-#include <ewoms/common/exceptions.hh>
-
 #include <dune/common/fvector.hh>
 
 #include <iostream>
