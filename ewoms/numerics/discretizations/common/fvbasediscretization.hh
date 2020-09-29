@@ -716,6 +716,44 @@ public:
     }
 
     /*!
+     * \brief Update all cached intensive quantities from scratch.
+     *
+     * If the intensive quantities are not cached, this is a no-op. Note that if only
+     * some of the domain's primary variables primary variables changed, it is more
+     * performant to only update these instead of the intensive quantities for the whole
+     * domain.
+     */
+    void updateIntensiveQuantitiesCache(unsigned timeIdx) const
+    {
+        if (!storeIntensiveQuantities())
+            return;
+
+        // loop over all elements...
+        ThreadedEntityIterator<GridView, /*codim=*/0> threadedElemIt(gridView_);
+
+        auto updateIqLambda =
+            [this, timeIdx, &threadedElemIt] () -> void
+        {
+            ElementContext elemCtx(simulator_);
+            ElementIterator elemIt = threadedElemIt.beginParallel();
+            for (; !threadedElemIt.isFinished(elemIt); elemIt = threadedElemIt.increment()) {
+                const Element& elem = *elemIt;
+                elemCtx.updatePrimaryStencil(elem);
+
+                for (unsigned dofIdx = 0; dofIdx < elemCtx.numPrimaryDof(timeIdx); ++dofIdx)
+                    this->intensiveQuantityCacheUpToDate_[timeIdx][elemCtx.globalSpaceIndex(dofIdx, timeIdx)] = false;
+
+                elemCtx.updatePrimaryIntensiveQuantities(/*timeIdx=*/0);
+            }
+        };
+
+        auto& taskletRunner = simulator_.taskletRunner();
+        int numThreads = std::max(taskletRunner.numWorkerThreads(), 1);
+        taskletRunner.dispatchFunction(updateIqLambda, /*numInvokations=*/numThreads);
+        taskletRunner.barrier();
+    }
+
+    /*!
      * \brief Move the intensive quantities for a given time index to the back.
      *
      * This method should only be called by the time discretization.
