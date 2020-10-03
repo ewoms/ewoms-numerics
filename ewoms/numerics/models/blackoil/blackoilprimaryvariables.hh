@@ -166,6 +166,34 @@ public:
     { primaryVarsMeaning_ = newMeaning; }
 
     /*!
+     * \brief Returns true iff gas phase is pysically present.
+     */
+    bool gasPhaseIsPresent() const
+    { return Indices::gasEnabled && primaryVarsMeaning_ == Sw_po_Sg && (*this)[compositionSwitchIdx] > 0.0; }
+
+    /*!
+     * \brief Returns true iff water phase is pysically present.
+     */
+    bool waterPhaseIsPresent() const
+    { return Indices::waterEnabled && (*this)[waterSaturationIdx] > 0.0; }
+
+    /*!
+     * \brief Returns true iff oil phase is pysically present.
+     */
+    bool oilPhaseIsPresent() const
+    {
+        if (!Indices::oilEnabled)
+            return false;
+
+        Scalar Sg =
+            (Indices::gasEnabled && primaryVarsMeaning_ == Sw_po_Sg)
+            ? (*this)[compositionSwitchIdx]
+            : 0.0;
+
+        return 1.0 - (*this)[waterSaturationIdx] - Sg > 0.0;
+    }
+
+    /*!
      * \copydoc ImmisciblePrimaryVariables::assignMassConservative
      */
     template <class FluidState>
