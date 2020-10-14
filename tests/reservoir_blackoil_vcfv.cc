@@ -32,6 +32,11 @@
 #include <ewoms/numerics/discretizations/vcfv/vcfvdiscretization.hh>
 #include "problems/reservoirproblem.hh"
 
+namespace Ewoms {
+namespace CO2DefaultTables {
+#include <ewoms/material/components/co2tables.inc.cc>
+}}
+
 BEGIN_PROPERTIES
 
 NEW_TYPE_TAG(ReservoirBlackOilVcfvProblem, INHERITS_FROM(BlackOilModel, ReservoirBaseProblem));

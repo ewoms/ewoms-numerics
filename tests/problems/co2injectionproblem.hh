@@ -63,7 +63,7 @@ template <class TypeTag>
 class Co2InjectionProblem;
 
 namespace Co2Injection {
-#include <ewoms/material/components/co2tables.inc>
+#include <ewoms/material/components/co2tables.inc.hh>
 }
 //! \endcond
 }

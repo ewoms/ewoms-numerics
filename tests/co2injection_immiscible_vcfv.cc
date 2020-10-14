@@ -34,6 +34,11 @@
 
 #include "problems/co2injectionproblem.hh"
 
+namespace Ewoms {
+namespace Co2Injection {
+#include <ewoms/material/components/co2tables.inc.cc>
+}}
+
 BEGIN_PROPERTIES
 
 NEW_TYPE_TAG(Co2InjectionImmiscibleVcfvProblem, INHERITS_FROM(ImmiscibleModel,

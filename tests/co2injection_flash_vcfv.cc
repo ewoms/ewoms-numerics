@@ -38,6 +38,11 @@
 #include "problems/co2injectionflash.hh"
 #include "problems/co2injectionproblem.hh"
 
+namespace Ewoms {
+namespace Co2Injection {
+#include <ewoms/material/components/co2tables.inc.cc>
+}}
+
 BEGIN_PROPERTIES
 
 NEW_TYPE_TAG(Co2InjectionFlashVcfvProblem, INHERITS_FROM(FlashModel, Co2InjectionBaseProblem));
