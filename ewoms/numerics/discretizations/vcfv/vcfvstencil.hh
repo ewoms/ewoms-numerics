@@ -1021,6 +1021,15 @@ public:
 
     void updateScvGeometry(const Element& element)
     {
+// tell the compilers to not complain about array bounds for the individual element types
+// (everything which is accessed at runtime is properly initialized, there is just no way
+// for a compiler that does not pass the Turing test to verify this at compile time...)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#pragma GCC diagnostic ignored "-Warray-bounds"
+
         auto geomType = element.geometry().type();
 
         // get the local geometries of the sub control volumes
@@ -1040,6 +1049,8 @@ public:
         }
         else
             throw std::logic_error("Not implemented: SCV geometries for non hexahedron elements");
+
+#pragma GCC diagnostic pop
     }
 
 #if HAVE_DUNE_LOCALFUNCTIONS
