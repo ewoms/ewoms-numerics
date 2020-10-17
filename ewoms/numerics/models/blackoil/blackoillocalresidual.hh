@@ -93,6 +93,11 @@ public:
                         unsigned dofIdx,
                         unsigned timeIdx) const
     {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic ignored "-Wunknown-warning-option"
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#pragma GCC diagnostic ignored "-Warray-bounds"
         // retrieve the intensive quantities for the SCV at the specified point in time
         const IntensiveQuantities& intQuants = elemCtx.intensiveQuantities(dofIdx, timeIdx);
         const auto& fs = intQuants.fluidState();
@@ -152,6 +157,7 @@ public:
 
         // deal with salt (if present)
         BrineModule::addStorage(storage, intQuants);
+#pragma GCC diagnostic pop
     }
 
     /*!

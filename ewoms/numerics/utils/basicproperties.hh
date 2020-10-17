@@ -151,7 +151,7 @@ SET_PROP(NumericModel, GridPart)
     using type = Dune::Fem::AdaptiveLeafGridPart<Grid>;
 };
 
-SET_TYPE_PROP(NumericModel, GridView, GET_PROP_TYPE(TypeTag, GridPart)::GridViewType);
+SET_TYPE_PROP(NumericModel, GridView, typename GET_PROP_TYPE(TypeTag, GridPart)::GridViewType);
 #else
 //! Use the leaf grid view by default.
 //!
