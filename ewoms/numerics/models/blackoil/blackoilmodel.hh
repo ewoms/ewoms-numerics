@@ -41,6 +41,7 @@
 #include "blackoilpolymermodules.hh"
 #include "blackoilfoammodules.hh"
 #include "blackoilbrinemodules.hh"
+#include "blackoilextbomodules.hh"
 #include "blackoildarcyfluxmodule.hh"
 
 #include <ewoms/numerics/common/multiphasebasemodel.hh>
@@ -104,19 +105,23 @@ SET_TYPE_PROP(BlackOilModel, ExtensiveQuantities, Ewoms::BlackOilExtensiveQuanti
 SET_TYPE_PROP(BlackOilModel, FluxModule, Ewoms::BlackOilDarcyFluxModule<TypeTag>);
 
 //! The indices required by the model
-SET_TYPE_PROP(BlackOilModel, Indices,
-              Ewoms::BlackOilIndices<GET_PROP_VALUE(TypeTag, EnableSolvent),
-                                   GET_PROP_VALUE(TypeTag, EnablePolymer),
-                                   GET_PROP_VALUE(TypeTag, EnableEnergy),
-                                   GET_PROP_VALUE(TypeTag, EnableFoam),
-                                   GET_PROP_VALUE(TypeTag, EnableBrine),
-                                   /*PVOffset=*/0>);
+SET_PROP(BlackOilModel, Indices)
+{
+    using type = Ewoms::BlackOilIndices<GET_PROP_VALUE(TypeTag, EnableSolvent),
+                                        GET_PROP_VALUE(TypeTag, EnableExtbo),
+                                        GET_PROP_VALUE(TypeTag, EnablePolymer),
+                                        GET_PROP_VALUE(TypeTag, EnableEnergy),
+                                        GET_PROP_VALUE(TypeTag, EnableFoam),
+                                        GET_PROP_VALUE(TypeTag, EnableBrine),
+                                        /*PVOffset=*/0>;
+};
 
 //! Set the fluid system to the black-oil fluid system by default
 SET_PROP(BlackOilModel, FluidSystem)
 {
 private:
     using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
+    using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
 
 public:
     using type = Ewoms::BlackOilFluidSystem<Scalar>;
@@ -124,6 +129,7 @@ public:
 
 // by default, all ECL extension modules are disabled
 SET_BOOL_PROP(BlackOilModel, EnableSolvent, false);
+SET_BOOL_PROP(BlackOilModel, EnableExtbo, false);
 SET_BOOL_PROP(BlackOilModel, EnablePolymer, false);
 SET_BOOL_PROP(BlackOilModel, EnablePolymerMW, false);
 SET_BOOL_PROP(BlackOilModel, EnableFoam, false);
@@ -234,20 +240,19 @@ class BlackOilModel
     using Indices = GET_PROP_TYPE(TypeTag, Indices);
     using FluidSystem = GET_PROP_TYPE(TypeTag, FluidSystem);
     using Simulator = GET_PROP_TYPE(TypeTag, Simulator);
+    using Discretization = GET_PROP_TYPE(TypeTag, Discretization);
     using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
     using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
 
+    enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     enum { numComponents = FluidSystem::numComponents };
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
 
     static const bool compositionSwitchEnabled = Indices::gasEnabled;
     static const bool waterEnabled = Indices::waterEnabled;
-    static const bool gasEnabled = Indices::gasEnabled;
-
-    static const int waterPhaseIdx = FluidSystem::waterPhaseIdx;
-    static const int gasPhaseIdx = FluidSystem::gasPhaseIdx;
 
     using SolventModule = BlackOilSolventModule<TypeTag>;
+    using ExtboModule = BlackOilExtboModule<TypeTag>;
     using PolymerModule = BlackOilPolymerModule<TypeTag>;
     using EnergyModule = BlackOilEnergyModule<TypeTag>;
 public:
@@ -263,6 +268,7 @@ public:
         ParentType::registerParameters();
 
         SolventModule::registerParameters();
+        ExtboModule::registerParameters();
         PolymerModule::registerParameters();
         EnergyModule::registerParameters();
 
@@ -292,6 +298,8 @@ public:
             oss << "composition_switching";
         else if (SolventModule::primaryVarApplies(pvIdx))
             return SolventModule::primaryVarName(pvIdx);
+        else if (ExtboModule::primaryVarApplies(pvIdx))
+            return ExtboModule::primaryVarName(pvIdx);
         else if (PolymerModule::primaryVarApplies(pvIdx))
             return PolymerModule::primaryVarName(pvIdx);
         else if (EnergyModule::primaryVarApplies(pvIdx))
@@ -313,6 +321,8 @@ public:
             oss << "conti_" << FluidSystem::phaseName(eqIdx - Indices::conti0EqIdx);
         else if (SolventModule::eqApplies(eqIdx))
             return SolventModule::eqName(eqIdx);
+        else if (ExtboModule::eqApplies(eqIdx))
+            return ExtboModule::eqName(eqIdx);
         else if (PolymerModule::eqApplies(eqIdx))
             return PolymerModule::eqName(eqIdx);
         else if (EnergyModule::eqApplies(eqIdx))
@@ -345,6 +355,10 @@ public:
         // deal with primary variables stemming from the solvent module
         else if (SolventModule::primaryVarApplies(pvIdx))
             return SolventModule::primaryVarWeight(pvIdx);
+
+        // deal with primary variables stemming from the extBO module
+        else if (ExtboModule::primaryVarApplies(pvIdx))
+            return ExtboModule::primaryVarWeight(pvIdx);
 
         // deal with primary variables stemming from the polymer module
         else if (PolymerModule::primaryVarApplies(pvIdx))
@@ -400,6 +414,9 @@ public:
         if (SolventModule::eqApplies(eqIdx))
             return SolventModule::eqWeight(eqIdx);
 
+        if (ExtboModule::eqApplies(eqIdx))
+            return ExtboModule::eqWeight(eqIdx);
+
         else if (PolymerModule::eqApplies(eqIdx))
             return PolymerModule::eqWeight(eqIdx);
 
@@ -441,6 +458,7 @@ public:
         outstream << priVars.pvtRegionIndex() << " ";
 
         SolventModule::serializeEntity(*this, outstream, dof);
+        ExtboModule::serializeEntity(*this, outstream, dof);
         PolymerModule::serializeEntity(*this, outstream, dof);
         EnergyModule::serializeEntity(*this, outstream, dof);
     }
@@ -478,6 +496,7 @@ public:
             throw std::runtime_error("Could not deserialize degree of freedom "+std::to_string(dofIdx));
 
         SolventModule::deserializeEntity(*this, instream, dof);
+        ExtboModule::deserializeEntity(*this, instream, dof);
         PolymerModule::deserializeEntity(*this, instream, dof);
         EnergyModule::deserializeEntity(*this, instream, dof);
 

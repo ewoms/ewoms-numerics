@@ -35,7 +35,7 @@ namespace Ewoms {
  *
  * \brief The primary variable and equation indices for the black-oil model.
  */
-template <unsigned numSolventsV, unsigned numPolymersV, unsigned numEnergyV, bool enableFoam, bool enableBrine, unsigned PVOffset, unsigned canonicalCompIdx>
+template <unsigned numSolventsV, unsigned numExtbosV, unsigned numPolymersV, unsigned numEnergyV, bool enableFoam, bool enableBrine, unsigned PVOffset, unsigned canonicalCompIdx>
 struct BlackOilOnePhaseIndices
 {
     //! Is phase enabled or not
@@ -46,6 +46,9 @@ struct BlackOilOnePhaseIndices
     //! Are solvents involved?
     static const bool enableSolvent = numSolventsV > 0;
 
+    //! Is extbo invoked?
+    static const bool enableExtbo = numExtbosV > 0;
+
     //! Are polymers involved?
     static const bool enablePolymer = numPolymersV > 0;
 
@@ -54,6 +57,9 @@ struct BlackOilOnePhaseIndices
 
     //! Number of solvent components to be considered
     static const int numSolvents = enableSolvent ? numSolventsV : 0;
+
+    //! Number of components to be considered for extbo
+    static const int numExtbos = enableExtbo ? numExtbosV : 0;
 
     //! Number of polymer components to be considered
     static const int numPolymers = enablePolymer ? numPolymersV : 0;
@@ -71,7 +77,7 @@ struct BlackOilOnePhaseIndices
     static const int numPhases = 1;
 
     //! The number of equations
-    static const int numEq = numPhases + numSolvents + numPolymers + numEnergy + numFoam + numBrine;
+    static const int numEq = numPhases + numSolvents + numExtbos + numPolymers + numEnergy + numFoam + numBrine;
 
     //////////////////////////////
     // Primary variable indices
@@ -95,6 +101,10 @@ struct BlackOilOnePhaseIndices
     static const int solventSaturationIdx =
         enableSolvent ? PVOffset + numPhases : -1000;
 
+    //! Index of the primary variable for the first extbo component
+    static const int zFractionIdx =
+        enableExtbo ? PVOffset + numPhases + numSolvents : -1000;
+
     //! Index of the primary variable for the first polymer
     static const int polymerConcentrationIdx =
         enablePolymer ? PVOffset + numPhases + numSolvents : -1000;
@@ -109,11 +119,11 @@ struct BlackOilOnePhaseIndices
 
     //! Index of the primary variable for the salt
     static const int saltConcentrationIdx =
-        enableBrine ? PVOffset + numPhases + numSolvents + numPolymers + numFoam : -1000;
+        enableBrine ? PVOffset + numPhases + numSolvents + numExtbos + numPolymers + numFoam : -1000;
 
     //! Index of the primary variable for temperature
     static const int temperatureIdx  =
-        enableEnergy ? PVOffset + numPhases + numSolvents + numPolymers + numFoam + numBrine: - 1000;
+        enableEnergy ? PVOffset + numPhases + numSolvents + numExtbos + numPolymers + numFoam + numBrine: - 1000;
 
     //////////////////////
     // Equation indices
@@ -146,6 +156,10 @@ struct BlackOilOnePhaseIndices
     static const int contiSolventEqIdx =
         enableSolvent ? PVOffset + numPhases : -1000;
 
+    //! Index of the continuity equation for the first extbo component
+    static const int contiZfracEqIdx =
+        enableExtbo ? PVOffset + numPhases + numSolvents : -1000;
+
     //! Index of the continuity equation for the first polymer component
     static const int contiPolymerEqIdx =
         enablePolymer ? PVOffset + numPhases + numSolvents : -1000;
@@ -160,11 +174,11 @@ struct BlackOilOnePhaseIndices
 
     //! Index of the continuity equation for the salt component
     static const int contiBrineEqIdx =
-        enableBrine ? PVOffset + numPhases + numSolvents + numPolymers + numFoam : -1000;
+        enableBrine ? PVOffset + numPhases + numSolvents + numExtbos + numPolymers + numFoam : -1000;
 
     //! Index of the continuity equation for energy
     static const int contiEnergyEqIdx =
-        enableEnergy ? PVOffset + numPhases + numSolvents + numPolymers + numFoam + numBrine: -1000;
+        enableEnergy ? PVOffset + numPhases + numSolvents + numExtbos + numPolymers + numFoam + numBrine: -1000;
 };
 
 } // namespace Ewoms

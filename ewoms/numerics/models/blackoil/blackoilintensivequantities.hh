@@ -26,6 +26,7 @@
 
 #include "blackoilproperties.hh"
 #include "blackoilsolventmodules.hh"
+#include "blackoilextbomodules.hh"
 #include "blackoilpolymermodules.hh"
 #include "blackoilfoammodules.hh"
 #include "blackoilbrinemodules.hh"
@@ -51,6 +52,7 @@ class BlackOilIntensiveQuantities
     : public GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities)
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxIntensiveQuantities
     , public BlackOilSolventIntensiveQuantities<TypeTag>
+    , public BlackOilExtboIntensiveQuantities<TypeTag>
     , public BlackOilPolymerIntensiveQuantities<TypeTag>
     , public BlackOilFoamIntensiveQuantities<TypeTag>
     , public BlackOilBrineIntensiveQuantities<TypeTag>
@@ -66,21 +68,33 @@ class BlackOilIntensiveQuantities
     using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
     using PrimaryVariables = GET_PROP_TYPE(TypeTag, PrimaryVariables);
     using Indices = GET_PROP_TYPE(TypeTag, Indices);
+    using GridView = GET_PROP_TYPE(TypeTag, GridView);
     using FluxModule = GET_PROP_TYPE(TypeTag, FluxModule);
 
+    enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { enableSolvent = GET_PROP_VALUE(TypeTag, EnableSolvent) };
+    enum { enableExtbo = GET_PROP_VALUE(TypeTag, EnableExtbo) };
+    enum { enablePolymer = GET_PROP_VALUE(TypeTag, EnablePolymer) };
+    enum { enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
     enum { enableTemperature = GET_PROP_VALUE(TypeTag, EnableTemperature) };
     enum { enableEnergy = GET_PROP_VALUE(TypeTag, EnableEnergy) };
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
+    enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
+    enum { waterCompIdx = FluidSystem::waterCompIdx };
+    enum { oilCompIdx = FluidSystem::oilCompIdx };
+    enum { gasCompIdx = FluidSystem::gasCompIdx };
     enum { waterPhaseIdx = FluidSystem::waterPhaseIdx };
     enum { oilPhaseIdx = FluidSystem::oilPhaseIdx };
     enum { gasPhaseIdx = FluidSystem::gasPhaseIdx };
+    enum { dimWorld = GridView::dimensionworld };
     enum { compositionSwitchIdx = Indices::compositionSwitchIdx };
 
     static const bool compositionSwitchEnabled = Indices::gasEnabled;
     static const bool waterEnabled = Indices::waterEnabled;
 
+    using Toolbox = Ewoms::MathToolbox<Evaluation>;
+    using DimMatrix = Dune::FieldMatrix<Scalar, dimWorld, dimWorld>;
     using FluxIntensiveQuantities = typename FluxModule::FluxIntensiveQuantities;
     using FluidState = Ewoms::BlackOilFluidState<Evaluation, FluidSystem, enableTemperature, enableEnergy, compositionSwitchEnabled,  enableBrine, Indices::numPhases >;
 
@@ -195,6 +209,9 @@ public:
         // update the Saturation functions for the blackoil solvent module.
         asImp_().solventPostSatFuncUpdate_(elemCtx, dofIdx, timeIdx);
 
+        // update extBO parameters
+        asImp_().zFractionUpdate_(elemCtx, dofIdx, timeIdx);
+
         Evaluation SoMax = 0.0;
         if (FluidSystem::phaseIsActive(FluidSystem::oilPhaseIdx)) {
             SoMax = Ewoms::max(fluidState_.saturation(oilPhaseIdx),
@@ -208,7 +225,7 @@ public:
             // we use the compositions of the gas-saturated oil and oil-saturated gas.
             if (FluidSystem::enableDissolvedGas()) {
                 Scalar RsMax = elemCtx.problem().maxGasDissolutionFactor(timeIdx, globalSpaceIdx);
-                const Evaluation& RsSat =
+                const Evaluation& RsSat = enableExtbo ? asImp_().rs() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             oilPhaseIdx,
                                                             pvtRegionIdx,
@@ -220,7 +237,7 @@ public:
 
             if (FluidSystem::enableVaporizedOil()) {
                 Scalar RvMax = elemCtx.problem().maxOilVaporizationFactor(timeIdx, globalSpaceIdx);
-                const Evaluation& RvSat =
+                const Evaluation& RvSat = enableExtbo ? asImp_().rv() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             gasPhaseIdx,
                                                             pvtRegionIdx,
@@ -242,7 +259,7 @@ public:
                 // the gas phase is not present, but we need to compute its "composition"
                 // for the gravity correction anyway
                 Scalar RvMax = elemCtx.problem().maxOilVaporizationFactor(timeIdx, globalSpaceIdx);
-                const auto& RvSat =
+                const auto& RvSat = enableExtbo ? asImp_().rv() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             gasPhaseIdx,
                                                             pvtRegionIdx,
@@ -261,7 +278,7 @@ public:
                 // the oil phase is not present, but we need to compute its "composition" for
                 // the gravity correction anyway
                 Scalar RsMax = elemCtx.problem().maxGasDissolutionFactor(timeIdx, globalSpaceIdx);
-                const auto& RsSat =
+                const auto& RsSat = enableExtbo ? asImp_().rs() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             oilPhaseIdx,
                                                             pvtRegionIdx,
@@ -291,7 +308,12 @@ public:
             fluidState_.setInvB(phaseIdx, b);
 
             const auto& mu = FluidSystem::viscosity(fluidState_, paramCache, phaseIdx);
-            mobility_[phaseIdx] /= mu;
+            if (enableExtbo && phaseIdx == oilPhaseIdx)
+              mobility_[phaseIdx] /= asImp_().oilViscosity();
+            else if (enableExtbo && phaseIdx == gasPhaseIdx)
+              mobility_[phaseIdx] /= asImp_().gasViscosity();
+            else
+              mobility_[phaseIdx] /= mu;
         }
         Ewoms::Valgrind::CheckDefined(mobility_);
 
@@ -351,6 +373,7 @@ public:
         porosity_ *= problem.template rockCompPoroMultiplier<Evaluation>(*this, globalSpaceIdx);
 
         asImp_().solventPvtUpdate_(elemCtx, dofIdx, timeIdx);
+        asImp_().zPvtUpdate_();
         asImp_().polymerPropertiesUpdate_(elemCtx, dofIdx, timeIdx);
         asImp_().updateEnergyQuantities_(elemCtx, dofIdx, timeIdx, paramCache);
         asImp_().foamPropertiesUpdate_(elemCtx, dofIdx, timeIdx);
@@ -431,6 +454,7 @@ public:
 
 private:
     friend BlackOilSolventIntensiveQuantities<TypeTag>;
+    friend BlackOilExtboIntensiveQuantities<TypeTag>;
     friend BlackOilPolymerIntensiveQuantities<TypeTag>;
     friend BlackOilEnergyIntensiveQuantities<TypeTag>;
     friend BlackOilFoamIntensiveQuantities<TypeTag>;

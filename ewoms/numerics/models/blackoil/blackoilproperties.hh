@@ -32,16 +32,10 @@ BEGIN_PROPERTIES
 //! Specifies if the simulation should write output files that are
 //! compatible with those produced by the commercial Eclipse simulator
 NEW_PROP_TAG(EnableEclipseOutput);
-//! The material law for thermal conduction
-NEW_PROP_TAG(ThermalConductionLaw);
-//! The parameters of the material law for thermal conduction
-NEW_PROP_TAG(ThermalConductionLawParams);
-//! The material law for energy storage of the rock
-NEW_PROP_TAG(SolidEnergyLaw);
-//! The parameters for material law for energy storage of the rock
-NEW_PROP_TAG(SolidEnergyLawParams);
 //! Enable the ECL-blackoil extension for solvents. ("Second gas")
 NEW_PROP_TAG(EnableSolvent);
+//! Enable the ECL-blackoil extension for extended BO. ("Second gas" - alternative approach)
+NEW_PROP_TAG(EnableExtbo);
 //! Enable the ECL-blackoil extension for polymer.
 NEW_PROP_TAG(EnablePolymer);
 //! Enable the tracking polymer molecular weight tracking and related functionalities

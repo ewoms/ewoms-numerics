@@ -26,6 +26,7 @@
 
 #include "blackoilproperties.hh"
 #include "blackoilsolventmodules.hh"
+#include "blackoilextbomodules.hh"
 #include "blackoilpolymermodules.hh"
 #include "blackoilenergymodules.hh"
 #include "blackoilfoammodules.hh"
@@ -74,6 +75,7 @@ class BlackOilLocalResidual : public GET_PROP_TYPE(TypeTag, DiscLocalResidual)
 
     using Toolbox = Ewoms::MathToolbox<Evaluation>;
     using SolventModule = BlackOilSolventModule<TypeTag>;
+    using ExtboModule = BlackOilExtboModule<TypeTag>;
     using PolymerModule = BlackOilPolymerModule<TypeTag>;
     using EnergyModule = BlackOilEnergyModule<TypeTag>;
     using FoamModule = BlackOilFoamModule<TypeTag>;
@@ -142,6 +144,9 @@ public:
         // deal with solvents (if present)
         SolventModule::addStorage(storage, intQuants);
 
+        // deal with zFracton (if present)
+        ExtboModule::addStorage(storage, intQuants);
+
         // deal with polymer (if present)
         PolymerModule::addStorage(storage, intQuants);
 
@@ -185,6 +190,9 @@ public:
 
         // deal with solvents (if present)
         SolventModule::computeFlux(flux, elemCtx, scvfIdx, timeIdx);
+
+        // deal with zFracton (if present)
+        ExtboModule::computeFlux(flux, elemCtx, scvfIdx, timeIdx);
 
         // deal with polymer (if present)
         PolymerModule::computeFlux(flux, elemCtx, scvfIdx, timeIdx);
