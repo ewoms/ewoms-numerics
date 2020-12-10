@@ -33,7 +33,7 @@ namespace Ewoms {
  *
  * \brief The primary variable and equation indices for the black-oil model.
  */
-template <unsigned numSolventsV, unsigned numExtbosV, unsigned numPolymersV, unsigned numEnergyV, bool enableFoam, bool enableBrine, unsigned PVOffset, unsigned disabledCanonicalCompIdx>
+template <unsigned numSolventsV, unsigned numSsaSolventsV, unsigned numPolymersV, unsigned numEnergyV, bool enableFoam, bool enableBrine, unsigned PVOffset, unsigned disabledCanonicalCompIdx>
 struct BlackOilTwoPhaseIndices
 {
     //! Is phase enabled or not
@@ -44,8 +44,8 @@ struct BlackOilTwoPhaseIndices
     //! Are solvents involved?
     static const bool enableSolvent = numSolventsV > 0;
 
-    //! Is extbo invoked?
-    static const bool enableExtbo = numExtbosV > 0;
+    //! Are SSA solvents invoked?
+    static const bool enableSsaSolvent = numSsaSolventsV > 0;
 
     //! Are polymers involved?
     static const bool enablePolymer = numPolymersV > 0;
@@ -56,8 +56,8 @@ struct BlackOilTwoPhaseIndices
     //! Number of solvent components to be considered
     static const int numSolvents = enableSolvent ? numSolventsV : 0;
 
-    //! Number of components to be considered for extbo
-    static const int numExtbos = enableExtbo ? numExtbosV : 0;
+    //! Number of components to be considered for SSA solvent
+    static const int numSsaSolvents = enableSsaSolvent ? numSsaSolventsV : 0;
 
     //! Number of polymer components to be considered
     static const int numPolymers = enablePolymer ? numPolymersV : 0;
@@ -75,7 +75,7 @@ struct BlackOilTwoPhaseIndices
     static const int numPhases = 2;
 
     //! The number of equations
-    static const int numEq = numPhases + numSolvents + numExtbos + numPolymers + numEnergy + numFoam + numBrine;
+    static const int numEq = numPhases + numSolvents + numSsaSolvents + numPolymers + numEnergy + numFoam + numBrine;
 
     //////////////////////////////
     // Primary variable indices
@@ -99,9 +99,9 @@ struct BlackOilTwoPhaseIndices
     static const int solventSaturationIdx =
         enableSolvent ? PVOffset + numPhases : -1000;
 
-    //! Index of the primary variable for the first extbo component
+    //! Index of the primary variable for the first SSA solvent component
     static const int zFractionIdx =
-        enableExtbo ? PVOffset + numPhases + numSolvents : -1000;
+        enableSsaSolvent ? PVOffset + numPhases + numSolvents : -1000;
 
     //! Index of the primary variable for the first polymer
     static const int polymerConcentrationIdx =
@@ -121,7 +121,7 @@ struct BlackOilTwoPhaseIndices
 
     //! Index of the primary variable for temperature
     static const int temperatureIdx  =
-        enableEnergy ? PVOffset + numPhases + numSolvents + numExtbos + numPolymers + numFoam + numBrine : - 1000;
+        enableEnergy ? PVOffset + numPhases + numSolvents + numSsaSolvents + numPolymers + numFoam + numBrine : - 1000;
 
     //////////////////////
     // Equation indices
@@ -172,9 +172,9 @@ struct BlackOilTwoPhaseIndices
     static const int contiSolventEqIdx =
         enableSolvent ? PVOffset + numPhases : -1000;
 
-    //! Index of the continuity equation for the first extbo component
+    //! Index of the continuity equation for the first SSA solvent component
     static const int contiZfracEqIdx =
-        enableExtbo ? PVOffset + numPhases + numSolvents : -1000;
+        enableSsaSolvent ? PVOffset + numPhases + numSolvents : -1000;
 
     //! Index of the continuity equation for the first polymer component
     static const int contiPolymerEqIdx =
@@ -194,7 +194,7 @@ struct BlackOilTwoPhaseIndices
 
     //! Index of the continuity equation for energy
     static const int contiEnergyEqIdx =
-        enableEnergy ? PVOffset + numPhases + numSolvents + numExtbos + numPolymers + numFoam + numBrine : -1000;
+        enableEnergy ? PVOffset + numPhases + numSolvents + numSsaSolvents + numPolymers + numFoam + numBrine : -1000;
 };
 
 } // namespace Ewoms

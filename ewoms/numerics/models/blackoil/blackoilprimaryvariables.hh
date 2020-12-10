@@ -26,7 +26,7 @@
 
 #include "blackoilproperties.hh"
 #include "blackoilsolventmodules.hh"
-#include "blackoilextbomodules.hh"
+#include "blackoilssasolventmodules.hh"
 #include "blackoilpolymermodules.hh"
 #include "blackoilenergymodules.hh"
 #include "blackoilfoammodules.hh"
@@ -48,8 +48,8 @@ namespace Ewoms {
 template <class TypeTag, bool enableSolvent>
 class BlackOilSolventModule;
 
-template <class TypeTag, bool enableExtbo>
-class BlackOilExtboModule;
+template <class TypeTag, bool enableSsaSolvent>
+class BlackOilSsaSolventModule;
 
 template <class TypeTag, bool enablePolymer>
 class BlackOilPolymerModule;
@@ -95,7 +95,7 @@ class BlackOilPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
     // component indices from the fluid system
     enum { numComponents = GET_PROP_VALUE(TypeTag, NumComponents) };
     enum { enableSolvent = GET_PROP_VALUE(TypeTag, EnableSolvent) };
-    enum { enableExtbo = GET_PROP_VALUE(TypeTag, EnableExtbo) };
+    enum { enableSsaSolvent = GET_PROP_VALUE(TypeTag, EnableSsaSolvent) };
     enum { enablePolymer = GET_PROP_VALUE(TypeTag, EnablePolymer) };
     enum { enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
@@ -106,7 +106,7 @@ class BlackOilPrimaryVariables : public FvBasePrimaryVariables<TypeTag>
 
     using ComponentVector = Dune::FieldVector<Scalar, numComponents>;
     using SolventModule = BlackOilSolventModule<TypeTag, enableSolvent>;
-    using ExtboModule = BlackOilExtboModule<TypeTag, enableExtbo>;
+    using SsaSolventModule = BlackOilSsaSolventModule<TypeTag, enableSsaSolvent>;
     using PolymerModule = BlackOilPolymerModule<TypeTag, enablePolymer>;
     using EnergyModule = BlackOilEnergyModule<TypeTag, enableEnergy>;
     using FoamModule = BlackOilFoamModule<TypeTag, enableFoam>;
@@ -431,7 +431,7 @@ public:
                 Scalar T = asImp_().temperature_();
                 Scalar SoMax = problem.maxOilSaturation(globalDofIdx);
                 Scalar RsMax = problem.maxGasDissolutionFactor(/*timeIdx=*/0, globalDofIdx);
-                Scalar RsSat = enableExtbo ? ExtboModule::rs(pvtRegionIndex(),
+                Scalar RsSat = enableSsaSolvent ? SsaSolventModule::rs(pvtRegionIndex(),
                                                              po,
                                                              zFraction_())
                              : FluidSystem::oilPvt().saturatedGasDissolutionFactor(pvtRegionIdx_,
@@ -466,7 +466,7 @@ public:
                 Scalar T = asImp_().temperature_();
                 Scalar SoMax = problem.maxOilSaturation(globalDofIdx);
                 Scalar RvMax = problem.maxOilVaporizationFactor(/*timeIdx=*/0, globalDofIdx);
-                Scalar RvSat = enableExtbo ? ExtboModule::rv(pvtRegionIndex(),
+                Scalar RvSat = enableSsaSolvent ? SsaSolventModule::rv(pvtRegionIndex(),
                                                              pg,
                                                              zFraction_())
                              : FluidSystem::gasPvt().saturatedOilVaporizationFactor(pvtRegionIdx_,
@@ -508,7 +508,7 @@ public:
             Scalar So = 1.0 - Sw - solventSaturation_();
             Scalar SoMax = std::max(So, problem.maxOilSaturation(globalDofIdx));
             Scalar RsMax = problem.maxGasDissolutionFactor(/*timeIdx=*/0, globalDofIdx);
-            Scalar RsSat = enableExtbo ? ExtboModule::rs(pvtRegionIndex(),
+            Scalar RsSat = enableSsaSolvent ? SsaSolventModule::rs(pvtRegionIndex(),
                                                          po,
                                                          zFraction_())
                          : FluidSystem::oilPvt().saturatedGasDissolutionFactor(pvtRegionIdx_,
@@ -567,7 +567,7 @@ public:
             Scalar T = asImp_().temperature_();
             Scalar SoMax = problem.maxOilSaturation(globalDofIdx);
             Scalar RvMax = problem.maxOilVaporizationFactor(/*timeIdx=*/0, globalDofIdx);
-            Scalar RvSat = enableExtbo ? ExtboModule::rv(pvtRegionIndex(),
+            Scalar RvSat = enableSsaSolvent ? SsaSolventModule::rv(pvtRegionIndex(),
                                                          pg,
                                                          zFraction_())
                          : FluidSystem::gasPvt().saturatedOilVaporizationFactor(pvtRegionIdx_,
@@ -650,7 +650,7 @@ private:
 
     Scalar zFraction_() const
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return 0.0;
 
         return (*this)[Indices::zFractionIdx];

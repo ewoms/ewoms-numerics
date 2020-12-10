@@ -26,7 +26,7 @@
 
 #include "blackoilproperties.hh"
 #include "blackoilsolventmodules.hh"
-#include "blackoilextbomodules.hh"
+#include "blackoilssasolventmodules.hh"
 #include "blackoilpolymermodules.hh"
 #include "blackoilfoammodules.hh"
 #include "blackoilbrinemodules.hh"
@@ -52,7 +52,7 @@ class BlackOilIntensiveQuantities
     : public GET_PROP_TYPE(TypeTag, DiscIntensiveQuantities)
     , public GET_PROP_TYPE(TypeTag, FluxModule)::FluxIntensiveQuantities
     , public BlackOilSolventIntensiveQuantities<TypeTag>
-    , public BlackOilExtboIntensiveQuantities<TypeTag>
+    , public BlackOilSsaSolventIntensiveQuantities<TypeTag>
     , public BlackOilPolymerIntensiveQuantities<TypeTag>
     , public BlackOilFoamIntensiveQuantities<TypeTag>
     , public BlackOilBrineIntensiveQuantities<TypeTag>
@@ -73,7 +73,7 @@ class BlackOilIntensiveQuantities
 
     enum { numEq = GET_PROP_VALUE(TypeTag, NumEq) };
     enum { enableSolvent = GET_PROP_VALUE(TypeTag, EnableSolvent) };
-    enum { enableExtbo = GET_PROP_VALUE(TypeTag, EnableExtbo) };
+    enum { enableSsaSolvent = GET_PROP_VALUE(TypeTag, EnableSsaSolvent) };
     enum { enablePolymer = GET_PROP_VALUE(TypeTag, EnablePolymer) };
     enum { enableFoam = GET_PROP_VALUE(TypeTag, EnableFoam) };
     enum { enableBrine = GET_PROP_VALUE(TypeTag, EnableBrine) };
@@ -209,7 +209,7 @@ public:
         // update the Saturation functions for the blackoil solvent module.
         asImp_().solventPostSatFuncUpdate_(elemCtx, dofIdx, timeIdx);
 
-        // update extBO parameters
+        // update SSA solvent parameters
         asImp_().zFractionUpdate_(elemCtx, dofIdx, timeIdx);
 
         Evaluation SoMax = 0.0;
@@ -225,7 +225,7 @@ public:
             // we use the compositions of the gas-saturated oil and oil-saturated gas.
             if (FluidSystem::enableDissolvedGas()) {
                 Scalar RsMax = elemCtx.problem().maxGasDissolutionFactor(timeIdx, globalSpaceIdx);
-                const Evaluation& RsSat = enableExtbo ? asImp_().rs() :
+                const Evaluation& RsSat = enableSsaSolvent ? asImp_().rs() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             oilPhaseIdx,
                                                             pvtRegionIdx,
@@ -237,7 +237,7 @@ public:
 
             if (FluidSystem::enableVaporizedOil()) {
                 Scalar RvMax = elemCtx.problem().maxOilVaporizationFactor(timeIdx, globalSpaceIdx);
-                const Evaluation& RvSat = enableExtbo ? asImp_().rv() :
+                const Evaluation& RvSat = enableSsaSolvent ? asImp_().rv() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             gasPhaseIdx,
                                                             pvtRegionIdx,
@@ -259,7 +259,7 @@ public:
                 // the gas phase is not present, but we need to compute its "composition"
                 // for the gravity correction anyway
                 Scalar RvMax = elemCtx.problem().maxOilVaporizationFactor(timeIdx, globalSpaceIdx);
-                const auto& RvSat = enableExtbo ? asImp_().rv() :
+                const auto& RvSat = enableSsaSolvent ? asImp_().rv() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             gasPhaseIdx,
                                                             pvtRegionIdx,
@@ -278,7 +278,7 @@ public:
                 // the oil phase is not present, but we need to compute its "composition" for
                 // the gravity correction anyway
                 Scalar RsMax = elemCtx.problem().maxGasDissolutionFactor(timeIdx, globalSpaceIdx);
-                const auto& RsSat = enableExtbo ? asImp_().rs() :
+                const auto& RsSat = enableSsaSolvent ? asImp_().rs() :
                     FluidSystem::saturatedDissolutionFactor(fluidState_,
                                                             oilPhaseIdx,
                                                             pvtRegionIdx,
@@ -308,9 +308,9 @@ public:
             fluidState_.setInvB(phaseIdx, b);
 
             const auto& mu = FluidSystem::viscosity(fluidState_, paramCache, phaseIdx);
-            if (enableExtbo && phaseIdx == oilPhaseIdx)
+            if (enableSsaSolvent && phaseIdx == oilPhaseIdx)
               mobility_[phaseIdx] /= asImp_().oilViscosity();
-            else if (enableExtbo && phaseIdx == gasPhaseIdx)
+            else if (enableSsaSolvent && phaseIdx == gasPhaseIdx)
               mobility_[phaseIdx] /= asImp_().gasViscosity();
             else
               mobility_[phaseIdx] /= mu;
@@ -454,7 +454,7 @@ public:
 
 private:
     friend BlackOilSolventIntensiveQuantities<TypeTag>;
-    friend BlackOilExtboIntensiveQuantities<TypeTag>;
+    friend BlackOilSsaSolventIntensiveQuantities<TypeTag>;
     friend BlackOilPolymerIntensiveQuantities<TypeTag>;
     friend BlackOilEnergyIntensiveQuantities<TypeTag>;
     friend BlackOilFoamIntensiveQuantities<TypeTag>;

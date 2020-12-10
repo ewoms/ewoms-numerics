@@ -19,18 +19,19 @@
 /*!
  * \file
  *
- * \brief Contains the classes required to extend the black-oil model by solvent component.
+ * \brief Contains the classes required to extend black-oil solvent model proposed by Sandve, Sævareid and Aavatsmark.
+ *
  *  For details, refer:
  *  [*] T.H. Sandve, O. Sævareid and I. Aavatsmark: “Improved Extended Blackoil Formulation
  *  for CO2 EOR Simulations.” in ECMOR XVII – The 17th European Conference on the
  *  Mathematics of Oil Recovery,  September 2020.
  */
-#ifndef EWOMS_BLACK_OIL_EXTBO_MODULE_HH
-#define EWOMS_BLACK_OIL_EXTBO_MODULE_HH
+#ifndef EWOMS_BLACK_OIL_SSA_SOLVENT_HH
+#define EWOMS_BLACK_OIL_SSA_SOLVENT_HH
 
 #include "blackoilproperties.hh"
 
-//#include <ewoms/numerics/io/vtkblackoilextbomodule.hh> //todo: missing ...
+//#include <ewoms/numerics/io/vtkblackoilssasolventmodule.hh> //todo: missing ...
 
 #include <ewoms/numerics/common/quantitycallbacks.hh>
 
@@ -63,8 +64,8 @@ namespace Ewoms {
  * \brief Contains the high level supplements required to extend the black oil
  *        model.
  */
-template <class TypeTag, bool enableExtboV = GET_PROP_VALUE(TypeTag, EnableExtbo)>
-class BlackOilExtboModule
+template <class TypeTag, bool enableSsaSolventV = GET_PROP_VALUE(TypeTag, EnableSsaSolvent)>
+class BlackOilSsaSolventModule
 {
     using Scalar = GET_PROP_TYPE(TypeTag, Scalar);
     using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
@@ -86,7 +87,7 @@ class BlackOilExtboModule
 
     static constexpr unsigned zFractionIdx = Indices::zFractionIdx;
     static constexpr unsigned contiZfracEqIdx = Indices::contiZfracEqIdx;
-    static constexpr unsigned enableExtbo = enableExtboV;
+    static constexpr unsigned enableSsaSolvent = enableSsaSolventV;
     static constexpr unsigned numEq = GET_PROP_VALUE(TypeTag, NumEq);
     static constexpr unsigned numPhases = FluidSystem::numPhases;
     static constexpr unsigned gasPhaseIdx = FluidSystem::gasPhaseIdx;
@@ -103,10 +104,10 @@ public:
     {
         // some sanity checks: if extended BO is enabled, the PVTSOL keyword must be
         // present, if extended BO is disabled the keyword must not be present.
-        if (enableExtbo && !eclState.runspec().phases().active(Phase::ZFRACTION))
+        if (enableSsaSolvent && !eclState.runspec().phases().active(Phase::ZFRACTION))
             throw std::runtime_error("Extended black oil treatment requested at compile "
                                      "time, but the deck does not contain the PVTSOL keyword");
-        else if (!enableExtbo && eclState.runspec().phases().active(Phase::ZFRACTION))
+        else if (!enableSsaSolvent && eclState.runspec().phases().active(Phase::ZFRACTION))
             throw std::runtime_error("Extended black oil treatment disabled at compile time, but the deck "
                                      "contains the PVTSOL keyword");
 
@@ -250,7 +251,7 @@ public:
            }
         }
         else
-           throw std::runtime_error("Extbo:  kw SDENSITY is missing or not aligned with NTPVT\n");
+           throw std::runtime_error("SsaSolvent:  kw SDENSITY is missing or not aligned with NTPVT\n");
     }
 #endif
 
@@ -259,11 +260,11 @@ public:
      */
     static void registerParameters()
     {
-        if (!enableExtbo)
-            // extBO have disabled at compile time
+        if (!enableSsaSolvent)
+            // SSA solvents have disabled at compile time
             return;
 
-        //Ewoms::VtkBlackOilExtboModule<TypeTag>::registerParameters();
+        //Ewoms::VtkBlackOilSsaSolventModule<TypeTag>::registerParameters();
     }
 
     /*!
@@ -272,17 +273,17 @@ public:
     static void registerOutputModules(Model& model,
                                       Simulator& simulator)
     {
-        if (!enableExtbo)
-            // extBO have disabled at compile time
+        if (!enableSsaSolvent)
+            // SSA solvents have disabled at compile time
             return;
 
-        //model.addOutputModule(new Ewoms::VtkBlackOilExtboModule<TypeTag>(simulator));
+        //model.addOutputModule(new Ewoms::VtkBlackOilSsaSolventModule<TypeTag>(simulator));
     }
 
     static bool primaryVarApplies(unsigned pvIdx)
     {
-        if (!enableExtbo)
-            // extBO have disabled at compile time
+        if (!enableSsaSolvent)
+            // SSA solvents have disabled at compile time
             return false;
 
         return pvIdx == zFractionIdx;
@@ -305,7 +306,7 @@ public:
 
     static bool eqApplies(unsigned eqIdx)
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return false;
 
         return eqIdx == contiZfracEqIdx;
@@ -330,7 +331,7 @@ public:
     static void addStorage(Dune::FieldVector<LhsEval, numEq>& storage,
                            const IntensiveQuantities& intQuants)
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return;
 
         if (blackoilConserveSurfaceVolume) {
@@ -369,7 +370,7 @@ public:
                             unsigned timeIdx)
 
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return;
 
         const auto& extQuants = elemCtx.extensiveQuantities(scvfIdx, timeIdx);
@@ -423,7 +424,7 @@ public:
     static void assignPrimaryVars(PrimaryVariables& priVars,
                                   Scalar zFraction)
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return;
 
         priVars[zFractionIdx] = zFraction;
@@ -436,7 +437,7 @@ public:
                                   const PrimaryVariables& oldPv,
                                   const EqVector& delta)
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return;
 
         // do a plain unchopped Newton update
@@ -467,7 +468,7 @@ public:
     template <class DofEntity>
     static void serializeEntity(const Model& model, std::ostream& outstream, const DofEntity& dof)
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return;
 
         unsigned dofIdx = model.dofMapper().index(dof);
@@ -479,7 +480,7 @@ public:
     template <class DofEntity>
     static void deserializeEntity(Model& model, std::istream& instream, const DofEntity& dof)
     {
-        if (!enableExtbo)
+        if (!enableSsaSolvent)
             return;
 
         unsigned dofIdx = model.dofMapper().index(dof);
@@ -580,71 +581,71 @@ private:
     static std::vector<TabulatedFunction> gasCmp_;
 };
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::X_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::X_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::Y_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Y_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::PBUB_RS_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::PBUB_RS_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::PBUB_RV_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::PBUB_RV_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::VISCO_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::VISCO_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::VISCG_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::VISCG_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::BO_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::BO_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::BG_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::BG_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::RS_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::RS_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Tabulated2DFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::RV_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Tabulated2DFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::RV_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Scalar>
-BlackOilExtboModule<TypeTag, enableExtboV>::zReferenceDensity_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Scalar>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::zReferenceDensity_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::Scalar>
-BlackOilExtboModule<TypeTag, enableExtboV>::zLim_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::Scalar>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::zLim_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::TabulatedFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::oilCmp_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::TabulatedFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::oilCmp_;
 
-template <class TypeTag, bool enableExtboV>
-std::vector<typename BlackOilExtboModule<TypeTag, enableExtboV>::TabulatedFunction>
-BlackOilExtboModule<TypeTag, enableExtboV>::gasCmp_;
+template <class TypeTag, bool enableSsaSolventV>
+std::vector<typename BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::TabulatedFunction>
+BlackOilSsaSolventModule<TypeTag, enableSsaSolventV>::gasCmp_;
 
 /*!
  * \ingroup BlackOil
- * \class Ewoms::BlackOilExtboIntensiveQuantities
+ * \class Ewoms::BlackOilSsaSolventIntensiveQuantities
  *
  * \brief Provides the volumetric quantities required for the equations needed by the
  *        solvents extension of the black-oil model.
  */
-template <class TypeTag, bool enableExtboV = GET_PROP_VALUE(TypeTag, EnableExtbo)>
-class BlackOilExtboIntensiveQuantities
+template <class TypeTag, bool enableSsaSolventV = GET_PROP_VALUE(TypeTag, EnableSsaSolvent)>
+class BlackOilSsaSolventIntensiveQuantities
 {
     using Implementation = GET_PROP_TYPE(TypeTag, IntensiveQuantities);
 
@@ -656,7 +657,7 @@ class BlackOilExtboIntensiveQuantities
     using Indices = GET_PROP_TYPE(TypeTag, Indices);
     using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
 
-    using ExtboModule = BlackOilExtboModule<TypeTag>;
+    using SsaSolventModule = BlackOilSsaSolventModule<TypeTag>;
 
     enum { numPhases = GET_PROP_VALUE(TypeTag, NumPhases) };
     static constexpr int zFractionIdx = Indices::zFractionIdx;
@@ -681,26 +682,26 @@ public:
 
         zFraction_ = priVars.makeEvaluation(zFractionIdx, timeIdx);
 
-        oilViscosity_ = ExtboModule::oilViscosity(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
-        gasViscosity_ = ExtboModule::gasViscosity(pvtRegionIdx, fs.pressure(gasPhaseIdx), zFraction_);
+        oilViscosity_ = SsaSolventModule::oilViscosity(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
+        gasViscosity_ = SsaSolventModule::gasViscosity(pvtRegionIdx, fs.pressure(gasPhaseIdx), zFraction_);
 
-        bo_ = ExtboModule::bo(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
-        bg_ = ExtboModule::bg(pvtRegionIdx, fs.pressure(gasPhaseIdx), zFraction_);
+        bo_ = SsaSolventModule::bo(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
+        bg_ = SsaSolventModule::bg(pvtRegionIdx, fs.pressure(gasPhaseIdx), zFraction_);
 
-        bz_ = ExtboModule::bg(pvtRegionIdx, fs.pressure(oilPhaseIdx), Evaluation{0.99});
+        bz_ = SsaSolventModule::bg(pvtRegionIdx, fs.pressure(oilPhaseIdx), Evaluation{0.99});
 
         if (FluidSystem::enableDissolvedGas())
-            rs_ = ExtboModule::rs(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
+            rs_ = SsaSolventModule::rs(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
         else
             rs_ = 0.0;
 
         if (FluidSystem::enableVaporizedOil())
-            rv_ = ExtboModule::rv(pvtRegionIdx, fs.pressure(gasPhaseIdx), zFraction_);
+            rv_ = SsaSolventModule::rv(pvtRegionIdx, fs.pressure(gasPhaseIdx), zFraction_);
         else
             rv_ = 0.0;
 
-        xVolume_ = ExtboModule::xVolume(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
-        yVolume_ = ExtboModule::yVolume(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
+        xVolume_ = SsaSolventModule::xVolume(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
+        yVolume_ = SsaSolventModule::yVolume(pvtRegionIdx, fs.pressure(oilPhaseIdx), zFraction_);
 
         Evaluation pbub = fs.pressure(oilPhaseIdx);
 
@@ -716,23 +717,23 @@ public:
 
         if (priVars.primaryVarsMeaning() == PrimaryVariables::Sw_po_Rs) {
            rs_ = priVars.makeEvaluation(Indices::compositionSwitchIdx, timeIdx);
-           const Evaluation zLim = ExtboModule::zLim(pvtRegionIdx);
+           const Evaluation zLim = SsaSolventModule::zLim(pvtRegionIdx);
            if (zFraction_ > zLim) {
-             pbub = ExtboModule::pbubRs(pvtRegionIdx, zLim, rs_);
+             pbub = SsaSolventModule::pbubRs(pvtRegionIdx, zLim, rs_);
            } else {
-             pbub = ExtboModule::pbubRs(pvtRegionIdx, zFraction_, rs_);
+             pbub = SsaSolventModule::pbubRs(pvtRegionIdx, zFraction_, rs_);
            }
-           bo_ = ExtboModule::bo(pvtRegionIdx, pbub, zFraction_) + ExtboModule::oilCmp(pvtRegionIdx, zFraction_)*(fs.pressure(oilPhaseIdx)-pbub);
+           bo_ = SsaSolventModule::bo(pvtRegionIdx, pbub, zFraction_) + SsaSolventModule::oilCmp(pvtRegionIdx, zFraction_)*(fs.pressure(oilPhaseIdx)-pbub);
 
-           xVolume_ = ExtboModule::xVolume(pvtRegionIdx, pbub, zFraction_);
+           xVolume_ = SsaSolventModule::xVolume(pvtRegionIdx, pbub, zFraction_);
         }
 
         if (priVars.primaryVarsMeaning() == PrimaryVariables::Sw_pg_Rv) {
            rv_ = priVars.makeEvaluation(Indices::compositionSwitchIdx, timeIdx);
-           Evaluation rvsat = ExtboModule::rv(pvtRegionIdx, pbub, zFraction_);
-           bg_ = ExtboModule::bg(pvtRegionIdx, pbub, zFraction_) + ExtboModule::gasCmp(pvtRegionIdx, zFraction_)*(rv_-rvsat);
+           Evaluation rvsat = SsaSolventModule::rv(pvtRegionIdx, pbub, zFraction_);
+           bg_ = SsaSolventModule::bg(pvtRegionIdx, pbub, zFraction_) + SsaSolventModule::gasCmp(pvtRegionIdx, zFraction_)*(rv_-rvsat);
 
-           yVolume_ = ExtboModule::yVolume(pvtRegionIdx, pbub, zFraction_);
+           yVolume_ = SsaSolventModule::yVolume(pvtRegionIdx, pbub, zFraction_);
         }
     }
 
@@ -747,7 +748,7 @@ public:
         auto& fs = asImp_().fluidState_;
 
         unsigned pvtRegionIdx = iq.pvtRegionIndex();
-        zRefDensity_ = ExtboModule::referenceDensity(pvtRegionIdx);
+        zRefDensity_ = SsaSolventModule::referenceDensity(pvtRegionIdx);
 
         fs.setInvB(oilPhaseIdx, 1.0/bo_);
         fs.setInvB(gasPhaseIdx, 1.0/bg_);
@@ -825,7 +826,7 @@ protected:
 };
 
 template <class TypeTag>
-class BlackOilExtboIntensiveQuantities<TypeTag, false>
+class BlackOilSsaSolventIntensiveQuantities<TypeTag, false>
 {
     using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);
     using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
@@ -842,45 +843,45 @@ public:
     { }
 
     const Evaluation& xVolume() const
-    { throw std::runtime_error("xVolume() called but extbo is disabled"); }
+    { throw std::runtime_error("xVolume() called but SSA solvents are disabled"); }
 
     const Evaluation& yVolume() const
-    { throw std::runtime_error("yVolume() called but extbo is disabled"); }
+    { throw std::runtime_error("yVolume() called but SSA solvents are disabled"); }
 
     const Evaluation& oilViscosity() const
-    { throw std::runtime_error("oilViscosity() called but extbo is disabled"); }
+    { throw std::runtime_error("oilViscosity() called but SSA solvents are disabled"); }
 
     const Evaluation& gasViscosity() const
-    { throw std::runtime_error("gasViscosity() called but extbo is disabled"); }
+    { throw std::runtime_error("gasViscosity() called but SSA solvents are disabled"); }
 
     const Evaluation& rs() const
-    { throw std::runtime_error("rs() called but extbo is disabled"); }
+    { throw std::runtime_error("rs() called but SSA solvents are disabled"); }
 
     const Evaluation& rv() const
-    { throw std::runtime_error("rv() called but extbo is disabled"); }
+    { throw std::runtime_error("rv() called but SSA solvents are disabled"); }
 
     const Evaluation& zPureInvFormationVolumeFactor() const
-    { throw std::runtime_error("zPureInvFormationVolumeFactor() called but extbo is disabled"); }
+    { throw std::runtime_error("zPureInvFormationVolumeFactor() called but SSA solvents are disabled"); }
 
     const Evaluation& zFraction() const
-    { throw std::runtime_error("zFraction() called but extbo is disabled"); }
+    { throw std::runtime_error("zFraction() called but SSA solvents are disabled"); }
 
     const Evaluation& zInverseFormationVolumeFactor() const
-     { throw std::runtime_error("zInverseFormationVolumeFactor() called but extbo is disabled"); }
+     { throw std::runtime_error("zInverseFormationVolumeFactor() called but SSA solvents are disabled"); }
 
     const Scalar& zRefDensity() const
-     { throw std::runtime_error("zRefDensity() called but extbo is disabled"); }
+     { throw std::runtime_error("zRefDensity() called but SSA solvents are disabled"); }
 };
 
 /*!
  * \ingroup BlackOil
- * \class Ewoms::BlackOilExtboExtensiveQuantities
+ * \class Ewoms::BlackOilSsaSolventExtensiveQuantities
  *
  * \brief Provides the solvent specific extensive quantities to the generic black-oil
  *        module's extensive quantities.
  */
-template <class TypeTag, bool enableExtboV = GET_PROP_VALUE(TypeTag, EnableExtbo)>
-class BlackOilExtboExtensiveQuantities
+template <class TypeTag, bool enableSsaSolventV = GET_PROP_VALUE(TypeTag, EnableSsaSolvent)>
+class BlackOilSsaSolventExtensiveQuantities
 {
     using Implementation = GET_PROP_TYPE(TypeTag, ExtensiveQuantities);
 
@@ -909,7 +910,7 @@ private:
 };
 
 template <class TypeTag>
-class BlackOilExtboExtensiveQuantities<TypeTag, false>
+class BlackOilSsaSolventExtensiveQuantities<TypeTag, false>
 {
     using ElementContext = GET_PROP_TYPE(TypeTag, ElementContext);
     using Evaluation = GET_PROP_TYPE(TypeTag, Evaluation);

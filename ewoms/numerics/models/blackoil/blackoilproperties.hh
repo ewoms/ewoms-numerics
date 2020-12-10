@@ -35,7 +35,7 @@ NEW_PROP_TAG(EnableEclipseOutput);
 //! Enable the ECL-blackoil extension for solvents. ("Second gas")
 NEW_PROP_TAG(EnableSolvent);
 //! Enable the ECL-blackoil extension for extended BO. ("Second gas" - alternative approach)
-NEW_PROP_TAG(EnableExtbo);
+NEW_PROP_TAG(EnableSsaSolvent);
 //! Enable the ECL-blackoil extension for polymer.
 NEW_PROP_TAG(EnablePolymer);
 //! Enable the tracking polymer molecular weight tracking and related functionalities
