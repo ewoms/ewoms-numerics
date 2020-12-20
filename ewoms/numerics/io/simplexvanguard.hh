@@ -99,7 +99,7 @@ public:
     SimplexGridVanguard(Simulator& simulator)
         : ParentType(simulator)
     {
-        Dune::array<unsigned, dimWorld> cellRes;
+        std::array<unsigned, dimWorld> cellRes;
         GlobalPosition upperRight;
         GlobalPosition lowerLeft;
 
